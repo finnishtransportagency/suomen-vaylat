@@ -301,6 +301,7 @@ const Dialog = ({
   const [userResized, setUserResized] = useState(false);
 
   const [bases, setBases] = useState({ rem: 16, em: 16 });
+  const mobileFullscreen = isMobile && fullScreenOnMobile;
 
   useEffect(() => {
     const computeBases = () => {
@@ -354,6 +355,18 @@ const Dialog = ({
 
   const initial = useMemo(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+
+    if (mobileFullscreen) {
+      return {
+        width: bounds.vw,
+        height: bounds.vh,
+        minW: bounds.vw,
+        minH: bounds.vh,
+        maxW: bounds.vw,
+        maxH: bounds.vh
+      };
+    }
+
     return resolveEffectiveSize(
       effectiveWidthProp,
       effectiveHeightProp,
@@ -370,6 +383,11 @@ const Dialog = ({
   // Initial anchor
   const initialPos = useMemo(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+
+    if (mobileFullscreen) {
+      return { x: 0, y: 0 };
+    }
+
     return anchoredPosition(
       initial.width,
       initial.height,
@@ -396,6 +414,12 @@ const Dialog = ({
   // Re-resolve when rem/em bases become available
   useEffect(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+
+    if (mobileFullscreen) {
+      setSize({ width: bounds.vw, height: bounds.vh });
+      setPosition({ x: 0, y: 0 });
+      return;
+    }
 
     const resolved = resolveEffectiveSize(
       effectiveWidthProp,
@@ -448,29 +472,29 @@ const Dialog = ({
   }, [maximize]);
 
   const getMeasuredContentElement = (bodyEl) => {
-  if (!bodyEl) return null;
-  return bodyEl.firstElementChild || bodyEl;
-};
+    if (!bodyEl) return null;
+    return bodyEl.firstElementChild || bodyEl;
+  };
 
   const measureContentSize = (bodyEl) => {
-  if (!bodyEl) return { width: 0, height: 0 };
+    if (!bodyEl) return { width: 0, height: 0 };
 
-  const contentEl = getMeasuredContentElement(bodyEl);
+    const contentEl = getMeasuredContentElement(bodyEl);
 
-  if (!contentEl) {
+    if (!contentEl) {
+      return {
+        width: bodyEl.scrollWidth || 0,
+        height: bodyEl.scrollHeight || 0
+      };
+    }
+
+    const rect = contentEl.getBoundingClientRect();
+
     return {
-      width: bodyEl.scrollWidth || 0,
-      height: bodyEl.scrollHeight || 0
+      width: Math.ceil(Math.max(contentEl.scrollWidth || 0, rect.width || 0)),
+      height: Math.ceil(Math.max(contentEl.scrollHeight || 0, rect.height || 0))
     };
-  }
-
-  const rect = contentEl.getBoundingClientRect();
-
-  return {
-    width: Math.ceil(Math.max(contentEl.scrollWidth || 0, rect.width || 0)),
-    height: Math.ceil(Math.max(contentEl.scrollHeight || 0, rect.height || 0))
   };
-};
 
   /**
    * Core behavior:
@@ -479,139 +503,145 @@ const Dialog = ({
    * - if resize=true and user manually resizes -> stop auto-sizing
    */
   useLayoutEffect(() => {
-  if (!isVisible) return;
-  if (minimize) return;
-  if (!bodyRef.current) return;
-  if (maximize) return;
+    if (!isVisible) return;
+    if (mobileFullscreen) return;
+    if (minimize) return;
+    if (!bodyRef.current) return;
+    if (maximize) return;
 
-  const autoSizingAllowed = !resize || !userResized;
-  if (!autoSizingAllowed) return;
+    const autoSizingAllowed = !resize || !userResized;
+    if (!autoSizingAllowed) return;
 
-  let rafId = 0;
-  let framePending = false;
+    let rafId = 0;
+    let framePending = false;
 
-  const updateSizeFromContent = () => {
-    const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+    const updateSizeFromContent = () => {
+      const bounds = { vw: window.innerWidth, vh: window.innerHeight };
 
-    const headerH = headerRef.current?.offsetHeight ?? 0;
-    const contentSize = measureContentSize(bodyRef.current);
+      const headerH = headerRef.current?.offsetHeight ?? 0;
+      const contentSize = measureContentSize(bodyRef.current);
 
-    let desiredW = size.width;
-    let desiredH = size.height;
+      let desiredW = size.width;
+      let desiredH = size.height;
 
-    if (autoWidthActive) {
-      desiredW = contentSize.width;
-    }
+      if (autoWidthActive) {
+        desiredW = contentSize.width;
+      }
 
-    if (autoHeightActive) {
-      desiredH = headerH + contentSize.height;
-    }
+      if (autoHeightActive) {
+        desiredH = headerH + contentSize.height;
+      }
 
-    const resolved = resolveEffectiveSize(
-      desiredW,
-      desiredH,
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-      bounds,
-      bases
-    );
-
-    const nextWidth = autoWidthActive ? resolved.width : size.width;
-    const nextHeight = autoHeightActive ? resolved.height : size.height;
-
-    const widthChanged = Math.abs(nextWidth - size.width) > 1;
-    const heightChanged = Math.abs(nextHeight - size.height) > 1;
-
-    if (!widthChanged && !heightChanged) return;
-
-    const nextSize = {
-      width: nextWidth,
-      height: nextHeight
-    };
-
-    setSize(nextSize);
-
-    if (!hasUserMoved) {
-      const nextPos = anchoredPosition(
-        nextSize.width,
-        nextSize.height,
-        anchorOriginX,
-        anchorOriginY,
-        anchorX,
-        anchorY,
+      const resolved = resolveEffectiveSize(
+        desiredW,
+        desiredH,
+        minWidth,
+        minHeight,
+        maxWidth,
+        maxHeight,
         bounds,
         bases
       );
-      setPosition(nextPos);
-    }
-  };
 
-  const scheduleMeasure = () => {
-    if (framePending) return;
-    framePending = true;
+      const nextWidth = autoWidthActive ? resolved.width : size.width;
+      const nextHeight = autoHeightActive ? resolved.height : size.height;
 
-    rafId = requestAnimationFrame(() => {
-      framePending = false;
-      updateSizeFromContent();
+      const widthChanged = Math.abs(nextWidth - size.width) > 1;
+      const heightChanged = Math.abs(nextHeight - size.height) > 1;
+
+      if (!widthChanged && !heightChanged) return;
+
+      const nextSize = {
+        width: nextWidth,
+        height: nextHeight
+      };
+
+      setSize(nextSize);
+
+      if (!hasUserMoved) {
+        const nextPos = anchoredPosition(
+          nextSize.width,
+          nextSize.height,
+          anchorOriginX,
+          anchorOriginY,
+          anchorX,
+          anchorY,
+          bounds,
+          bases
+        );
+        setPosition(nextPos);
+      }
+    };
+
+    const scheduleMeasure = () => {
+      if (framePending) return;
+      framePending = true;
+
+      rafId = requestAnimationFrame(() => {
+        framePending = false;
+        updateSizeFromContent();
+      });
+    };
+
+    const contentEl = getMeasuredContentElement(bodyRef.current);
+
+    // Observe actual content element size changes
+    const resizeObserver = new ResizeObserver(() => {
+      scheduleMeasure();
     });
-  };
 
-  const contentEl = getMeasuredContentElement(bodyRef.current);
+    if (contentEl) {
+      resizeObserver.observe(contentEl);
+    }
 
-  // Observe actual content element size changes
-  const resizeObserver = new ResizeObserver(() => {
-    scheduleMeasure();
-  });
+    // Also observe DOM mutations in case buttons are added/removed
+    const mutationObserver = new MutationObserver(() => {
+      scheduleMeasure();
+    });
 
-  if (contentEl) {
-    resizeObserver.observe(contentEl);
-  }
+    mutationObserver.observe(bodyRef.current, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true
+    });
 
-  // Also observe DOM mutations in case buttons are added/removed
-  const mutationObserver = new MutationObserver(() => {
-    scheduleMeasure();
-  });
+    // Initial measure
+    updateSizeFromContent();
 
-  mutationObserver.observe(bodyRef.current, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-    attributes: true
-  });
-
-  // Initial measure
-  updateSizeFromContent();
-
-  return () => {
-    resizeObserver.disconnect();
-    mutationObserver.disconnect();
-    if (rafId) cancelAnimationFrame(rafId);
-  };
-}, [
-  isVisible,
-  minimize,
-  resize,
-  userResized,
-  maximize,
-  autoWidthActive,
-  autoHeightActive,
-  minWidth,
-  minHeight,
-  maxWidth,
-  maxHeight,
-  anchorOriginX,
-  anchorOriginY,
-  anchorX,
-  anchorY,
-  hasUserMoved,
-  size.width,
-  size.height,
-  bases
-]);
+    return () => {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [
+    isVisible,
+    minimize,
+    resize,
+    userResized,
+    maximize,
+    autoWidthActive,
+    autoHeightActive,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    anchorOriginX,
+    anchorOriginY,
+    anchorX,
+    anchorY,
+    hasUserMoved,
+    size.width,
+    size.height,
+    bases
+  ]);
 
   const reanchorIfNeeded = React.useCallback(() => {
+    if (mobileFullscreen) {
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+      setPosition({ x: 0, y: 0 });
+      return;
+    }
     if (maximize || minimize) return;
     if (hasUserMoved || userResized) return;
 
@@ -691,19 +721,29 @@ const Dialog = ({
 
   // Mobile fullscreen
   useEffect(() => {
-    if (isMobile && fullScreenOnMobile && isVisible && !minimize) {
+    if (!mobileFullscreen) return;
+    if (!isVisible) return;
+    if (minimize) return;
+
+    const updateFullscreen = () => {
       setPosition({ x: 0, y: 0 });
-      setSize({ width: window.innerWidth, height: window.innerHeight });
-    }
-  }, [isVisible, minimize, fullScreenOnMobile]);
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    updateFullscreen();
+    window.addEventListener('resize', updateFullscreen);
+
+    return () => window.removeEventListener('resize', updateFullscreen);
+  }, [mobileFullscreen, isVisible, minimize]);
 
   const hidden = minimize === true;
 
-  const disableDragging =
-    hidden || !drag || maximize || (isMobile && fullScreenOnMobile);
+  const disableDragging = mobileFullscreen || hidden || !drag || maximize;
 
-  const canResize =
-    !hidden && resize && !maximize && !(isMobile && fullScreenOnMobile);
+  const canResize = !mobileFullscreen && !hidden && resize && !maximize;
 
   const enableResizing =
     typeof enableResizingSides === 'object'
@@ -713,10 +753,22 @@ const Dialog = ({
       : canResize;
 
   const bounds = { vw: window.innerWidth, vh: window.innerHeight };
-  const minWpx = toPx(minWidth, 'x', bounds, bases) ?? undefined;
-  const minHpx = toPx(minHeight, 'y', bounds, bases) ?? undefined;
-  const maxWpx = toPx(maxWidth, 'x', bounds, bases) ?? undefined;
-  const maxHpx = toPx(maxHeight, 'y', bounds, bases) ?? undefined;
+
+  const minWpx = mobileFullscreen
+    ? bounds.vw
+    : toPx(minWidth, 'x', bounds, bases) ?? undefined;
+
+  const minHpx = mobileFullscreen
+    ? bounds.vh
+    : toPx(minHeight, 'y', bounds, bases) ?? undefined;
+
+  const maxWpx = mobileFullscreen
+    ? bounds.vw
+    : toPx(maxWidth, 'x', bounds, bases) ?? undefined;
+
+  const maxHpx = mobileFullscreen
+    ? bounds.vh
+    : toPx(maxHeight, 'y', bounds, bases) ?? undefined;
 
   return (
     <>
@@ -808,8 +860,7 @@ const Dialog = ({
                 </HeaderBtn>
               )}
 
-              {maximizable &&
-                window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
+              {maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
                 <HeaderBtn
                   onClick={(e) => {
                     e.preventDefault();
@@ -843,9 +894,7 @@ const Dialog = ({
             </Right>
           </Header>
 
-          <Body ref={bodyRef}>
-              {renderedChildren}
-          </Body>
+          <Body ref={bodyRef}>{renderedChildren}</Body>
         </Panel>
       </StyledRnd>
     </>
