@@ -70,7 +70,7 @@ export const WebSiteShareButton = () => {
         aria-label={strings.accessibility?.shareWebsite ?? 'Share website'}
         icon={faShareAlt}
         text={strings.tooltips.share}
-        toggleState={false}
+        toggleState={shareUrl}
         tooltipDirection="right"
         clickAction={(e) => {
           e?.stopPropagation();
