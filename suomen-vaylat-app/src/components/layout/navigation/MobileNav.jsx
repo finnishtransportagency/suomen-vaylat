@@ -136,7 +136,9 @@ const StyledMobileNavContainer = styled(motion.nav)`
     IS_EXTRANET
       ? props.theme.colors.extranetHeaderColor
       : props.theme.colors.mainColor1};
-  z-index: 1001;
+  
+  isolation: isolate;
+  z-index: 11;
 
   display: flex;
   flex-direction: column;

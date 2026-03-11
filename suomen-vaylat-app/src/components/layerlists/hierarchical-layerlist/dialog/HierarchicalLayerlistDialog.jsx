@@ -24,7 +24,7 @@ const StyledMapLayersDialog = styled(motion.div)`
   border-radius: 4px;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  z-index: 900;
+  z-index: 10;
 
   &::-webkit-scrollbar {
     display: none;

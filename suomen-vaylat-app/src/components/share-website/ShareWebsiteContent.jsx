@@ -23,7 +23,6 @@ const StyledPopupWrapper = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 
   @media ${(props) => props.theme.device.mobileL} {
-    position: fixed;
     padding: 22px;
     bottom: 0;
     left: 0;

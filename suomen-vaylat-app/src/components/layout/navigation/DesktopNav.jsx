@@ -37,6 +37,8 @@ const DesktopNavContainer = styled.div`
   display: flex;
   align-items: center;
   margin-left: 0.5em;
+  isolation: isolate;
+  z-index: 11;
 `;
 
 const ProfileButton = styled.button`
@@ -67,7 +69,7 @@ const DropdownMenu = styled.ul`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
   margin: 0;
   padding: 0;
-  z-index: 4000;
+  z-index: 12;
   list-style: none;
   font-size: 15px;
 `;

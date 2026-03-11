@@ -31,7 +31,7 @@ import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
-  z-index: 1000;
+  z-index: 11;
   pointer-events: none;
   height: 100%;
   display: flex;
@@ -277,7 +277,7 @@ const MenuBar = () => {
                     {selectedLayers.length}
                   </StyledLayerCount>
                 </CircleButton>
-                
+
                 <WebSiteShareButton/>
 
                 {isDrawingToolsOpen ? (
