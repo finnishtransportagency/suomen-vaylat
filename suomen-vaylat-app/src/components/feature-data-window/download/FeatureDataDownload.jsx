@@ -94,19 +94,6 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
-const StyledDowloadButton = styled.button`
-  height: 3em;
-  color: ${(props) => props.theme.colors.mainWhite};
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  margin: 0.5em 0 0.5em 0;
-  background-color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.darkGrey
-      : props.theme.colors.mainColor1};
-`;
-
 const DownloadItem = ({
     download,
     closeAction,

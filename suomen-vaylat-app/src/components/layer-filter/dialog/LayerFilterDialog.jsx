@@ -80,7 +80,7 @@ const LayerFilterDialog = () => {
       maxWidth={maximizeFilter ? null : '90vw'}
       maxHeight={maximizeFilter ? null : '90vh'}
       minWidth={'25em'}
-      minHeight={'30em'}
+      minHeight={'23em'}
     >
       <LayerFilterContainer />
     </Dialog>
