@@ -19,7 +19,7 @@ const ShareWebsiteDialog = () => {
 
   return isShareOpen ? (
     <Dialog
-      drag={false}
+      drag={true}
       resize={false}
       fullScreenOnMobile={true}
       titleIcon={faShareAlt}

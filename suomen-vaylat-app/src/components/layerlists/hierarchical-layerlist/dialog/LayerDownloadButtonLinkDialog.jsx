@@ -23,7 +23,7 @@ const LayerDownloadLinkButtonDialog = () => {
 
   return downloadLink.layerDownloadLinkDialogOpen ? (
     <Dialog
-      drag={false}
+      drag={true}
       resize={false}
       fullScreenOnMobile={true}
       title={strings.downloadLink.downloadLinkDialogHeader}

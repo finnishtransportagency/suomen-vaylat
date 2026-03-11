@@ -194,6 +194,7 @@ const SaveViewsDialog = () => {
     <Dialog
       drag
       resize
+      fullScreenOnMobile
       title={strings.savedContent?.saveView?.saveView}
       titleIcon={faCamera}
       closeAction={handleCloseSaveViewDialog}
