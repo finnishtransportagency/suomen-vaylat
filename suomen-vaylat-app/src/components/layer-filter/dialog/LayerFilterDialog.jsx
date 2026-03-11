@@ -82,7 +82,7 @@ const LayerFilterDialog = () => {
       minWidth={'25em'}
       minHeight={'23em'}
     >
-      <LayerFilterContainer />
+      <LayerFilterContainer handleCloseFilterDialog={handleCloseFilterDialog} />
     </Dialog>
   )
   : null ;

@@ -116,7 +116,7 @@ const StyledTabContent = styled.div`
   height: 100%;
 `;
 
-export const LayerFilterContainer = () => {
+export const LayerFilterContainer = ({ handleCloseFilterDialog }) => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterDialog
   const [selectedTab, setSelectedTab] = useState(0);
   const { filteringInfo, allLayers, filters, channel } = useAppSelector(
@@ -156,8 +156,12 @@ export const LayerFilterContainer = () => {
     // delete filter by layer
     const filterInfo = filteringInfo.filter((f) => f.layer.id === id)[0];
     let updatedFilters = filters.filter((f) => f.layer !== id);
-    let filtersString = '';
+    console.log(updatedFilters, filterInfo)
+    
+    // no more filters so we close the dialog
+    if (updatedFilters.length === 0) handleCloseFilterDialog();
 
+    let filtersString = '';
     updatedFilters && !updatedFilters.codeValue &&
         updatedFilters
           .filter((f) => f.layer === filterInfo?.layer?.id)
