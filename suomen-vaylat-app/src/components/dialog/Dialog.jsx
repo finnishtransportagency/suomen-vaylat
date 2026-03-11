@@ -23,7 +23,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import { Tooltip } from 'react-tooltip';
-import { clamp, resolveEffectiveSize, toPx, anchoredPosition} from './utils/dialogUtil'
+import {
+  clamp,
+  resolveEffectiveSize,
+  toPx,
+  anchoredPosition
+} from './utils/dialogUtil';
 
 /* ---------------- Constants ---------------- */
 
@@ -384,26 +389,6 @@ const Dialog = ({
     return bodyEl.firstElementChild || bodyEl;
   };
 
-  const measureContentSize = (bodyEl) => {
-    if (!bodyEl) return { width: 0, height: 0 };
-
-    const contentEl = getMeasuredContentElement(bodyEl);
-
-    if (!contentEl) {
-      return {
-        width: bodyEl.scrollWidth || 0,
-        height: bodyEl.scrollHeight || 0
-      };
-    }
-
-    const rect = contentEl.getBoundingClientRect();
-
-    return {
-      width: Math.ceil(Math.max(contentEl.scrollWidth || 0, rect.width || 0)),
-      height: Math.ceil(Math.max(contentEl.scrollHeight || 0, rect.height || 0))
-    };
-  };
-
   /**
    * Core behavior:
    * - if resize=false -> ALWAYS auto width/height with content
@@ -422,6 +407,28 @@ const Dialog = ({
 
     let rafId = 0;
     let framePending = false;
+
+    const measureContentSize = (bodyEl) => {
+      if (!bodyEl) return { width: 0, height: 0 };
+
+      const contentEl = getMeasuredContentElement(bodyEl);
+
+      if (!contentEl) {
+        return {
+          width: bodyEl.scrollWidth || 0,
+          height: bodyEl.scrollHeight || 0
+        };
+      }
+
+      const rect = contentEl.getBoundingClientRect();
+
+      return {
+        width: Math.ceil(Math.max(contentEl.scrollWidth || 0, rect.width || 0)),
+        height: Math.ceil(
+          Math.max(contentEl.scrollHeight || 0, rect.height || 0)
+        )
+      };
+    };
 
     const updateSizeFromContent = () => {
       const bounds = { vw: window.innerWidth, vh: window.innerHeight };
@@ -541,7 +548,8 @@ const Dialog = ({
     hasUserMoved,
     size.width,
     size.height,
-    bases
+    bases,
+    mobileFullscreen
   ]);
 
   const reanchorIfNeeded = React.useCallback(() => {
@@ -610,7 +618,8 @@ const Dialog = ({
     userResized,
     size.width,
     size.height,
-    bases
+    bases,
+    mobileFullscreen
   ]);
 
   useEffect(() => {
