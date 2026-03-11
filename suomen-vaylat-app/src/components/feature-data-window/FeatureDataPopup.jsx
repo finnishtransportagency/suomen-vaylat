@@ -4,11 +4,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   faTimes,
   faSearchLocation,
-  faMapMarkedAlt,
   faDownload,
   faAngleLeft,
   faAngleRight,
-  faLayerGroup,
   faStreetView
 } from '@fortawesome/free-solid-svg-icons';
 import proj4 from 'proj4';
@@ -29,7 +27,7 @@ import {
   resetGFILocations,
   addFeaturesToGFILocations,
   setFilters,
-  removeMarkerRequest
+  removeMarkerRequest,
 } from '../../state/slices/rpcSlice';
 import FeatureDataTabContent from './tabs/FeatureDataTabContent';
 import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
@@ -437,7 +435,7 @@ const StyledLoaderWrapper = styled.div`
   }
 `;
 
-export const FeatureDataPopup = () => {
+export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
   const LAYER_ID = 'gfi-result-layer';
 
   const { store } = useContext(ReactReduxContext);
@@ -872,11 +870,17 @@ export const FeatureDataPopup = () => {
   };
 
   const closeTab = (index, id) => {
+    var filteredLocations = gfiLocations.filter((gfi) => gfi.layerId !== id);
+    
+    if (filteredLocations.length === 0) {
+      handleCloseGFIDialog();
+    }
+
+    store.dispatch(resetGFILocations(filteredLocations));
+
     const updatedFilters = filters.filter((filter) => filter.layer !== id);
     store.dispatch(setFilters(updatedFilters));
 
-    var filteredLocations = gfiLocations.filter((gfi) => gfi.layerId !== id);
-    store.dispatch(resetGFILocations(filteredLocations));
     channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
         null,

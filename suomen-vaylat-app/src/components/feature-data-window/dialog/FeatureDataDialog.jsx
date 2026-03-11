@@ -8,7 +8,8 @@ import FeatureDataPopup from '../FeatureDataPopup';
 import {
   resetGFILocations,
   removeMarkerRequest,
-  setVKMData
+  setVKMData,
+  setFilters
 } from '../../../state/slices/rpcSlice';
 
 import {
@@ -36,6 +37,7 @@ const FeatureDataDialog = () => {
   const handleCloseGFIDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
+    store.dispatch(setFilters([]));
     store.dispatch(setIsGfiOpen(false));
     store.dispatch(setVKMData(null));
     store.dispatch(setMinimizeGfi(false));
@@ -89,7 +91,7 @@ const FeatureDataDialog = () => {
       minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}
       maximizeAction={() => store.dispatch(setMaximizeGfi(!maximizeGfi))}
     >
-      <FeatureDataPopup />
+      <FeatureDataPopup handleCloseGFIDialog={handleCloseGFIDialog}/>
     </Dialog>
   ) : null;
 };
