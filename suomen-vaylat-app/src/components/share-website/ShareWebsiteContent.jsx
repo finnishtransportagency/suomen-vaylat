@@ -219,7 +219,7 @@ export const ShareWebsiteContent = () => {
   });
   mapLayers = mapLayers.slice(0, -2); // remove last '++'
 
-  let url = shareUrl
+  let url = shareUrl && shareUrl
     .replace('{zoom}', currentZoomLevel)
     .replace('{x}', parseInt(center.x))
     .replace('{y}', parseInt(center.y))

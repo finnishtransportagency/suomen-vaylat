@@ -26,7 +26,7 @@ const initialState = {
   isCustomFilterOpen: false,
   isFilterDialogOpen: false,
   isSavedLayer: false,
-  shareUrl: '',
+  shareUrl: null,
   isThemeMenuOpen: false,
   isDrawingToolsOpen: false,
   isLegendOpen: false,

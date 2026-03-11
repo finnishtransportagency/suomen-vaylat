@@ -14,7 +14,7 @@ const ShareWebsiteDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const handleCloseShareWebSite = () => {
-    store.dispatch(setShareUrl(''));
+    store.dispatch(setShareUrl(null));
   };
 
   return isShareOpen ? (
@@ -27,8 +27,6 @@ const ShareWebsiteDialog = () => {
       type={'normal'}
       closeAction={handleCloseShareWebSite}
       id="share_website_popup"
-      minWidth={'30rem'}
-      minHeight={'33rem'}
     >
       <ShareWebsiteContent />
     </Dialog>

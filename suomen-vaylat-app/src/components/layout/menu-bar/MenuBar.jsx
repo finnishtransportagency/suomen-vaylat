@@ -277,12 +277,8 @@ const MenuBar = () => {
                     {selectedLayers.length}
                   </StyledLayerCount>
                 </CircleButton>
-                <WebSiteShareButton
-                  id="menubar-share-btn"
-                  aria-label={
-                    strings.accessibility?.shareWebsite ?? 'Share website'
-                  }
-                />
+                
+                <WebSiteShareButton/>
 
                 {isDrawingToolsOpen ? (
                   <StyledDrawingToolsWrapper id="menubar-drawingtools-wrapper">

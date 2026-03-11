@@ -134,8 +134,6 @@ const CloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const Body = styled.div`
-  flex: 1 1 auto;
-  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
