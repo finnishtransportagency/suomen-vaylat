@@ -27,7 +27,7 @@ import {
 
 const FeatureDataDialog = () => {
   const { store } = useContext(ReactReduxContext);
-  const { channel, gfiLocations } = useAppSelector((state) => state.rpc);
+  const { channel } = useAppSelector((state) => state.rpc);
 
   const { isGfiOpen, minimizeGfi, maximizeGfi, activeTool } = useAppSelector(
     (state) => state.ui
@@ -79,11 +79,11 @@ const FeatureDataDialog = () => {
       } /* Action when pressing dialog close button or backdrop */
       id="gfi_dialog"
       minWidth={'35rem'}
-      minHeight={gfiLocations.length > 0 ? '40rem' : '34rem'}
+      minHeight={'40rem'}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}
-      maximizable={gfiLocations.length > 0 ? true : false}
+      maximizable={true}
       maxWidth={maximizeGfi ? null : '90vw'}
       maxHeight={maximizeGfi ? null : '90vh'}
       minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}

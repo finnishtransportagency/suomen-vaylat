@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import strings from '../../../translations';
 import {
   faLayerGroup,
-  faMapMarkedAlt,
   faMap,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
@@ -16,9 +15,7 @@ import { useAppSelector } from '../../../state/hooks';
 import {
   setIsDrawingToolsOpen,
   setIsSideMenuOpen,
-  setIsGfiOpen,
   setActiveTool,
-  setMinimizeGfi,
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
@@ -26,7 +23,6 @@ import {
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
-  setVKMData
 } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../../utils/components/CircleButton';
@@ -280,27 +276,6 @@ const MenuBar = () => {
                   <StyledLayerCount id="menubar-map-layers-count">
                     {selectedLayers.length}
                   </StyledLayerCount>
-                </CircleButton>
-                <CircleButton
-                  id="menubar-gfi-btn"
-                  icon={faMapMarkedAlt}
-                  text={strings.gfi.title}
-                  toggleState={isGfiOpen}
-                  tooltipDirection={'right'}
-                  clickAction={() => {
-                    if (isGfiOpen) {
-                      store.dispatch(setVKMData(null));
-                      store.dispatch(setMinimizeGfi(false));
-                    }
-                    store.dispatch(setIsGfiOpen(!isGfiOpen));
-                  }}
-                  aria-label={strings.gfi?.title}
-                >
-                  {filters?.filters?.length > 0 && (
-                    <StyledLayerCount id="menubar-filter-layer-count">
-                      {filters.filters.length}
-                    </StyledLayerCount>
-                  )}
                 </CircleButton>
                 <WebSiteShareButton
                   id="menubar-share-btn"

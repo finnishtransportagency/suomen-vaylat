@@ -214,10 +214,6 @@
     "target": "Mål",
     "selectLocations": "Välj objekt",
     "focusToLocations": "Inrikta",
-    "choosingGfi": "Val av objektdata",
-    "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
-    "choosingGfiDescription1": "Välj 'Funktionsval' från verktyg menu",
-    "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
     "draw": "Rita",
     "drawSubtitle": "Välj platser med hjälp av ritverktyg",
     "search": "Sökning",
@@ -237,9 +233,7 @@
     },
     "streetView": {
       "title": "Google Street View",
-      "openGoogleStreetView": "Öppna Google Street View",
-      "googleStreetviewTitle": "Google Street View",
-      "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
+      "openGoogleStreetView": "Öppna Google Street View"
     },
     "errors": {
       "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: ",

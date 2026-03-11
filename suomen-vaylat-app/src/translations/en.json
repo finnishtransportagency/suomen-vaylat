@@ -214,10 +214,6 @@
     "target": "Target",
     "selectLocations": "Select locations",
     "focusToLocations": "Target",
-    "choosingGfi": "Choosing feature data",
-    "choosingGfiDescription0": "Make sure that you have activated layers from the Layers menu",
-    "choosingGfiDescription1": "Select 'Feature selection' from tools menu",
-    "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
     "search": "Search",
@@ -237,9 +233,7 @@
     },
     "streetView": {
       "title": "Google Street View",
-      "openGoogleStreetView": "Open Google Street View",
-      "googleStreetviewTitle": "Google Street View",
-      "googleStreetviewContent": "Open selected point in Google Street View in new tab"
+      "openGoogleStreetView": "Open Google Street View"
     },
     "errors": {
       "userLayerDataFetchError": "Failed to retrieve feature data for layer: ",

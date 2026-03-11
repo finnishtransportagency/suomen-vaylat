@@ -211,10 +211,6 @@
     "target": "Kohde",
     "selectLocations": "Valitse kohteita",
     "focusToLocations": "Kohdista",
-    "choosingGfi": "Kohdetietojen valitseminen",
-    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
-    "choosingGfiDescription1": "Valitse työkaluvalikosta 'Kohteiden valinta'",
-    "choosingGfiDescription2": "Voit valita kohteita käyttämällä piirtotyökaluja tai valmiita rajausvaihtoehtoja",
     "draw": "Piirrä",
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
     "search": "Haku",
@@ -236,9 +232,7 @@
     "filterBadgeTitle": "Suodattimet",
     "streetView": {
       "title": "Google Street View",
-      "openGoogleStreetView": "Avaa Google Street View",
-      "googleStreetviewTitle": "Google Street View",
-      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
+      "openGoogleStreetView": "Avaa Google Street View"
     },
     "errors": {
       "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: ",

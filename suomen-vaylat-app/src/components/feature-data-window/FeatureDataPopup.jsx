@@ -23,7 +23,7 @@ import { Controller, FreeMode } from 'swiper/modules';
 import {
   setIsGfiDownloadToolsOpen,
   setMinimizeGfi,
-  setWarning,
+  setWarning
 } from '../../state/slices/uiSlice';
 import {
   resetGFILocations,
@@ -51,8 +51,6 @@ import PillButton from '../../utils/components/PillButton';
 // Max amount of features that wont trigger react-data-table-component
 const KUNTA_IMAGE_URL =
   'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
-
-
 
 const StyledAccordion = styled(Accordion)`
   margin: 0px !important;
@@ -290,9 +288,9 @@ const StyledTabContent = styled.div`
   user-select: text;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;    /* grow/shrink and take remaining space */
-  min-height: 0;     /* critical: allow child to scroll */
-  overflow-y: auto;  /* scroll when content overflows */
+  flex: 1 1 auto; /* grow/shrink and take remaining space */
+  min-height: 0; /* critical: allow child to scroll */
+  overflow-y: auto; /* scroll when content overflows */
 
   /* rest of your styles preserved... */
   div.contentWrapper-infobox {
@@ -452,7 +450,7 @@ export const FeatureDataPopup = () => {
     setPointInfoImageError,
     gfiCroppingArea,
     pointInfo,
-    filters,
+    filters
   } = useAppSelector((state) => state.rpc);
 
   const { isGfiDownloadToolsOpen } = useAppSelector((state) => state.ui);
@@ -484,7 +482,8 @@ export const FeatureDataPopup = () => {
       setTabsIds([]);
     } else {
       const onlyUserLayers = gfiLocations.every(
-        l => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
+        (l) =>
+          typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
       );
       setDisableDownload(onlyUserLayers);
 
@@ -773,7 +772,9 @@ export const FeatureDataPopup = () => {
           pageSizes: [10, 50, 100],
           position: PagingPosition.Bottom
         },
-        format: ({ value }) => {return renderLinksInText(value)}
+        format: ({ value }) => {
+          return renderLinksInText(value);
+        }
       };
       return tablePropsInit;
     }
@@ -843,7 +844,9 @@ export const FeatureDataPopup = () => {
           pageSizes: [10, 50, 100],
           position: PagingPosition.Bottom
         },
-        format: ({ value }) => {return renderLinksInText(value)}
+        format: ({ value }) => {
+          return renderLinksInText(value);
+        }
       };
       return tablePropsInit;
     }
@@ -956,8 +959,10 @@ export const FeatureDataPopup = () => {
         icon={faDownload}
         text={strings.gfi.downloadMaterials}
         disabled={disableDownload}
-        variant='inverse'
-        onClick={() => store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))}
+        variant="inverse"
+        onClick={() =>
+          store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))
+        }
         aria-label={
           gfiLocations.length > 0 && !disableDownload
             ? strings.gfi.downloadMaterials
@@ -974,7 +979,7 @@ export const FeatureDataPopup = () => {
         icon={faSearchLocation}
         text={strings.gfi.focusToLocations}
         disabled={gfiLocations.length === 0 || disableDownload}
-        variant='inverse'
+        variant="inverse"
         onClick={() => {
           handleOverlayGeometry(tabsIds[selectedTab]);
           isMobile && store.dispatch(setMinimizeGfi(true));
@@ -1031,7 +1036,7 @@ export const FeatureDataPopup = () => {
         </StyledAccordionSummary>
         <AccordionDetails>
           <StyledVKMDataContainer>
-            { vkmData &&
+            {vkmData && (
               <StyledVKMDataMunacipalityImageWrapper>
                 {vkmData && vkmData.vkm.kuntakoodi && !pointInfoImageError && (
                   <img
@@ -1051,7 +1056,7 @@ export const FeatureDataPopup = () => {
                   <h5>{vkmData.vkm.kuntanimi}</h5>
                 )}
               </StyledVKMDataMunacipalityImageWrapper>
-            }
+            )}
             {vkmData && vkmData.coordinates && (
               <StyledCoordinatesWrapper>
                 <div>
@@ -1203,91 +1208,56 @@ export const FeatureDataPopup = () => {
         </StyledTabSwiperContainer>
       )}
       <StyledTabContent id="feature-data-tab-content" isMobile={isMobile}>
-        {tabsIds[selectedTab] === undefined ? (
-          <StyledNoGfisContainer>
-            <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
-            <StyledInfoTextContainer>
-              <li>
-                {strings.gfi.choosingGfiDescription0}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faLayerGroup}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-              <li>
-                {strings.gfi.choosingGfiDescription1}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faMapMarkedAlt}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-              <li>{strings.gfi.choosingGfiDescription2}.</li>
-            </StyledInfoTextContainer>
-            <StyledSubtitle>
-              {strings.gfi.streetView.googleStreetviewTitle}:
-            </StyledSubtitle>
-            <StyledInfoTextContainer>
-              <li>
-                {strings.gfi.streetView.googleStreetviewContent}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faStreetView}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-            </StyledInfoTextContainer>
-          </StyledNoGfisContainer>
-        ) : (
-          <StyledSwiper
-            ref={gfiInputEl}
-            id={'gfi-swiper'}
-            onSlideChange={(e) => {
-              setSelectedTab(e.activeIndex);
-            }}
-            tabIndex={selectedTab}
-            allowTouchMove={false} // Disable swiping
-            speed={300}
-          >
-            {gfiLocations.map((location, index) => {
-              const layers = allLayers.filter(
-                (layer) => layer.id === location.layerId
-              );
-              const title = layers.length > 0 && layers[0].name;
-              const tableProps = tablePropsInit(index, location);
+        <StyledSwiper
+          ref={gfiInputEl}
+          id={'gfi-swiper'}
+          onSlideChange={(e) => {
+            setSelectedTab(e.activeIndex);
+          }}
+          tabIndex={selectedTab}
+          allowTouchMove={false} // Disable swiping
+          speed={300}
+        >
+          {gfiLocations.map((location, index) => {
+            const layers = allLayers.filter(
+              (layer) => layer.id === location.layerId
+            );
+            const title = layers.length > 0 && layers[0].name;
+            const tableProps = tablePropsInit(index, location);
 
-              if (location.type === 'geojson') {
-                return (
-                  <SwiperSlide
-                    id={'gfi_tab_content_' + location.layerId}
-                    key={'gfi_tab_content_' + location.layerId}
-                  >
-                    <FeatureDataTabContent
-                      layer={layers[0]}
-                      data={location}
-                      title={title}
-                      tablePropsInit={tableProps}
-                      filters={filters}
-                    />
-                  </SwiperSlide>
-                );
-              } else if (location.type === 'json') {
-                return (
-                  <SwiperSlide
-                    id={'gfi_tab_content_' + location.layerId}
-                    key={'gfi_tab_content_' + location.layerId}
-                  >
-                    <FeatureDataTabContent
-                      layer={layers[0]}
-                      title={title}
-                      tablePropsInit={tableProps}
-                      filters={filters}
-                    />
-                  </SwiperSlide>
-                );
-              }
-              return null;
-            })}
-          </StyledSwiper>
-        )}
+            if (location.type === 'geojson') {
+              return (
+                <SwiperSlide
+                  id={'gfi_tab_content_' + location.layerId}
+                  key={'gfi_tab_content_' + location.layerId}
+                >
+                  <FeatureDataTabContent
+                    layer={layers[0]}
+                    data={location}
+                    title={title}
+                    tablePropsInit={tableProps}
+                    filters={filters}
+                  />
+                </SwiperSlide>
+              );
+            } else if (location.type === 'json') {
+              return (
+                <SwiperSlide
+                  id={'gfi_tab_content_' + location.layerId}
+                  key={'gfi_tab_content_' + location.layerId}
+                >
+                  <FeatureDataTabContent
+                    layer={layers[0]}
+                    title={title}
+                    tablePropsInit={tableProps}
+                    filters={filters}
+                  />
+                </SwiperSlide>
+              );
+            }
+            return null;
+          })}
+        </StyledSwiper>
         {gfiLocations.content && gfiLocations.content[0].noContent && (
           <StyledNoGfisContainer>
             <StyledSubtitle>{strings.gfi.noResultsTitle}</StyledSubtitle>
@@ -1305,13 +1275,16 @@ export const FeatureDataPopup = () => {
               {featuresCount} {moreFeatures && ` / ${totalfeaturesCount}`}
             </span>
           </StyledFeatureAmount>
-          { moreFeatures && (
+          {moreFeatures && (
             <StyledShowMoreButtonWrapper>
               <PillButton
                 id={'feature-data-show-more-results-button'}
                 text={strings.gfi.getMoreFeatures}
                 onClick={() =>
-                  getMoreFeatures(selectedLocation.content, selectedLocation.layerId)
+                  getMoreFeatures(
+                    selectedLocation.content,
+                    selectedLocation.layerId
+                  )
                 }
                 aria-label={strings.gfi.getMoreFeatures}
               />
@@ -1344,7 +1317,7 @@ export const FeatureDataPopup = () => {
               x: '-100%'
             }}
           >
-            <FeatureDataDownloadTools/>
+            <FeatureDataDownloadTools />
           </StyledGfiToolsContainer>
         )}
       </AnimatePresence>
@@ -1364,7 +1337,9 @@ export const FeatureDataPopup = () => {
             exit={{
               opacity: 0
             }}
-            onClick={() => store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))}
+            onClick={() =>
+              store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))
+            }
           />
         )}
       </AnimatePresence>
