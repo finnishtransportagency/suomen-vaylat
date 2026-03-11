@@ -28,8 +28,8 @@ const CoordinateToolDialog = () => {
       minHeight={'23rem'}
       anchorX='end'
       anchorY='end'
-      anchorOriginX = '90%'
-      anchorOriginY = '95%'
+      anchorOriginX = '93%'
+      anchorOriginY = '93%'
     >
       <CoordinateTool />
     </Dialog>

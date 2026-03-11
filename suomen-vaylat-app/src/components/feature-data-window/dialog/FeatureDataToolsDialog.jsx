@@ -61,8 +61,14 @@ const FeatureDataToolsDialog = () => {
       minimizable={true}
       minimizeAction={() => store.dispatch(setMinimizeFeatureSelection(true))}
       id="gfi_tools_menu_dialog"
-      width={'25rem'}
+      minWidth={'16rem'}
+      minHeight={'20rem'}
+      width={'22rem'}
       height={'30rem'}
+      anchorX='start'
+      anchorY='center'
+      anchorOriginX = '15%'
+      anchorOriginY = '50%'
     >
       <FeatureDataSelectionToolsMenu />
     </Dialog>
