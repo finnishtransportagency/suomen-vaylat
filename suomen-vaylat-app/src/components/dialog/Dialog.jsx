@@ -246,21 +246,29 @@ const Dialog = ({
   const [bases, setBases] = useState({ rem: 16, em: 16 });
   const mobileFullscreen = isMobile && fullScreenOnMobile;
 
-  const { bringToFront, assignInitialZ, topId } = useDialogStack();
-  const [zIndex, setZIndex] = useState(null);
+  const { register, unregister, bringToFront, getZIndex, topId } =
+    useDialogStack();
+
   const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
 
   useEffect(() => {
-    const z = assignInitialZ ? assignInitialZ(idRef.current) : 1000;
-    setZIndex(z);
-  }, [assignInitialZ]);
+    const id = idRef.current
+    if (!register) return;
+    register(id);
+
+    return () => {
+      unregister && unregister(id);
+    };
+  }, [register, unregister]);
 
   const handleBringToFront = (e) => {
     e.stopPropagation();
-    if (!bringToFront) return; // no-op if provider missing
+    if (!bringToFront) return;
     if (topId === idRef.current) return;
-    setZIndex(bringToFront(idRef.current));
+    bringToFront(idRef.current);
   };
+
+  const zIndex = getZIndex ? getZIndex(idRef.current) : 1000;
 
   useEffect(() => {
     const computeBases = () => {
@@ -727,7 +735,9 @@ const Dialog = ({
       {backdrop && !hidden && (
         <StyledDialogBackdrop
           style={{ zIndex: zIndex - 1 }}
-          onClick={() => closeAction()}
+          onClick={() => {
+            closeAction();
+          }}
         />
       )}
 
@@ -831,7 +841,11 @@ const Dialog = ({
                 </HeaderBtn>
               )}
 
-              <CloseBtn onClick={() => closeAction()}>
+              <CloseBtn
+                onClick={() => {
+                  closeAction();
+                }}
+              >
                 <CloseIcon icon={faTimes} />
               </CloseBtn>
             </Right>

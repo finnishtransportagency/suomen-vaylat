@@ -46,7 +46,7 @@ const AnnouncementsDialog = () => {
       {currentAnnouncement !== null && announcements[currentAnnouncement] && (
         <Dialog
           key={'announcement-dialog-' + announcements[currentAnnouncement].id}
-          drag={false} /* Enable (true) or disable (false) drag */
+          drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={
             true

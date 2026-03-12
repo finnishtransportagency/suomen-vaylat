@@ -1,34 +1,74 @@
-import React, { createContext, useContext, useRef, useCallback, useState } from 'react';
-
 // AI-GENERATED
+// GPT-5.4 Think deeper
 // Inspected by Oskari Rintamäki
-// Date: 2026-03-02 
+// Date: 2026-03-12
+
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useMemo,
+  useState
+} from 'react';
 
 const DialogStackContext = createContext(null);
 
 export const useDialogStack = () => useContext(DialogStackContext);
 
 /**
- * Provider to control z-indexes for dialogs
+ * orderedIds = bottom -> top
+ * topId = last item in orderedIds
  */
 export const DialogStackProvider = ({ children, baseZ = 12 }) => {
-  const nextZRef = useRef(baseZ);
-  const [topId, setTopId] = useState(null);
+  const [orderedIds, setOrderedIds] = useState([]);
+
+  const register = useCallback((id) => {
+    if (!id) return;
+    setOrderedIds((prev) => {
+      if (prev.includes(id)) return prev;
+      return [...prev, id];
+    });
+  }, []);
+
+  const unregister = useCallback((id) => {
+    if (!id) return;
+    setOrderedIds((prev) => prev.filter((x) => x !== id));
+  }, []);
 
   const bringToFront = useCallback((id) => {
-    nextZRef.current += 1;
-    setTopId(id);
-    return nextZRef.current;
+    if (!id) return;
+    setOrderedIds((prev) => {
+      const filtered = prev.filter((x) => x !== id);
+      return [...filtered, id];
+    });
   }, []);
 
-  const assignInitialZ = useCallback((id) => {
-    setTopId(id);
-    nextZRef.current += 1;
-    return nextZRef.current;
-  }, []);
+  const getZIndex = useCallback(
+    (id) => {
+      const index = orderedIds.indexOf(id);
+      if (index === -1) return baseZ;
+      return baseZ + index;
+    },
+    [orderedIds, baseZ]
+  );
+
+  const topId =
+    orderedIds.length > 0 ? orderedIds[orderedIds.length - 1] : null;
+
+  const value = useMemo(
+    () => ({
+      orderedIds,
+      topId,
+      register,
+      unregister,
+      bringToFront,
+      getZIndex
+    }),
+    [orderedIds, topId, register, unregister, bringToFront, getZIndex]
+  );
 
   return (
-    <DialogStackContext.Provider value={{ bringToFront, assignInitialZ, topId, currentZ: nextZRef.current }}>
+    <DialogStackContext.Provider value={value}>
       {children}
     </DialogStackContext.Provider>
   );
