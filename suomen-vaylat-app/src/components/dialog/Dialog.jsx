@@ -157,47 +157,42 @@ const StyledDialogBackdrop = styled.div`
   cursor: pointer;
 `;
 
+
 const StyledResizeHandle = styled.div`
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 18px;
-  height: 18px;
+  right: 12px;
+  bottom: 14px;
+  width: 14px;
+  height: 14px;
   cursor: nwse-resize;
   z-index: 20;
   pointer-events: auto;
-  opacity: 0.75;
+  opacity: 0.8;
 
-  /* little diagonal "grip" lines */
   &::before,
-  &::after,
-  span::before {
+  &::after {
     content: '';
     position: absolute;
-    right: 0;
-    bottom: 0;
-    border-right: 2px solid ${(p) => p.theme.colors.mainColor1};
-    border-bottom: 2px solid ${(p) => p.theme.colors.mainColor1};
-    box-sizing: border-box;
+    display: block;
+    height: 2px;
+    background-color: ${(p) => p.theme.colors.mainColor1};
+    border-radius: 2px;
+    transform: rotate(-45deg);
+    transform-origin: right center;
   }
 
+  /* smaller inner line */
   &::before {
-    width: 18px;
-    height: 18px;
+    width: 6px;
+    right: 1px;
+    bottom: 2px;
   }
 
+  /* bigger outer line */
   &::after {
     width: 12px;
-    height: 12px;
-    right: 3px;
-    bottom: 3px;
-  }
-
-  span::before {
-    width: 6px;
-    height: 6px;
-    right: 6px;
-    bottom: 6px;
+    right: 1px;
+    bottom: 7px;
   }
 `;
 
@@ -714,6 +709,8 @@ const Dialog = ({
   const maxHpx = mobileFullscreen
     ? bounds.vh
     : toPx(maxHeight, 'y', bounds, bases) ?? undefined;
+
+    console.log(style)
 
   return (
     <>
