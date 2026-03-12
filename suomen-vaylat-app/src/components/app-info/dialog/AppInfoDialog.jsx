@@ -19,8 +19,8 @@ const AppInfoDialog = () => {
 
   return isInfoOpen ? (
     <Dialog
-      drag={false} /* Enable (true) or disable (false) drag */
-      resize={false}
+      drag={true} /* Enable (true) or disable (false) drag */
+      resize={true}
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -31,6 +31,8 @@ const AppInfoDialog = () => {
         handleCloseAppInfoDialog
       } /* Action when pressing dialog close button or backdrop */
       id="app_info_dialog"
+      minWidth='35rem'
+      minHeight='35rem'
     >
       <AppInfoDialogContent />
     </Dialog>

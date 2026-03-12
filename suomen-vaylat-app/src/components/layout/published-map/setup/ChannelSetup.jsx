@@ -36,6 +36,7 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
     setTimeout(() => {
       if (data.getSelectedAnnouncements) {
         channel.getSelectedAnnouncements(function (responseData) {
+          console.log(responseData)
           store.dispatch(setAnnouncements(responseData));
           activeAnnouncements = getActiveAnnouncements(responseData);
 

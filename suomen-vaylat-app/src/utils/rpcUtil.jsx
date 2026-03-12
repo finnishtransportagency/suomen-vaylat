@@ -611,18 +611,22 @@ export const getActiveAnnouncements = (annoucements) => {
   if (annoucements && annoucements.length > 0) {
     const localStorageAnnouncements = localStorage.getItem(
       ANNOUNCEMENTS_LOCALSTORAGE
-    )
-      ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
-      : [];
-    const activeAnnouncements = annoucements.filter((announcement) => {
-      const currDate = new Date();
-      const annDate = new Date(announcement.endDate);
-      return (
-        localStorageAnnouncements &&
-        !localStorageAnnouncements.includes(announcement.id) &&
-        currDate < annDate
-      );
-    });
+    );
+    console.log(annoucements);
+    console.log(localStorageAnnouncements);
+    let activeAnnouncements;
+    if (localStorageAnnouncements) {
+      activeAnnouncements = annoucements.filter((announcement) => {
+        const currDate = new Date();
+        const annDate = new Date(announcement.endDate);
+        return (
+          !localStorageAnnouncements.includes(announcement.id) &&
+          currDate < annDate
+        );
+      });
+    } else {
+      activeAnnouncements = annoucements;
+    }
 
     const currentLang = strings.getLanguage();
     const defaultLang = strings.getAvailableLanguages()[0];

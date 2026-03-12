@@ -157,6 +157,50 @@ const StyledDialogBackdrop = styled.div`
   cursor: pointer;
 `;
 
+const StyledResizeHandle = styled.div`
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  z-index: 20;
+  pointer-events: auto;
+  opacity: 0.75;
+
+  /* little diagonal "grip" lines */
+  &::before,
+  &::after,
+  span::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-right: 2px solid ${(p) => p.theme.colors.mainColor1};
+    border-bottom: 2px solid ${(p) => p.theme.colors.mainColor1};
+    box-sizing: border-box;
+  }
+
+  &::before {
+    width: 18px;
+    height: 18px;
+  }
+
+  &::after {
+    width: 12px;
+    height: 12px;
+    right: 3px;
+    bottom: 3px;
+  }
+
+  span::before {
+    width: 6px;
+    height: 6px;
+    right: 6px;
+    bottom: 6px;
+  }
+`;
+
 let __zCounter = 9993;
 
 /* ---------------- Component ---------------- */
@@ -184,8 +228,8 @@ const Dialog = ({
   /** Sizing */
   width = 'auto',
   height = 'auto',
-  minWidth,
-  minHeight,
+  minWidth = '25rem',
+  minHeight = '25rem',
   maxWidth = '90vw',
   maxHeight = '90vh',
 
@@ -194,8 +238,6 @@ const Dialog = ({
   anchorOriginY = '50%',
   anchorX = 'center',
   anchorY = 'center',
-
-  enableResizingSides,
 
   children,
   style = {}
@@ -235,9 +277,7 @@ const Dialog = ({
 
   const handleAnnouncementDialog = (selected, id) => {
     setLocalState(false);
-    setTimeout(() => {
-      closeAction?.(selected, id);
-    }, 500);
+    closeAction?.(selected, id);
   };
 
   const renderedChildren = !isAnnouncement
@@ -662,12 +702,18 @@ const Dialog = ({
 
   const canResize = !mobileFullscreen && !hidden && resize && !maximize;
 
-  const enableResizing =
-    typeof enableResizingSides === 'object'
-      ? hidden
-        ? false
-        : enableResizingSides
-      : canResize;
+  const enableResizing = canResize
+    ? {
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
+        topRight: false,
+        bottomRight: true,
+        bottomLeft: false,
+        topLeft: false
+      }
+    : false;
 
   const bounds = { vw: window.innerWidth, vh: window.innerHeight };
 
@@ -697,8 +743,7 @@ const Dialog = ({
             if (!isAnnouncement) {
               closeAction?.();
             } else {
-              setLocalState(false);
-              setTimeout(() => closeAction?.(null, null), 500);
+              handleAnnouncementDialog();
             }
           }}
         />
@@ -713,6 +758,9 @@ const Dialog = ({
         minHeight={minHpx}
         maxWidth={maxWpx}
         maxHeight={maxHpx}
+        resizeHandleComponent={{
+          bottomRight: <StyledResizeHandle />
+        }}
         onDragStart={() => {
           if (hidden) return;
           bringToFront();
@@ -801,8 +849,7 @@ const Dialog = ({
                   if (!isAnnouncement) {
                     closeAction?.();
                   } else {
-                    setLocalState(false);
-                    setTimeout(() => closeAction?.(null, null), 500);
+                    handleAnnouncementDialog();
                   }
                 }}
               >

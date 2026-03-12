@@ -14,6 +14,7 @@ const AnnouncementsDialog = () => {
   useEffect(() => {
     announcements && setCurrentAnnouncement(0);
   }, [announcements]);
+
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
     let existing = localStorage.getItem(name);
@@ -28,12 +29,16 @@ const AnnouncementsDialog = () => {
     // Save back to localStorage
     localStorage.setItem(name, existing.toString());
   };
+
   const closeAnnouncement = (selected, id) => {
     if (selected) {
       addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
     }
-    announcements.length > currentAnnouncement + 1 &&
+    if (announcements.length > currentAnnouncement + 1) {
       setCurrentAnnouncement(currentAnnouncement + 1);
+    } else {
+      setCurrentAnnouncement(null);
+    }
   };
 
   return (
@@ -55,7 +60,7 @@ const AnnouncementsDialog = () => {
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
           id={announcements[currentAnnouncement].id}
-          maxWidth={'50vw'}
+          min
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}

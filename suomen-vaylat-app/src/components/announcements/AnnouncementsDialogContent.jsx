@@ -8,7 +8,7 @@ const StyledCheckbox = styled.input`
 `;
 
 const StyledContent = styled.div`
-    padding: 32px;
+    padding: 1em;
 `;
 
 const StyledFooter = styled.div`
