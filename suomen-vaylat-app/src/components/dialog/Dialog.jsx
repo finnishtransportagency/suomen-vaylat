@@ -1,15 +1,14 @@
 // AI-GENERATED
 // GPT-5.4 Think deeper
 // Inspected by Oskari Rintamäki
-// Date: 2026-03-11
+// Date: 2026-03-12
 
 import React, {
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
-  useState,
-  cloneElement
+  useState
 } from 'react';
 import styled from 'styled-components';
 import { Rnd } from 'react-rnd';
@@ -29,6 +28,7 @@ import {
   toPx,
   anchoredPosition
 } from './utils/dialogUtil';
+import { useDialogStack } from '../../state/DialogStackContext';
 
 /* ---------------- Constants ---------------- */
 
@@ -66,7 +66,9 @@ const Header = styled.div`
   background-color: ${(p) =>
     p.$type === 'warning'
       ? p.theme.colors.secondaryColorDarkOrange
-      : p.theme.colors.mainColor1Selected};
+      : p.$onTop
+      ? p.theme.colors.mainColor1Selected
+      : p.theme.colors.mainColor1};
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
   padding: 0 16px;
 
@@ -157,7 +159,6 @@ const StyledDialogBackdrop = styled.div`
   cursor: pointer;
 `;
 
-
 const StyledResizeHandle = styled.div`
   position: absolute;
   right: 12px;
@@ -195,8 +196,6 @@ const StyledResizeHandle = styled.div`
     bottom: 7px;
   }
 `;
-
-let __zCounter = 9993;
 
 /* ---------------- Component ---------------- */
 
@@ -246,6 +245,22 @@ const Dialog = ({
 
   const [bases, setBases] = useState({ rem: 16, em: 16 });
   const mobileFullscreen = isMobile && fullScreenOnMobile;
+
+  const { bringToFront, assignInitialZ, topId } = useDialogStack();
+  const [zIndex, setZIndex] = useState(null);
+  const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
+
+  useEffect(() => {
+    const z = assignInitialZ ? assignInitialZ(idRef.current) : 1000;
+    setZIndex(z);
+  }, [assignInitialZ]);
+
+  const handleBringToFront = (e) => {
+    e.stopPropagation();
+    if (!bringToFront) return; // no-op if provider missing
+    if (topId === idRef.current) return;
+    setZIndex(bringToFront(idRef.current));
+  };
 
   useEffect(() => {
     const computeBases = () => {
@@ -381,10 +396,6 @@ const Dialog = ({
     setPosition(nextPos);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bases]);
-
-  // Z-index stacking
-  const [zIndex, setZIndex] = useState(++__zCounter);
-  const bringToFront = () => setZIndex(++__zCounter);
 
   // Save/restore around maximize
   const prevRef = useRef({ size, position });
@@ -710,8 +721,6 @@ const Dialog = ({
     ? bounds.vh
     : toPx(maxHeight, 'y', bounds, bases) ?? undefined;
 
-    console.log(style)
-
   return (
     <>
       {/* Hide backdrop while minimized */}
@@ -734,19 +743,23 @@ const Dialog = ({
         resizeHandleComponent={{
           bottomRight: <StyledResizeHandle />
         }}
-        onDragStart={() => {
+        onDragStart={(e) => {
           if (hidden) return;
-          bringToFront();
+          handleBringToFront(e);
           setHasUserMoved(true);
         }}
-        onResizeStart={() => {
+        onResizeStart={(e) => {
           if (hidden) return;
-          bringToFront();
+          handleBringToFront(e);
           setUserResized(true);
         }}
-        onMouseDown={() => {
+        onMouseDown={(e) => {
           if (hidden) return;
-          bringToFront();
+          handleBringToFront(e);
+        }}
+        onPointerDown={(e) => {
+          if (hidden) return;
+          handleBringToFront(e);
         }}
         onDragStop={(_, d) => setPosition({ x: d.x, y: d.y })}
         onResize={(_, __, ref, ___, newPosition) => {
@@ -773,6 +786,7 @@ const Dialog = ({
             id={'dialog_header_' + title}
             $type={type}
             $drag={drag && !disableDragging}
+            $onTop={topId === idRef.current}
             className="dialog-header"
           >
             <Tooltip
@@ -817,9 +831,7 @@ const Dialog = ({
                 </HeaderBtn>
               )}
 
-              <CloseBtn
-                onClick={() => closeAction()}
-              >
+              <CloseBtn onClick={() => closeAction()}>
                 <CloseIcon icon={faTimes} />
               </CloseBtn>
             </Right>

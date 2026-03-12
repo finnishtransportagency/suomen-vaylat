@@ -39,7 +39,7 @@ const StyledWarningSubtitle = styled.p`
 const StyledWarningButtonsContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: baseline;
   padding-top: 1rem;
   border-top: 1px solid #dee2e6;
   @media ${(props) => props.theme.device.mobileL} {

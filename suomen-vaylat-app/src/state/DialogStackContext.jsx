@@ -11,7 +11,7 @@ export const useDialogStack = () => useContext(DialogStackContext);
 /**
  * Provider to control z-indexes for dialogs
  */
-export const DialogStackProvider = ({ children, baseZ = 1000 }) => {
+export const DialogStackProvider = ({ children, baseZ = 12 }) => {
   const nextZRef = useRef(baseZ);
   const [topId, setTopId] = useState(null);
 

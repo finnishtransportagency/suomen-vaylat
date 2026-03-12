@@ -26,7 +26,9 @@ const WarningDialog = () => {
       type={'warning'}
       closeAction={handleCloseWarning}
       id={null}
-      maxWidth={'30rem'}
+      maxWidth={'45rem'}
+      minWidth='30rem'
+      minHeight='18rem'
     >
       <WarningDialogContent warning={warning} />
     </Dialog>
