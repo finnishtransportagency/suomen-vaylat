@@ -213,7 +213,7 @@ const Dialog = ({
   fullScreenOnMobile = false,
   title,
   titleIcon,
-  type,
+  type, // warning?
   hasHelp,
   helpId,
   helpContent,
@@ -242,12 +242,6 @@ const Dialog = ({
   children,
   style = {}
 }) => {
-  const isAnnouncement = type === 'announcement';
-  const [localState, setLocalState] = useState(isAnnouncement);
-
-  // If parent conditionally renders dialog, normal dialogs are always visible when mounted.
-  const isVisible = isAnnouncement ? localState : true;
-
   const panelRef = useRef(null);
   const headerRef = useRef(null);
   const bodyRef = useRef(null);
@@ -274,15 +268,6 @@ const Dialog = ({
     window.addEventListener('resize', computeBases);
     return () => window.removeEventListener('resize', computeBases);
   }, []);
-
-  const handleAnnouncementDialog = (selected, id) => {
-    setLocalState(false);
-    closeAction?.(selected, id);
-  };
-
-  const renderedChildren = !isAnnouncement
-    ? children
-    : cloneElement(children, { handleAnnouncementDialog });
 
   const renderDialogIcon = (icon) => {
     if (icon && React.isValidElement(icon)) return icon;
@@ -436,7 +421,6 @@ const Dialog = ({
    * - if resize=true and user manually resizes -> stop auto-sizing
    */
   useLayoutEffect(() => {
-    if (!isVisible) return;
     if (mobileFullscreen) return;
     if (minimize) return;
     if (!bodyRef.current) return;
@@ -570,7 +554,6 @@ const Dialog = ({
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [
-    isVisible,
     minimize,
     resize,
     userResized,
@@ -679,7 +662,6 @@ const Dialog = ({
   // Mobile fullscreen
   useEffect(() => {
     if (!mobileFullscreen) return;
-    if (!isVisible) return;
     if (minimize) return;
 
     const updateFullscreen = () => {
@@ -694,7 +676,7 @@ const Dialog = ({
     window.addEventListener('resize', updateFullscreen);
 
     return () => window.removeEventListener('resize', updateFullscreen);
-  }, [mobileFullscreen, isVisible, minimize]);
+  }, [mobileFullscreen, minimize]);
 
   const hidden = minimize === true;
 
@@ -739,13 +721,7 @@ const Dialog = ({
       {backdrop && !hidden && (
         <StyledDialogBackdrop
           style={{ zIndex: zIndex - 1 }}
-          onClick={() => {
-            if (!isAnnouncement) {
-              closeAction?.();
-            } else {
-              handleAnnouncementDialog();
-            }
-          }}
+          onClick={() => closeAction()}
         />
       )}
 
@@ -845,20 +821,14 @@ const Dialog = ({
               )}
 
               <CloseBtn
-                onClick={() => {
-                  if (!isAnnouncement) {
-                    closeAction?.();
-                  } else {
-                    handleAnnouncementDialog();
-                  }
-                }}
+                onClick={() => closeAction()}
               >
                 <CloseIcon icon={faTimes} />
               </CloseBtn>
             </Right>
           </Header>
 
-          <Body ref={bodyRef}>{renderedChildren}</Body>
+          <Body ref={bodyRef}>{children}</Body>
         </Panel>
       </StyledRnd>
     </>

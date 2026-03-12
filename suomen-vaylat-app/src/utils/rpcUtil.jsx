@@ -604,7 +604,7 @@ export const removeDuplicates = (originalArray, prop) => {
 /**
  * Gets active announcements
  * @param {Array} annoucements announcements
- * @returns {Array} active annoucements
+ * @returns {Array | null} active annoucements or null
  */
 export const getActiveAnnouncements = (annoucements) => {
   let activeAnnoucements = [];
@@ -612,21 +612,15 @@ export const getActiveAnnouncements = (annoucements) => {
     const localStorageAnnouncements = localStorage.getItem(
       ANNOUNCEMENTS_LOCALSTORAGE
     );
-    console.log(annoucements);
-    console.log(localStorageAnnouncements);
+
     let activeAnnouncements;
     if (localStorageAnnouncements) {
-      activeAnnouncements = annoucements.filter((announcement) => {
-        const currDate = new Date();
-        const annDate = new Date(announcement.endDate);
-        return (
-          !localStorageAnnouncements.includes(announcement.id) &&
-          currDate < annDate
-        );
-      });
+      activeAnnouncements = annoucements.filter((announcement) => !localStorageAnnouncements.includes(announcement.id));
     } else {
       activeAnnouncements = annoucements;
     }
+
+    if (activeAnnouncements.length === 0) return null;
 
     const currentLang = strings.getLanguage();
     const defaultLang = strings.getAvailableLanguages()[0];
@@ -644,5 +638,6 @@ export const getActiveAnnouncements = (annoucements) => {
       });
     });
   }
+
   return activeAnnoucements;
 };

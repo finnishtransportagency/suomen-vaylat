@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import Dialog from '../../dialog/Dialog';
 import { useAppSelector } from '../../../state/hooks';
 import AnnouncementsDialogContent from '../AnnouncementsDialogContent';
@@ -55,17 +55,17 @@ const AnnouncementsDialog = () => {
           title={
             announcements[currentAnnouncement].title
           } /* Dialog header title */
-          type={'announcement'} /* Dialog type */
           closeAction={
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
           id={announcements[currentAnnouncement].id}
-          min
+          minWidth="30rem"
+          minHeight="18rem"
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}
-            title={announcements[currentAnnouncement].title}
             content={announcements[currentAnnouncement].content}
+            handleAnnouncementDialog={closeAnnouncement}
             key={'announcement_dialog_' + announcements[currentAnnouncement].id}
           />
         </Dialog>
