@@ -246,6 +246,7 @@ const Dialog = ({
   const [bases, setBases] = useState({ rem: 16, em: 16 });
   const mobileFullscreen = isMobile && fullScreenOnMobile;
 
+  // Handle z-indexes of dialogs
   const { register, unregister, bringToFront, getZIndex, topId } =
     useDialogStack();
 
@@ -270,6 +271,7 @@ const Dialog = ({
 
   const zIndex = getZIndex ? getZIndex(idRef.current) : 1000;
 
+  // Compute the bases which are used to calculate the px width and height for dialogs from rem, em etc.
   useEffect(() => {
     const computeBases = () => {
       const rem =
@@ -287,6 +289,7 @@ const Dialog = ({
     return () => window.removeEventListener('resize', computeBases);
   }, []);
 
+  // Handle two different icon libraries
   const renderDialogIcon = (icon) => {
     if (icon && React.isValidElement(icon)) return icon;
     if (icon && typeof icon === 'object')
