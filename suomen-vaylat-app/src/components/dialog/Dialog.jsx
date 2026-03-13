@@ -799,16 +799,19 @@ const Dialog = ({
             $onTop={topId === idRef.current}
             className="dialog-header"
           >
-            <Tooltip
-              anchorSelect={'#' + helpId}
-              style={{ backgroundColor: theme.colors.mainColor1 }}
-              disable={isMobile}
-              id={helpId + '_tooltip'}
-              place="bottom"
-              effect="float"
-            >
-              {helpContent}
-            </Tooltip>
+            
+            {hasHelp && helpId && (
+              <Tooltip
+                anchorSelect={`#${helpId}`}
+                style={{ backgroundColor: theme.colors.mainColor1 }}
+                disable={isMobile}
+                id={`${helpId}_tooltip`}
+                place="bottom"
+                effect="float"
+              >
+                {helpContent}
+              </Tooltip>
+            )}
 
             <Title>
               {renderDialogIcon(titleIcon)}
