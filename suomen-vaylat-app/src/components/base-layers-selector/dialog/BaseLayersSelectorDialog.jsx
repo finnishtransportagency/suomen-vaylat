@@ -17,6 +17,7 @@ const BaseLayerSelectorDialog = () => {
   return isBaseLayerSelectorMenuOpen ? (
     <Dialog
       drag={false}
+      backdrop
       resize={false}
       fullScreenOnMobile={true}
       title={strings.baseLayerSelector.title}
