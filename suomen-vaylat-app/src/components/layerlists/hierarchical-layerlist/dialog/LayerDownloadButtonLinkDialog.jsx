@@ -31,6 +31,7 @@ const LayerDownloadLinkButtonDialog = () => {
       closeAction={handleCloseDownloadLinkDialog}
       id="layer_download_link_dialog"
       maxWidth={'22rem'}
+      minHeight='20rem'
     >
       <LayerDownloadLinkButtonDialogContent downloadLink={downloadLink} />
     </Dialog>

@@ -59,7 +59,6 @@ const Panel = styled.div`
 
 const Header = styled.div`
   z-index: 10;
-  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -97,7 +96,8 @@ const Title = styled.div`
   user-select: none;
 
   p {
-    margin: 0 1rem 0 0;
+    padding: 8px;
+    margin: 0px;
     font-size: 20px;
     font-weight: bold;
     color: ${(p) => p.theme.colors.mainWhite};

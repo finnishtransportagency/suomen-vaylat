@@ -171,7 +171,8 @@ const StyledRightAction = styled.button`
 const StyledActionButtons = styled.div`
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-between
+
   margin-top: 12px;
   flex-wrap: wrap;
 

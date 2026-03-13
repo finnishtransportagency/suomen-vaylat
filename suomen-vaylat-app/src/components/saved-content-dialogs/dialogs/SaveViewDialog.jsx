@@ -197,7 +197,7 @@ const SaveViewsDialog = () => {
       closeAction={handleCloseSaveViewDialog}
       type="normal"
       minWidth={'32rem'}
-      minHeight={'31rem'}
+      minHeight={'28rem'}
       hasHelp
       helpId='show_view_help'
       helpContent={helpContent}
