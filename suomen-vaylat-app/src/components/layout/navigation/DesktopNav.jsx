@@ -69,7 +69,7 @@ const DropdownMenu = styled.ul`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
   margin: 0;
   padding: 0;
-  z-index: 12;
+  z-index: 13;
   list-style: none;
   font-size: 15px;
 `;

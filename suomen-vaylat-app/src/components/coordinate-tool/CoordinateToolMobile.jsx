@@ -53,7 +53,7 @@ const StyledMobileCoordsContainer = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 10;
+  z-index: 12;
   background: ${(props) => props.theme.colors.mainWhite};
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   @media ${(props) => props.theme.device.mobileL} {
@@ -903,7 +903,7 @@ const CoordinateToolMobile = () => {
       animate={isCoordinateToolOpen ? 'visible' : 'hidden'}
       variants={listVariants}
       drag="y"
-      dragConstraints={{ top: 0, bottom: 240 }}
+      dragConstraints={{ top: 0, bottom: 330 }}
       dragElastic={0.2}
       aria-labelledby="coordinate-tool-mobile-title"
     >
