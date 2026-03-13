@@ -43,7 +43,7 @@ const AnnouncementsDialog = () => {
 
   return (
     <>
-      {currentAnnouncement !== null && announcements[currentAnnouncement] && (
+      {currentAnnouncement !== null && announcements[currentAnnouncement] ? (
         <Dialog
           key={'announcement-dialog-' + announcements[currentAnnouncement].id}
           drag={true} /* Enable (true) or disable (false) drag */
@@ -69,7 +69,8 @@ const AnnouncementsDialog = () => {
             key={'announcement_dialog_' + announcements[currentAnnouncement].id}
           />
         </Dialog>
-      )}
+      )
+    : null }
     </>
   );
 };
