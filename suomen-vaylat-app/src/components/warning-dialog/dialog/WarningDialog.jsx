@@ -28,7 +28,7 @@ const WarningDialog = () => {
       id={null}
       maxWidth={'45rem'}
       minWidth='30rem'
-      minHeight='18rem'
+      minHeight='10rem'
     >
       <WarningDialogContent warning={warning} />
     </Dialog>
