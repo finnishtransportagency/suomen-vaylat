@@ -1,5 +1,4 @@
 import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
-import thunkMiddleware from 'redux-thunk';
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
 import searchReducer from './slices/searchSlice';
@@ -9,7 +8,6 @@ import uiReducer from './slices/uiSlice';
 //import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
 //import { throttle } from 'lodash';
 
-const middlewareEnhancer = applyMiddleware(thunkMiddleware);
 
 export const store = configureStore ({
   reducer: {
@@ -18,7 +16,6 @@ export const store = configureStore ({
     ui: uiReducer,
     search: searchReducer
   },
-  enhancers: [middlewareEnhancer],
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware({serializableCheck: false}),
   // TODO check at if something still need to get localStorage
