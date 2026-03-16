@@ -940,7 +940,6 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
   };
 
   useEffect(() => {
-    vkmData ? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     if (pointInfo.lon && pointInfo.lat) {
       // our projection EPSG:3067
       var oskariProjection =
@@ -1301,30 +1300,12 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
         </StyledDownloadAndLocationButtonsWrapper>
       </StyledButtonsContainer>
 
-      <AnimatePresence>
         {isGfiDownloadToolsOpen && (
           <StyledGfiToolsContainer
-            transition={{
-              duration: 0.4,
-              type: 'tween'
-            }}
-            initial={{
-              opacity: 0,
-              x: '-100%'
-            }}
-            animate={{
-              opacity: 1,
-              x: 0
-            }}
-            exit={{
-              opacity: 0,
-              x: '-100%'
-            }}
           >
             <FeatureDataDownloadTools />
           </StyledGfiToolsContainer>
         )}
-      </AnimatePresence>
       <AnimatePresence>
         {isGfiDownloadToolsOpen && (
           <StyledGfiBackdrop

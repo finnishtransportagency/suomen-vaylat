@@ -73,7 +73,7 @@ const StyledButtonText = styled.div`
 `;
 
 const BaseLayerSelector = () => {
-    const { allLayers, selectedLayersByType } = useAppSelector((state) => state.rpc);
+    const { allLayers, allGroups } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
@@ -108,7 +108,7 @@ const BaseLayerSelector = () => {
                 aria-label={strings.baseLayerSelector.labels.editBaseLayers}
                 tabIndex={0}
                 role="button"
-                disabled={selectedLayersByType.backgroundMaps?.length === 0}
+                disabled={allGroups.length === 0}
             >
                 <ModeEditOutlineTwoToneIcon />
             </StyledMenuButton>
