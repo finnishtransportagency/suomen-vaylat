@@ -638,7 +638,6 @@
         "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "start:5/116/0/50 end:5/348/0/100",
         "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
       "vkmTrack": "Type in the format 'track number/track kilometre/track metre'. All 3 parameters are mandatory.",
@@ -651,10 +650,10 @@
       "nomenclature": "With name search, you can search for objects in a geographic name registry. Eg.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
-      "layerExamples": ["pölkytys"],
+      "layerExamples": ["Digiroad, kuntoluokkatieto"],
       "feature": "With feature search you can search for specific features from the top layer on the map. You can Control the selected layer order from the maplayer menu, in 'selected layers' tab. Example search: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
-      "location": "Location search is a default search type that includes all other search types except material- and feature searches."
+      "location": "Location search is a default search type that includes road-, track-, address-, nomenclature- and property searches."
     },
     "nomenclature": {
       "title": "Name search"

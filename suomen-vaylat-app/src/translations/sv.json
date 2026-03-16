@@ -638,7 +638,6 @@
         "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "start:5/116/0/50 slut:5/348/0/100",
         "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
       "vkmTrack": "Skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
@@ -651,10 +650,10 @@
       "nomenclature": "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
-      "layerExamples": ["pölkytys"],
+      "layerExamples": ["Digiroad, kuntoluokkatieto"],
       "feature": "Destinationssökning kan användas för att söka efter destinationsinformation på den översta nivån av de valda kartlagren. Exempelsökning: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
-      "location": "Platssökning är en standardsöktyp som inkluderar alla andra söktyper förutom material- och objektsökningar."
+      "location": "Platssökning är en standardsöktyp som inkluderar sök efter vägnummer, bansökning, adressökning, namnsökning och fastighetssökning."
     },
     "nomenclature": {
       "title": "Namnsökning"
