@@ -63,7 +63,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: ${(p) =>
-    p.$type === 'warning'
+    p.type === 'warning'
       ? p.theme.colors.secondaryColorDarkOrange
       : p.$onTop
       ? p.theme.colors.mainColor1Selected
@@ -797,10 +797,10 @@ const Dialog = ({
           <Header
             ref={headerRef}
             id={'dialog_header_' + title}
-            $type={type}
             $drag={drag && !disableDragging}
             $onTop={topId === idRef.current}
             className="dialog-header"
+            type={type}
           >
             
             {hasHelp && helpId && (
