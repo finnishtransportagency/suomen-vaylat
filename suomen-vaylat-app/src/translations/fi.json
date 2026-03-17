@@ -636,7 +636,6 @@
         "5/116/0/50",
         "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
-        "alku:5/116/0/50 loppu:5/348/0/100",
         "'Käytä ajorataa haussa' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
       ],
       "vkmTrack": "Kirjoita muodossa 'ratanumero/ratakilometri/ratametri'. Kaikki 3 parametria on pakollisia.",
@@ -649,10 +648,10 @@
       "nomenclature": "Nimistöhaulla voit hakea kohteita paikkatietonimistöstä. Esim.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
-      "layerExamples": ["pölkytys", "liikennemerkit"],
+      "layerExamples": ["digiroad, kuntoluokkatieto"],
       "feature": "Kohdehakua voidaan käyttää kohdetietojen etsimiseen valittujen karttatasojen päällimmäiseltä tasolta. Esimerkkihaku: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
-      "location": "Paikkahaku on oletusarvoinen hakukanava, joka sisältää kaikki muut hakutyypit, paitsi aineisto- ja kohdehaun."
+      "location": "Paikkahaku on oletusarvoinen hakukanava, joka sisältää tie-, rata-, osoite-, nimistö- ja kiinteistöhaun."
     },
     "nomenclature": {
       "title": "Nimistöhaku"
