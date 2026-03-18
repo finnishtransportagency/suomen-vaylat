@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import FilterLayerList from './FilterLayerList';
 import FilterLayers from './FilterLayers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -48,17 +48,9 @@ const StyledLayerGroups = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: ${(props) =>
-    props.parentId === -1 ? props.theme.colors.mainWhite : '#F2F2F2'};
+  background-color: #F2F2F2;
   margin: 8px 0px 8px 0px;
   border-radius: 4px;
-
-  &:last-child {
-    ${(props) =>
-      props.parentId === -1
-        ? '1px solid ' + props.theme.colors.mainColor2
-        : 'none'};
-  }
 `;
 
 const StyledMasterGroupHeader = styled.div`
@@ -434,7 +426,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
 
   return (
     <>
-      <StyledLayerGroups>
+      <StyledLayerGroups id='filter-layer-groups-wrapper'>
         {group.parentId === -1 ? (
           <StyledMasterGroupHeader
             aria-label={
@@ -455,8 +447,8 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
               setIsOpen(!isOpen);
             }}
           >
-            <StyledLeftContent>
-              <StyledMasterGroupHeaderIcon>
+            <StyledLeftContent id='filter-layer-master-group-header-left-content'>
+              <StyledMasterGroupHeaderIcon id='filter-layer-master-group-header-icon'>
                 {themeStyles.hasOwnProperty(group.id) ? (
                   <FontAwesomeIcon icon={themeStyles[group.id].icon} />
                 ) : (
@@ -470,7 +462,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                   </p>
                 )}
               </StyledMasterGroupHeaderIcon>
-              <StyledMasterGroupTitleContent>
+              <StyledMasterGroupTitleContent id='filter-layer-master-group-header-title-content'>
                 <StyledMasterGroupName>
                   {group.locale[currentLang] && group.locale[currentLang].name
                     ? group.locale[currentLang].name
@@ -484,8 +476,9 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                 </StyledMasterGroupLayersCount>
               </StyledMasterGroupTitleContent>
             </StyledLeftContent>
-            <StyledRightContent>
+            <StyledRightContent id='filter-layer-master-group-header-right-content'>
               <StyledSelectButton
+                id='filter-layer-master-group-header-select-button'
                 aria-label={
                   isOpen
                     ? group.locale[currentLang] &&
@@ -520,6 +513,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
           </StyledMasterGroupHeader>
         ) : (
           <StyledGroupHeader
+            id='filter-layer-group-header'
             aria-label={
               isOpen
                 ? group.locale[currentLang] && group.locale[currentLang].name
@@ -533,11 +527,12 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                 ? group.locale[defaultLang].name
                 : group.id
             }
-            key={'smgh_' + group.parentId + '_' + group.id}
+            key={'sgh_' + group.parentId + '_' + group.id}
             onClick={() => setIsOpen(!isOpen)}
           >
-            <StyledLefContent>
+            <StyledLefContent id='filter-layer-group-header-left-content'>
               <StyledSelectButton
+                id='filter-layer-group-header-select-button'
                 subGroup={true}
                 aria-label={
                   isOpen
@@ -570,7 +565,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                 </StyledMotionIconWrapper>
               </StyledSelectButton>
               <div>
-                <StyledGroupName>
+                <StyledGroupName id='filter-layer-group-header-name'>
                   {group.locale[currentLang] && group.locale[currentLang].name
                     ? group.locale[currentLang].name
                     : group.locale[defaultLang] &&
@@ -578,12 +573,12 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                     ? group.locale[defaultLang].name
                     : group.id}
                 </StyledGroupName>
-                <StyledSubGroupLayersCount>
+                <StyledSubGroupLayersCount id='filter-layer-group-header-layer-count'>
                   {totalVisibleGroupLayersCount + ' / ' + totalGroupLayersCount}
                 </StyledSubGroupLayersCount>
               </div>
             </StyledLefContent>
-            <StyledRightContent>
+            <StyledRightContent id='filter-layer-group-header-right-content'>
               <LayerlistSwitch
                 isSelected={
                   totalVisibleGroupLayersCount === totalGroupLayersCount &&
@@ -595,6 +590,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
           </StyledGroupHeader>
         )}
         <StyledLayerGroup
+          id={'filter-layer-group_' + group.id}
           parentId={group.parentId}
           key={'slg_' + group.parentId + '_' + group.id}
           initial="hidden"

@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../../translations';
-import { isValidUrl } from '../../../utils/validUrlUtil';
-
 import { useAppSelector } from '../../../state/hooks';
+import { renderLinksInText } from '../../../utils/commonUtil'
 
 const StyledGfiTabContentItem = styled(motion.div)`
-    overflow: hidden;
     border-bottom: 1px solid #cdcdcd;
+`;
+
+// this is needed for hover bg color to 
+const StyledGfiTabContentItemHeaderContainer = styled.div`
+    padding: 12px;
+    &:hover {
+        background-color: ${(props) => props.theme.colors.hover};
+    }
 `;
 
 const StyledGfiTabContentItemHeader = styled(motion.div)`
@@ -20,7 +26,6 @@ const StyledGfiTabContentItemHeader = styled(motion.div)`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 12px;
 `;
 
 const StyledGfiSubTabContentItemHeader = styled(motion.div)`
@@ -49,7 +54,7 @@ const StyledGfiSubTabContentItemName = styled.p`
 const StyledGfiTabContentItemExpandIcon = styled(motion.div)`
     display: flex;
     align-items: center;
-    font-size: 24px;
+    font-size: 16px;
     margin: 6px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
@@ -69,23 +74,25 @@ const StyledGfiTabContentItemCollapseContent = styled(motion.div)`
 
 `;
 
-const StyledGfiTabContentItemTable = styled.table`
+const StyledTableWrapper = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto; /* show horizontal scrollbar if needed */
+  -webkit-overflow-scrolling: touch;
+`;
 
+const StyledGfiTabContentItemTable = styled.table`
+  border-collapse: collapse;
+  /* allow the table to be as wide as its contents; min-width ensures it fills parent */
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
 `;
 
 const StyledGfiTabContentItemTableRow = styled.tr`
 
 `;
 
-// inline-block styling makes the area between two text lines clickable
-const StyledLinkText = styled.a`
-    display: inline-block;
-    word-break: break-all;
-`;
-
-const StyledPropertyValue = styled.div`
-    margin: 6px;
-`;
 
 const StyledGfiTabContentItemTableHeader = styled.th`
     padding: 6px 6px 6px 16px;
@@ -95,6 +102,7 @@ const StyledGfiTabContentItemTableHeader = styled.th`
 
 const StyledGfiTabContentItemTableData = styled.td`
     font-size: 14px;
+    padding: 8px;
 `;
 
 const StyledGfiTabContentItemSubCollapseContent = styled(motion.div)`
@@ -109,7 +117,6 @@ const FeatureDataTabContentItem = ({
     deSelectFeature
 }) => {
     const [isExpanded, setIsExpanded] = useState(index === 0);
-    const [isHovered, setHovered] = useState(false);
     const [isSubExpanded, setIsSubExpanded] = useState(false);
     const [orderHigh, setOrderHigh] = useState(null);
     const [orderLow, setOrderLow] = useState(null);
@@ -144,53 +151,39 @@ const FeatureDataTabContentItem = ({
         }
     }, [data, isGeojson]);
 
-    const formattedContent = (value) => {
-        if (isValidUrl(value)) {
-            return (<StyledLinkText target="_blank" rel="noreferrer" href={value}>{value}</StyledLinkText>);
-        } else {
-            return (
-                <StyledPropertyValue 
-                    dangerouslySetInnerHTML={{ __html: typeof(value) === "string" ? value.replace(/\n/g, '<br />') : value}} 
-                />
-            );
-        }
-    };
-
     return (
         <StyledGfiTabContentItem
+            id={'gfi_tab_content_item_' + data.id}
             onMouseEnter={() => {
-                setHovered(true);
                 if (selectFeature && isGeojson) selectFeature(channel, [data]);
             }}
             onMouseLeave={() => {
-                setHovered(false);
                 if (deSelectFeature && isGeojson) deSelectFeature(channel, [data]);
             }}
-            animate={{
-                backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
-            }}
         >
-            <StyledGfiTabContentItemHeader
-                onClick={() => {
-                    setIsExpanded(!isExpanded);
-                    isExpanded && setIsSubExpanded(false);
-                }}
-            >
-                <StyledGfiTabContentItemName>
-                    {title}
-                </StyledGfiTabContentItemName>
-                <StyledGfiTabContentItemExpandIcon
-                    animate={{
-                        rotate: isExpanded ? 180 : 0,
-                    }}
-                    transition={{
-                        duration: 0.3,
-                        type: 'tween',
+            <StyledGfiTabContentItemHeaderContainer>
+                <StyledGfiTabContentItemHeader
+                    onClick={() => {
+                        setIsExpanded(!isExpanded);
+                        isExpanded && setIsSubExpanded(false);
                     }}
                 >
-                    <FontAwesomeIcon icon={faAngleDown} />
-                </StyledGfiTabContentItemExpandIcon>
-            </StyledGfiTabContentItemHeader>
+                    <StyledGfiTabContentItemName>
+                        {title}
+                    </StyledGfiTabContentItemName>
+                    <StyledGfiTabContentItemExpandIcon
+                        animate={{
+                            rotate: isExpanded ? 180 : 0,
+                        }}
+                        transition={{
+                            duration: 0.3,
+                            type: 'tween',
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    </StyledGfiTabContentItemExpandIcon>
+                </StyledGfiTabContentItemHeader>
+            </StyledGfiTabContentItemHeaderContainer>
             <AnimatePresence>
                 {isExpanded && (
                     <StyledGfiTabContentItemCollapseContent
@@ -201,21 +194,21 @@ const FeatureDataTabContentItem = ({
                     >
                         {/* === GEOJSON properties version === */}
                         {isGeojson ? (
-                            <>
+                            <StyledTableWrapper>
                                 <StyledGfiTabContentItemTable>
                             <tbody>
                                 {orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => (
                                     <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                         <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                         <StyledGfiTabContentItemTableData>
-                                            {formattedContent(data.properties[value])}
+                                            {renderLinksInText(data.properties[value])}
                                         </StyledGfiTabContentItemTableData>
                                     </StyledGfiTabContentItemTableRow>
                                 )) : orderLow && orderLow.filter(value => value !== 'UID').map(value => (
                                     <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                         <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                         <StyledGfiTabContentItemTableData>
-                                            {formattedContent(data.properties[value])}
+                                            {renderLinksInText(data.properties[value])}
                                         </StyledGfiTabContentItemTableData>
                                     </StyledGfiTabContentItemTableRow>
                                 ))}
@@ -268,7 +261,7 @@ const FeatureDataTabContentItem = ({
                                                         <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                             <StyledGfiTabContentItemTableData>
-                                                                {formattedContent(data.properties[value])}
+                                                                {renderLinksInText(data.properties[value])}
                                                             </StyledGfiTabContentItemTableData>
                                                         </StyledGfiTabContentItemTableRow>
                                                     ))}
@@ -279,7 +272,7 @@ const FeatureDataTabContentItem = ({
                                 </AnimatePresence>
                             </>
                         )}
-                            </>
+                            </StyledTableWrapper>
                         ) 
                         : isFlatGeojson ? (
                             /* === FLAT new table/JSON version (data.geojson) === */
@@ -289,7 +282,7 @@ const FeatureDataTabContentItem = ({
                                         <StyledGfiTabContentItemTableRow key={field + '_' + data.geojson[field]}>
                                             <StyledGfiTabContentItemTableHeader>{field}</StyledGfiTabContentItemTableHeader>
                                             <StyledGfiTabContentItemTableData>
-                                                {formattedContent(data.geojson[field])}
+                                                {renderLinksInText(data.geojson[field])}
                                             </StyledGfiTabContentItemTableData>
                                         </StyledGfiTabContentItemTableRow>
                                     ))}
@@ -303,7 +296,7 @@ const FeatureDataTabContentItem = ({
                                         <StyledGfiTabContentItemTableRow key={key + '_' + data[key]}>
                                             <StyledGfiTabContentItemTableHeader>{key}</StyledGfiTabContentItemTableHeader>
                                             <StyledGfiTabContentItemTableData>
-                                                {formattedContent(data[key])}
+                                                {renderLinksInText(data[key])}
                                             </StyledGfiTabContentItemTableData>
                                         </StyledGfiTabContentItemTableRow>
                                     ))}

@@ -1,6 +1,6 @@
-import { StyledArticle } from './Components/Common';
-import LineageStatements from './Components/LineageStatements';
-import QualityTabDataQualities from './Components/QualityTabDataQualities';
+import { StyledArticle } from '../components/Common';
+import LineageStatements from '../components/LineageStatements';
+import QualityTabDataQualities from '../components/QualityTabDataQualities';
 
 export const QualityTab = ({ identification, data, visible }) => {
     return (

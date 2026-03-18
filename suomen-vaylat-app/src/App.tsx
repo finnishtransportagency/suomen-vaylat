@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import './resources/css/_colors.scss';
 import './resources/css/custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Route } from 'react-router-dom';
-import SimpleReactLightbox from 'simple-react-lightbox';
+import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
@@ -133,41 +132,33 @@ const App = () => {
     </StyledAppContainer>
   );
 
-  return IS_EXTRANET && !isLoggedIn ? (
+  return IS_EXTRANET && !isLoggedIn? (
     <>
       Logging in progress, please wait or refresh page and try again later. If
       problem continues contact paikkatieto@vayla.fi
     </>
   ) : (
-    <SimpleReactLightbox>
-      <Theme>
+    <Theme>
+      <Routes>
         <Route
-          exact
           path={routerPrefix}
-          render={() => (
+          element={
             <StyledAppContainer>
               <PageTitle />
               <Layout />
             </StyledAppContainer>
-          )}
+          }
         />
         <Route
-          exact
           path={routerPrefix + 'theme/:zoom/:x/:y/:themeId/:lang?'}
-          render={() => {
-            return appContainer;
-          }}
+          element={appContainer}
         />
-
         <Route
-          exact
           path={routerPrefix + 'link/:zoom/:x/:y/:maplayers/:lang?'}
-          render={() => {
-            return appContainer;
-          }}
+          element={appContainer}
         />
-      </Theme>
-    </SimpleReactLightbox>
+      </Routes>
+</Theme>
   );
 };
 

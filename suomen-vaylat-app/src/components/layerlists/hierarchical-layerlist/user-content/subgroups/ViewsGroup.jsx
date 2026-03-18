@@ -6,7 +6,7 @@ import React, {
   useEffect
 } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDown,
@@ -26,7 +26,7 @@ import {
   setWarning
 } from '../../../../../state/slices/uiSlice';
 import { setEditingView, setViews } from '../../../../../state/slices/rpcSlice';
-import Moment from 'react-moment';
+import moment from 'moment';
 
 /* animation variants */
 const masterHeaderIconVariants = {
@@ -232,6 +232,10 @@ const StyledViewsCount = styled.p`
   color: ${(p) => p.theme.colors.mainColor1};
 `;
 
+const StyledNoViewsText = styled.div`
+  font-size: 14px;
+`;
+
 const ViewsGroup = () => {
   const [open, setOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
@@ -402,7 +406,6 @@ const ViewsGroup = () => {
 
       <StyledGroup
         id={listId}
-        parentId={-1}
         role="list"
         aria-labelledby={headerId}
         initial="hidden"
@@ -540,9 +543,9 @@ const ViewsGroup = () => {
               );
             })
         ) : (
-          <div role="status" aria-live="polite">
+          <StyledNoViewsText role="status" aria-live="polite">
             {strings.savedContent?.saveView?.noSavedViews || 'No saved views'}
-          </div>
+          </StyledNoViewsText>
         )}
       </StyledGroup>
 
@@ -595,9 +598,9 @@ const ViewsGroup = () => {
               <StyledMetaRow id={`${prefix}info-modal-saved`}>
                 <b>{strings.savedContent?.saveView?.savedAt || 'Saved'}:</b>
                 <span>
-                  <Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">
-                    {infoView.saveDate}
-                  </Moment>
+                  <div>
+                    {moment(infoView.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
+                  </div>
                 </span>
               </StyledMetaRow>
 

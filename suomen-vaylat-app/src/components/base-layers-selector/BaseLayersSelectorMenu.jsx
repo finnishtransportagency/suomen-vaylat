@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
-import { Button } from 'react-bootstrap';
 import {
   setIsBaseLayerSelectorMenuOpen,
   setSelectedBaseLayers
 } from '../../state/slices/uiSlice';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledMenuContainer = styled.div`
   padding: 16px;
@@ -70,64 +70,6 @@ const StyledDraggableButton = styled.div`
   @media ${(props) => props.theme.device.tablet} {
     max-width: 100px;
   }
-`;
-
-const StyledSaveButton = styled(Button)`
-  cursor: pointer;
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  border-radius: 30px;
-  border: none;
-  width: 10em;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.buttonSelected} !important;
-  }
-  @media ${(props) => props.theme.device.laptop} {
-    max-width: 120px;
-  }
-  @media ${(props) => props.theme.device.tablet} {
-    max-width: 100px;
-  }
-`;
-
-const StyledButtonText = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-  font-weight: 600;
-  user-select: none;
-  align-items: center;
-`;
-
-const StyledCancelButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.mainWhite};
-  color: ${({ theme }) => theme.colors.mainColor1};
-  border: 2px solid ${({ theme }) => theme.colors.mainColor1};
-  font-weight: 600;
-  &:hover:enabled {
-    background-color: ${({ theme }) => theme.colors.hover};
-    color: ${({ theme }) => theme.colors.buttonSelected};
-  }
-  cursor: pointer;
-  border-radius: 30px;
-  width: 10em;
-  @media ${(props) => props.theme.device.laptop} {
-    max-width: 120px;
-  }
-  @media ${(props) => props.theme.device.tablet} {
-    max-width: 100px;
-  }
-`;
-
-const StyledCancelButtonText = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-  font-weight: 600;
-  user-select: none;
-  align-items: center;
-  color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const StyledSwitchButtonText = styled.div`
@@ -362,29 +304,24 @@ const BaseLayerSelectorMenu = () => {
 
   const SaveButton = () => {
     return (
-      <StyledSaveButton
-        id="baselayer-selector-base-layer-save-button"
-        aria-label={strings.baseLayerSelector.labels.saveAriaLabel}
-        tabIndex={0}
+      <PillButton
+        id={'baselayer-selector-base-layer-save-button'}
+        text={strings.baseLayerSelector.save}
         onClick={handleSaveBaseLayers}
-      >
-        <StyledButtonText>{strings.baseLayerSelector.save}</StyledButtonText>
-      </StyledSaveButton>
+        aria-label={strings.baseLayerSelector.labels.saveAriaLabel}
+      />
     );
   };
 
   const CancelButton = () => {
     return (
-      <StyledCancelButton
-        id="baselayer-selector-base-layer-cancel-button"
-        aria-label={strings.baseLayerSelector.labels.cancelAriaLabel}
-        tabIndex={0}
+      <PillButton
+        id={'baselayer-selector-base-layer-cancel-button'}
+        text={strings.baseLayerSelector.cancel}
+        variant='inverse'
         onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(false))}
-      >
-        <StyledCancelButtonText>
-          {strings.baseLayerSelector.cancel}
-        </StyledCancelButtonText>
-      </StyledCancelButton>
+        aria-label={strings.baseLayerSelector.labels.cancelAriaLabel}
+      />
     );
   };
 

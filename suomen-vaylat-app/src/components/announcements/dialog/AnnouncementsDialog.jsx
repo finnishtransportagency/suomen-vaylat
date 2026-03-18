@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import Dialog from '../../dialog/Dialog';
 import { useAppSelector } from '../../../state/hooks';
 import AnnouncementsDialogContent from '../AnnouncementsDialogContent';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../utils/constants';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 
-const AnnouncementsDialog = ({ constraintsRef }) => {
+const AnnouncementsDialog = () => {
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
@@ -14,6 +14,7 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
   useEffect(() => {
     announcements && setCurrentAnnouncement(0);
   }, [announcements]);
+
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
     let existing = localStorage.getItem(name);
@@ -28,25 +29,25 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
     // Save back to localStorage
     localStorage.setItem(name, existing.toString());
   };
+
   const closeAnnouncement = (selected, id) => {
     if (selected) {
       addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
     }
-    announcements.length > currentAnnouncement + 1 &&
+    if (announcements.length > currentAnnouncement + 1) {
       setCurrentAnnouncement(currentAnnouncement + 1);
+    } else {
+      setCurrentAnnouncement(null);
+    }
   };
 
   return (
     <>
-      {currentAnnouncement !== null && announcements[currentAnnouncement] && (
+      {currentAnnouncement !== null && announcements[currentAnnouncement] ? (
         <Dialog
           key={'announcement-dialog-' + announcements[currentAnnouncement].id}
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
+          drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
           fullScreenOnMobile={
             true
           } /* Scale dialog full width / height when using mobile device */
@@ -54,21 +55,22 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
           title={
             announcements[currentAnnouncement].title
           } /* Dialog header title */
-          type={'announcement'} /* Dialog type */
           closeAction={
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
-          isOpen={null} /* Dialog state */
           id={announcements[currentAnnouncement].id}
+          minWidth="30rem"
+          minHeight="18rem"
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}
-            title={announcements[currentAnnouncement].title}
             content={announcements[currentAnnouncement].content}
+            handleAnnouncementDialog={closeAnnouncement}
             key={'announcement_dialog_' + announcements[currentAnnouncement].id}
           />
         </Dialog>
-      )}
+      )
+    : null }
     </>
   );
 };

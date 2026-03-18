@@ -1,18 +1,18 @@
 import strings from '../../../translations';
-import Citation from './Components/Citation';
-import CitationDate from './Components/CitationDate';
-import { StyledArticle } from './Components/Common';
-import DistributionFormats from './Components/DistributionFormats';
-import HeaderAndParagraph from './Components/HeaderAndParagraph';
-import Languages from './Components/Languages';
-import LineageStatements from './Components/LineageStatements';
-import MetadataGraphic from './Components/MetadataGraphic';
-import OnlineResources from './Components/OnlineResources';
-import ResponsibleParties from './Components/ResponsibleParties';
-import SpatialRepresentationTypes from './Components/SpatialRepresentationTypes';
-import SpatialResolutions from './Components/SpatialResolutions';
-import TemporalExtents from './Components/TemporalExtents';
-import TopicCategories from './Components/TopicCategories';
+import Citation from '../components/Citation';
+import CitationDate from '../components/CitationDate';
+import { StyledArticle } from '../components/Common';
+import DistributionFormats from '../components/DistributionFormats';
+import HeaderAndParagraph from '../components/HeaderAndParagraph';
+import Languages from '../components/Languages';
+import LineageStatements from '../components/LineageStatements';
+import MetadataGraphic from '../components/MetadataGraphic';
+import OnlineResources from '../components/OnlineResources';
+import ResponsibleParties from '../components/ResponsibleParties';
+import SpatialRepresentationTypes from '../components/SpatialRepresentationTypes';
+import SpatialResolutions from '../components/SpatialResolutions';
+import TemporalExtents from '../components/TemporalExtents';
+import TopicCategories from '../components/TopicCategories';
 
 export const JhsTab = ({ identification, data, visible }) => {
     return (

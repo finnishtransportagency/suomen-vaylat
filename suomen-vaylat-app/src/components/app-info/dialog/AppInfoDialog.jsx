@@ -9,39 +9,34 @@ import { setIsInfoOpen } from '../../../state/slices/uiSlice';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const AppInfoDialog = ({ constraintsRef }) => {
+const AppInfoDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isInfoOpen } = useAppSelector((state) => state.ui);
-
   const handleCloseAppInfoDialog = () => {
     store.dispatch(setIsInfoOpen(false));
   };
 
-  return (
+  return isInfoOpen ? (
     <Dialog
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale dialog full width / height when using mobile device */
-          titleIcon={faInfoCircle} /* Use icon on title or null */
-          title={strings.appInfo.title} /* Dialog header title */
-          type={"normal"} /* Dialog type */
-          closeAction={
-            handleCloseAppInfoDialog
-          } /* Action when pressing dialog close button or backdrop */
-          isOpen={isInfoOpen} /* Dialog state */
-          id="app_info_dialog"
-          maxWidth={"800px"}
-        >
-          <AppInfoDialogContent />
-        </Dialog>
-  );
+      drag={true} /* Enable (true) or disable (false) drag */
+      resize={true}
+      fullScreenOnMobile={
+        true
+      } /* Scale dialog full width / height when using mobile device */
+      titleIcon={faInfoCircle} /* Use icon on title or null */
+      title={strings.appInfo.title} /* Dialog header title */
+      type={'normal'} /* Dialog type */
+      closeAction={
+        handleCloseAppInfoDialog
+      } /* Action when pressing dialog close button or backdrop */
+      id="app_info_dialog"
+      minWidth='35rem'
+      minHeight='35rem'
+    >
+      <AppInfoDialogContent />
+    </Dialog>
+  ) : null;
 };
 
 export default AppInfoDialog;

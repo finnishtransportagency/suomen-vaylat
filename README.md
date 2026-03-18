@@ -91,3 +91,7 @@ Issues should be reported here: https://github.com/finnishtransportagency/suomen
 
 This work is lisenced under [EUPL v1.1](https://joinup.ec.europa.eu/software/page/eupl/licence-eupl)
 (any language version applies, English version is included in https://github.com/finnishtransportagency/suomen-vaylat/blob/master/LICENSE.EUPL-11.pdf).
+
+## AI use
+
+This project takes advantage of regenerative AI as part of development. Any AI produced content has been reviewed by a human.

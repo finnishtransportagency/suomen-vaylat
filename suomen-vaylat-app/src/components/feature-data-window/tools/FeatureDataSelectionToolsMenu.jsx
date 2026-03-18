@@ -1,18 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Slide, toast } from 'react-toastify';
 import strings from '../../../translations';
 import { isMobile } from '../../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
-import Moment from 'react-moment';
+import moment from 'moment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPencilAlt,
   faPencilRuler,
   faBorderAll,
-  faTimes,
   faDownload,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
@@ -35,12 +34,15 @@ import {
 
 import {
   setMinimizeGfi,
-  setSelectedGfiTool,
+  setSelectedDrawingTool,
   setGeoJsonArray,
   setHasToastBeenShown,
   setWarning,
   setActiveSelectionTool,
-  setActiveTool
+  setActiveTool,
+  setMinimizeFeatureSelection,
+  setIsGfiToolsOpen,
+  setIsGfiOpen
 } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
@@ -49,7 +51,9 @@ import {
   GFI_GEOMETRY_LAYER_ID,
   BODY_SIZE_EXCEED,
   GENERAL_FAIL,
-  VECTOR_LAYER_ID
+  VECTOR_LAYER_ID,
+  FEATURE_SELECTION_LAYER,
+  FEATURE_SELECTION_DRAWING_TOOL
 } from '../../../utils/constants';
 import { useAppSelector } from '../../../state/hooks';
 
@@ -79,20 +83,6 @@ const StyledDrawingToolsContainer = styled(motion.div)`
   gap: 16px;
 `;
 
-const StyledCloseButton = styled.div`
-  z-index: 1;
-  position: sticky;
-  top: 0px;
-  right: 0px;
-  display: flex;
-  justify-content: flex-end;
-  svg {
-    font-size: 24px;
-    color: ${(props) => props.theme.colors.mainColor1};
-    cursor: pointer;
-  }
-`;
-
 const StyledLoaderWrapper = styled.div`
   position: absolute;
   top: 50%;
@@ -107,15 +97,6 @@ const StyledLoaderWrapper = styled.div`
     height: 100%;
     fill: none;
   }
-`;
-
-const StyledSubtitle = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  color: ${(props) => props.theme.colors.mainColor1};
-  padding: 10px 0px 10px 5px;
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 const StyledSavedView = styled.div`
@@ -146,7 +127,7 @@ const StyledSavedViewName = styled.p`
   transition: all 0.1s ease-in;
 `;
 
-const StyledSavedViewDescription = styled(Moment)`
+const StyledSavedViewDescription = styled.div`
   margin: 0;
   padding: 0px;
   font-size: 12px;
@@ -234,7 +215,7 @@ const addFeaturesToMapParams = {
   clearPrevious: true
 };
 
-const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
+const FeatureDataSelectionToolsMenu = () => {
   const drawinToolsData = [
     {
       id: 'sv-measure-linestring',
@@ -276,7 +257,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
   const {
     gfiCroppingTypes,
-    selectedGfiTool,
+    selectedDrawingTool,
     hasToastBeenShown,
     isGfiOpen,
     activeSelectionTool,
@@ -296,17 +277,41 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     toast.dismiss('measurementToast');
   };
 
+  const handleGfiToolsMenu = () => {
+    store.dispatch(setIsGfiToolsOpen(false));
+    channel && activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
+      channel.postRequest("DrawTools.StopDrawingRequest", [
+        FEATURE_SELECTION_DRAWING_TOOL,
+        true,
+      ]);
+
+    setIsGfiToolsOpen &&
+      channel &&
+      channel.postRequest("VectorLayerRequest", [
+        {
+          layerId: FEATURE_SELECTION_LAYER,
+          remove: true,
+        },
+      ]);
+    store.dispatch(setIsGfiOpen(true));
+  };
+
   const handleSelectTool = (id) => {
     if (activeSelectionTool !== id) {
+      // set the selected tool as active
       store.dispatch(setActiveSelectionTool(id));
+
       if (id === 0 || id === 505) {
-        store.dispatch(setActiveSelectionTool(id));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
           null,
           null,
-          'download-tool-layer'
+          FEATURE_SELECTION_LAYER
         ]);
       } else {
+        // minimize dialog
+        store.dispatch(setMinimizeFeatureSelection(true));
+
+        // start the spinner
         setIsGfiLoading(true);
         channel.getGfiCroppingArea(
           [id],
@@ -320,7 +325,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
             let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
             let options = {
-              layerId: 'download-tool-layer',
+              layerId: FEATURE_SELECTION_LAYER,
               clearPrevious: true,
               featureStyle: {
                 fill: {
@@ -385,19 +390,40 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         );
       }
     } else {
+      // Disable previously selected tool as we just clicked on it again
+      // If we had selected a drawing tool, disable it
+      if (selectedDrawingTool) {
+        // stop and clear drawing
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+            FEATURE_SELECTION_DRAWING_TOOL,
+            true
+          ]);
+        store.dispatch(setSelectedDrawingTool(null));
+        // dismiss measurement toast as drawing is not active anymore
+        toast.dismiss('measurementToast');
+      }
       store.dispatch(setActiveSelectionTool(null));
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
         null,
         null,
-        'download-tool-layer'
+        FEATURE_SELECTION_LAYER
       ]);
     }
   };
 
   const handleSelectDrawingTool = (id, item) => {
-    if (id !== selectedGfiTool) {
-      setIsGfiLoading(true);
-      store.dispatch(setSelectedGfiTool(id));
+    if (id !== selectedDrawingTool) {
+      // if we had selected a drawing tool previously, clear that
+      if (selectedDrawingTool !== null) {
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+          FEATURE_SELECTION_DRAWING_TOOL,
+          true
+        ]);
+      }
+      // minimize dialog
+      store.dispatch(setMinimizeFeatureSelection(true));
+
+      store.dispatch(setSelectedDrawingTool(id));
       var style = {
         draw: {
           fill: {
@@ -447,9 +473,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         }
       };
 
-      var data = ['gfi-selection-tool', item.type, { style: style }];
+      var data = [FEATURE_SELECTION_DRAWING_TOOL, item.type, { style: style }];
       channel.postRequest('DrawTools.StartDrawingRequest', data);
-      store.dispatch(setActiveTool('gfi-selection-tool'));
+      store.dispatch(setActiveTool(FEATURE_SELECTION_DRAWING_TOOL));
+      // do we want to minimize gfi when selecting features on map?
       isGfiOpen && store.dispatch(setMinimizeGfi(true));
       if (
         showToast !== false &&
@@ -475,10 +502,23 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
           );
         }
       }
+    } else {
+      // we clicked on the same drawingtool so disable it and clear it
+      channel.postRequest('DrawTools.StopDrawingRequest', [
+          FEATURE_SELECTION_DRAWING_TOOL,
+          true
+        ]);
+      // now we shouldn't have any drawingtool selected
+      store.dispatch(setSelectedDrawingTool(null));
+      // dismiss measurement toast as drawing is not active anymore
+      toast.dismiss('measurementToast');
     }
   };
 
   const handleActivateSavedGeometry = async (features) => {
+    // minimize dialog
+    store.dispatch(setMinimizeFeatureSelection(true));
+
     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
       null,
@@ -598,6 +638,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
   const featureEventHandler = async (data) => {
     if (data.operation === 'click') {
+      // Bring feature selection back after click
+      store.dispatch(setMinimizeFeatureSelection(false));
+
       if (data.features) {
         store.dispatch(resetGFILocations([]));
         isGfiOpen && store.dispatch(setMinimizeGfi(false));
@@ -853,17 +896,24 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     let isSubscribed = true;
     channel &&
       channel.handleEvent('DrawingEvent', async (data) => {
-        if (store.getState().ui.selectedGfiTool) {
+        if (selectedDrawingTool) {
+
           if (isSubscribed && data.isFinished && data.isFinished === true) {
-            activeTool === 'gfi-selection-tool' &&
+            // start spinner on feature selection only after we actually select the area
+            setIsGfiLoading(true);
+
+            // Bring feature selection back after click
+            store.dispatch(setMinimizeFeatureSelection(false));
+
+            activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
               channel.postRequest('DrawTools.StopDrawingRequest', [
-                'gfi-selection-tool',
+                FEATURE_SELECTION_DRAWING_TOOL,
                 true
               ]);
             store.dispatch(setActiveTool(null));
             isGfiOpen && store.dispatch(setMinimizeGfi(false));
             store.dispatch(setGeoJsonArray([data]));
-            store.dispatch(setSelectedGfiTool(null));
+            store.dispatch(setSelectedDrawingTool(null));
             toast.dismiss('measurementToast');
             store.dispatch(resetGFILocations([]));
 
@@ -925,7 +975,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     return () => {
       isSubscribed = false;
     };
-  }, [activeTool, channel]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeTool, channel, selectedDrawingTool]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     store.dispatch(setActiveSelectionTool(null));
@@ -959,11 +1009,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
   return (
     <StyledGfiToolContainer id="gfiToolContainer" role="region" tabIndex="0">
-      {closeButton && (
-        <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
-          <FontAwesomeIcon icon={faTimes} />
-        </StyledCloseButton>
-      )}
       <AnimatePresence>
         {isGfiLoading && (
           <StyledLoaderWrapper
@@ -994,7 +1039,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
       </AnimatePresence>
 
       <StyledToolsContainer isGfiLoading={isGfiLoading}>
-        <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
         <CircleButtonListItem
           key={'cropping-type-draw'}
           id={0}
@@ -1032,7 +1076,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     item={tool}
                     title={tool.title}
                     subtitle={null}
-                    selectedItem={selectedGfiTool}
+                    selectedItem={selectedDrawingTool}
                     handleSelectTool={handleSelectDrawingTool}
                     size={'md'}
                     bgColor={'#ffffff'}
@@ -1094,10 +1138,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                           {geometry.name}
                         </StyledSavedViewName>
                         <StyledSavedViewDescription
-                          format="DD.MM.YYYY"
-                          tz="Europe/Helsinki"
                         >
-                          {geometry.saveDate}
+                          {moment(geometry.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
                         </StyledSavedViewDescription>
                       </StyledSavedViewTitleContent>
                     </StyledLeftContent>
@@ -1132,4 +1174,4 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
   );
 };
 
-export default GfiToolsMenu;
+export default FeatureDataSelectionToolsMenu;

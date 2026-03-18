@@ -76,8 +76,8 @@
     "swedishDesc": "Beskrivning på svenska",
     "swedishSource": "Källa på svenska",
     "mandatory": "(obligatorisk)",
-    "cancel": "AVBRYT",
-    "import": "IMPORTERA DATASET",
+    "cancel": "Avbryt",
+    "import": "Importera dataset",
     "visTabText": "Visualiseringsinställningar här...",
     "fileNote": "Zip-filen får endast innehålla ett lager och får vara högst 10 MB stor. När den packats upp får filen vara högst 150 MB.",
     "languagesTooltip": "Välj ytterligare språk för vilka metadata för dataset ges.",
@@ -213,11 +213,7 @@
     "gfiLocation": "Zooma in på objektet",
     "target": "Mål",
     "selectLocations": "Välj objekt",
-    "focusToLocations": "Precisera objekt",
-    "choosingGfi": "Val av objektdata",
-    "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
-    "choosingGfiDescription1": "Visa verktyg för val av funktionsdata genom att välja Välj Platser",
-    "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
+    "focusToLocations": "Inrikta",
     "draw": "Rita",
     "drawSubtitle": "Välj platser med hjälp av ritverktyg",
     "search": "Sökning",
@@ -237,22 +233,23 @@
     },
     "streetView": {
       "title": "Google Street View",
-      "openGoogleStreetView": "Öppna Google Street View",
-      "googleStreetviewTitle": "Google Street View",
-      "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
+      "openGoogleStreetView": "Öppna Google Street View"
     },
     "errors": {
       "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: ",
       "userlayerDataParseError": "Misslyckades med att bearbeta data för egen kartlager"
+    },
+    "featureSelection": {
+      "title": "Funktionsval"
     }
   },
   "vkm": {
+    "title": "Plats- och adressinformation",
     "locationInfo": "Positionsdata",
     "roadAddressInfo": "Vägadressuppgifter",
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
-    "newDownload": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -357,23 +354,27 @@
       },
       "mapLayerMenu": {
         "title": "Kartnivåmeny",
-        "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
-        "tabsContent": {
-          "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.",
-          "allLayersExtranet": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.\n'Mina dataset' innehåller användarens sparade vyer, geometrier och eventuella egna lager. I 'Mina dataset' kan du redigera och ta bort sparade vyer, geometrier och egna kartlager. Det är inte möjligt att dela dina egna kartlager för närvarande.",
-          "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till vänster. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras. Filterknappen öppnar filtermenyn, där informationen som visas på kartan kan filtreras utifrån attribut data."
+        "content": {
+          "general": "Du kan söka efter ett kartlager per namn genom att skriva 3 tecken i sökfältet. Listan över dataset kan filtreras efter ämnesområde via menyn 'Filtrera per typ', eller så kan du spara ett 'eget filter' med valda dataset i webbläsarens cache (finns under filteralternativen). Ett eget filter är endast tillgängligt på den enhet och i den webbläsare där det sparats.\nKlicka på informationsikonen bredvid ett lagernamn för att öppna datasetets metadata. Om en nedladdningsknapp visas vid lagret är datasettet nedladdningsbart för hela Finland. Om nedladdningsknappen saknas kräver nedladdning att objekt väljs på kartan.\nVissa dataset går att filtrera baserat på deras attributdata. Om ett dataset kan filtreras visas en filterikon vid lagret.",
+          "ownDatasets": "'Mina dataset' innehåller vyer och geometrier som användaren sparat och som kan visas, redigeras och tas bort.\nSparade vyer och geometrier lagras för närvarande endast i webbläsarens cache, så de är endast tillgängliga på den enhet och i den webbläsare där de sparats.\nMetadata för personliga geometrier och vyer kan visas via informationsknappen. En stjärna visas bredvid namnet på en vy som är inställd som standard. Standardvyer aktiveras automatiskt när sidan öppnas.",
+          "ownDatasetsExtranet": "'Mina dataset' innehåller vyer, geometrier och personliga kartlager som användaren sparat och som kan redigeras och tas bort.\nSparade vyer och geometrier lagras för närvarande endast i webbläsarens cache, så de är endast tillgängliga på den enhet och i den webbläsare där de sparats. Egen kartlager lagras i databasen och hämtas per användare. För närvarande går det inte att dela egen kartlager.\nMetadata för personliga geometrier och vyer kan visas via informationsknappen. En stjärna visas bredvid namnet på en vy som är inställd som standard. Standardvyer aktiveras automatiskt när sidan öppnas.",
+          "selectedLayers": "'Valda lagert' innehåller en lista över de kartlager som valts för visning. Du kan ändra lagrens ordning genom att dra dem med handtaget till vänster. Opacitet kan justeras med reglaget och ett lager kan aktiveras eller avaktiveras med kryssrutan. Filterknappen öppnar filtreringsalternativ där de synliga kartuppgifterna kan filtreras baserat på attributvärden."
         }
       },
       "search": {
         "title": "Sök",
-        "content": "Sökningen öppnas via förstoringsglasknappen längst upp till höger på kartan. Med sökfunktionen kan du söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser. Mer detaljerade sökinstruktioner finns genom att öppna pilknappen i fönstret som visas när du väljer fler sökkriterier. Sökinstruktionerna kan öppnas och stängas per söktyp via infoikonen. Du kan ta bort söktermer från kartan genom att trycka på papperskorgsikonen i sökfältet, och resultaten kan tas bort från kartan med knappen 'Rensa resultat'. När sökresultat är aktiva kan sökfönstret döljas."
+        "content": "Sökningen öppnas via förstoringsglasknappen längst upp till höger på kartan. Med sökfunktionen kan du söka efter t.ex. kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser. Mer detaljerade sökinstruktioner finns genom att öppna pilknappen i fönstret som visas när du väljer fler sökkriterier. Sökinstruktionerna kan öppnas och stängas per söktyp via infoikonen. Du kan ta bort söktermer från kartan genom att trycka på papperskorgsikonen i sökfältet, och resultaten kan tas bort från kartan med knappen 'Rensa resultat'. När sökresultat är aktiva kan sökfönstret döljas."
+      },
+      "featureSelection": {
+        "title": "Val av objekt",
+        "content": "Du kan välja objekt på kartan med olika urvalsmetoder, till exempel genom med ritverktyg, med tidigare sparade geometrier eller med fördefinierade områdegeometrier. Fönstret minimeras automatiskt när urvalsverktyget aktiveras. När ett urval har gjorts och objektsinformationen har hämtats öppnas den i 'Objektuppgifter' -fönstret. När 'Objektuppgifter' -fönstret eller 'Funktionsval' -fönstret stängs rensas även urvalet från kartan. En aktiverad urvalsknapp kan avaktiveras genom att trycka på samma knapp igen eller genom att välja en annan."
       },
       "drawingTools": {
         "title": "Ritverktyg",
-        "content": "Ritverktygen öppnas via ritknappen i fönstret som öppnas från verktygsfältet till vänster. Med verktygen kan du lägga till geometrier på kartan och mäta längd eller area. Knappen 'Kartanteckning' öppnar en meny för att lägga till olika kartmarkeringar, och du kan lägga till text till dessa markeringar. Ritade geometrier och kartmarkeringar kan sparas genom att klicka på 'Spara'-knappen, som är den nedersta knappen i ritverktygen. När du sparar geometrier anger du ett namn och, om så önskas, en beskrivning. Ritade geometrier kan tas bort från kartan med den orangea 'Töm'-knappen. Sparade geometrier listas under 'Mina dataset' i kartlagrets meny."
+        "content": "Ritverktygen öppnas via ritknappen i fönstret som öppnas från verktygsfältet till vänster. Med verktygen kan du lägga till geometrier på kartan och mäta längd eller area. Knappen 'Kartanteckning' öppnar en meny för att lägga till olika kartmarkeringar, och du kan lägga till text till dessa markeringar.\nRitade geometrier och kartmarkeringar kan sparas genom att klicka på 'Spara'-knappen, som är den nedersta knappen i ritverktygen. Sparandet gäller även geometrier som ritats på kartan av andra funktioner, till exempel punkter som lagts till med koordinatverktyget, samt sökresultat som ritats ut på kartan. När du sparar geometrier anger du ett namn och, om så önskas, en beskrivning. Ritade geometrier kan tas bort från kartan med den orangea 'Töm'-knappen. Sparade geometrier listas under 'Mina dataset' i kartlagrets meny."
       },
       "gfi": {
-        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata."
+        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata.\nAnvänd knappen 'Inrikta' för att centrera kartan på de valda objekten."
       },
       "shareWebsite": {
         "title": "Dela kartvy",
@@ -385,7 +386,7 @@
       },
       "coordinateTool": {
         "title": "Koordinatverktyg",
-        "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna."
+        "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna. Koordinaterna kan visas antingen med tre decimalers precision eller i fullständig form. Valet sparas i webbläsarens cache."
       },
       "location": {
         "title": "Min position",
@@ -430,13 +431,13 @@
             "content": "Om så önskas kan du ta bort det applicerade filtret genom att trycka på \"Ta bort alla filter\" eller genom att klicka på krysset bredvid aktiva filter."
           }
         },
-        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
+        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.\nFiltrering fungerar med 'AND'-logik, vilket betyder att varje tillagt filter begränsar träffmängden.",
         "feedback": "Om filterverktyget saknas från lagret eller attributet som ska filtreras saknar ett väsentligt attribut kan du skicka feedback om ämnet till",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
       "downloads": {
         "title": "Nedladdningar",
-        "content": "Nedladdningar öppnas från knappen Nedladdningar i verktygsfönstret. Från popup-fönstret kan du göra ett nytt funktionsval för att ladda ner och hantera tidigare nedladdningar från funktionsdatafönstret."
+        "content": "Nedladdningar öppnas från knappen Nedladdningar i verktygsfönstret. Från popup-fönstret kan du göra ett nytt funktionsval och hantera tidigare nedladdningar."
       },
       "views": {
         "title": "Spara vy",
@@ -448,7 +449,7 @@
       },
       "setFullScreen": {
         "title": "Bygga ut",
-        "content": "Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen."
+        "content": "Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen, och den finns i verktygsmenyn."
       },
       "zoomBar": {
         "title": "Bildtexter / zoomfält",
@@ -637,7 +638,6 @@
         "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "start:5/116/0/50 slut:5/348/0/100",
         "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
       "vkmTrack": "Skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
@@ -646,14 +646,14 @@
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
-      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
+      "toastTipContent": "Du kan spara geometrin från ritverktygen i verktygsmenyn längst till vänster på sidan.",
       "nomenclature": "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
-      "layerExamples": ["pölkytys"],
+      "layerExamples": ["Digiroad, kuntoluokkatieto"],
       "feature": "Destinationssökning kan användas för att söka efter destinationsinformation på den översta nivån av de valda kartlagren. Exempelsökning: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
-      "location": "Platssökning är en standardsöktyp som inkluderar alla andra söktyper förutom material- och objektsökningar."
+      "location": "Platssökning är en standardsöktyp som inkluderar sök efter vägnummer, bansökning, adressökning, namnsökning och fastighetssökning."
     },
     "nomenclature": {
       "title": "Namnsökning"
@@ -700,15 +700,13 @@
       "show": "Visa",
       "filterByType": "Filtrera enligt typ",
       "searchForLayers": "Sök kartnivåer",
-      "createFilter": "Filtrera",
       "clearFilters": "Ta bort valda filter",
       "searchResults": "Sökresultat",
       "clearSelectedMapLayers": "Ta bort valda kartnivåer",
       "clearSelectedBackgroundMaps": "Ta bort valda bakgrundskartor",
       "noSearchResults": "Inga sökresultat",
       "typeAtLeastThreeCharacters": "Mata in minst 3 bokstäver",
-      "createCustomFilter": "eget filter",
-      "saveCustomFilter": "Spara"
+      "createCustomFilter": "eget filter"
     },
     "selectedLayers": {
       "layerVisible": "Lager synligt",
@@ -717,7 +715,7 @@
       "toShowLayer": "för att se kartlagret",
       "opacity": "Genomskinlighet"
     },
-    "customLayerInfo": {
+    "customFilterInfo": {
       "customFilter": "Eget filter",
       "dialogTitle": "Skapa ditt eget filter",
       "closeInfo": "Stäng hjälpen",
@@ -791,6 +789,9 @@
   },
   "metadata": {
     "title": "{0} -kartlager metadata",
+    "errors": {
+      "getLayerMetadataError": "Metatietojen haku epäonnistui"
+    },
     "error": "Metadata hittades inte",
     "heading": {
       "abstractTextService": "Sammanfattning text (data)",

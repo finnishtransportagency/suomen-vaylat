@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
-import Moment from 'react-moment';
+import moment from 'moment';
 import { useContext, useState, useEffect } from 'react';
 import { theme } from '../../../theme/theme';
 import { setDownloadRemove } from '../../../state/slices/rpcSlice';
@@ -15,6 +15,7 @@ import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/f
 
 import DialogListItem from '../../dialog/DialogListItem';
 import SvLoader from '../../../utils/components/SvLoader';
+import PillButton from '../../../utils/components/PillButton';
 
 const StyledDownloadsContainer = styled.div`
     width:100%;
@@ -93,19 +94,6 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
-const StyledDowloadButton = styled.button`
-  height: 3em;
-  color: ${(props) => props.theme.colors.mainWhite};
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  margin: 0.5em 0 0.5em 0;
-  background-color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.darkGrey
-      : props.theme.colors.mainColor1};
-`;
-
 const DownloadItem = ({
     download,
     closeAction,
@@ -120,7 +108,7 @@ const DownloadItem = ({
             title={
                 <StyledListItemTitleWrapper key={'download-wrapper-list-item-' + download.id}>
                     <li key={'download-wrapper-format-' + download.id}>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
-                    <li key={'download-wrapper-date-' + download.id}>{strings.downloads.date}: <span><Moment format='DD.MM.YYYY HH:mm' tz='Europe/Helsinki'>{download.date}</Moment></span></li>
+                    <li key={'download-wrapper-date-' + download.id}>{strings.downloads.date}: <span><div format='DD.MM.YYYY HH:mm' tz='Europe/Helsinki'>{moment(download.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}</div></span></li>
                     <li key={'download-wrapper-file-size-' + download.id}>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
                     <li key={'download-wrapper-layers-' + download.id}>{strings.downloads.layers}: </li>
                         <ul key={'download-ul-' + download.id}>
@@ -176,95 +164,125 @@ const FeatureDataDownload = () => {
       }, [gfiLocations]);
 
     return (
-        <>
-    
+      <>
         <StyledDownloadsContainer>
-        <StyledDescription>{strings.downloads.downloadsInfo}</StyledDescription>
-        <StyledDescription>{strings.downloads.downloadsInfo2}</StyledDescription>
+          <StyledDescription>
+            {strings.downloads.downloadsInfo}
+          </StyledDescription>
+          <StyledDescription>
+            {strings.downloads.downloadsInfo2}
+          </StyledDescription>
 
-        {noDownloadableLayers && (
-            <StyledDescription style={{ color: "#d32f2f", marginBottom: 4 }}>
-                {strings.downloads.noValidMaplayers}
+          {noDownloadableLayers && (
+            <StyledDescription style={{ color: '#d32f2f', marginBottom: 4 }}>
+              {strings.downloads.noValidMaplayers}
             </StyledDescription>
-        )}
+          )}
 
-        <StyledDowloadButton
+          <PillButton
+            id={'feature-data-download-new-download-button'}
             disabled={noDownloadableLayers}
+            text={strings.gfi.selectLocations}
             onClick={handleGfiLocationsOpen}
-        >
-            {strings.downloads.newDownload}
-        </StyledDowloadButton>
-        
+            aria-label={strings.gfi.selectLocations}
+            style={{ width: '100%', justifyContent: 'center' }}
+          />
 
-
-            <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
-            {
-                downloads.filter(download => download.loading === true).length > 0 ?
-                downloads.filter(download => download.loading === true).map(download => {
-                    return <DownloadItem
-                        download={download}
-                        key={'download-item-processing-' + download.id}
+          <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
+          {downloads.filter((download) => download.loading === true).length >
+          0 ? (
+            downloads
+              .filter((download) => download.loading === true)
+              .map((download) => {
+                return (
+                  <DownloadItem
+                    download={download}
+                    key={'download-item-processing-' + download.id}
+                  >
+                    <StyledLoaderWrapper>
+                      <SvLoader />
+                    </StyledLoaderWrapper>
+                  </DownloadItem>
+                );
+              })
+          ) : (
+            <StyledDescription>
+              - {strings.downloads.noProcessingDownloads}
+            </StyledDescription>
+          )}
+          <StyledSubtitle>{strings.downloads.readyForDownload}:</StyledSubtitle>
+          {downloads.filter((download) => download.loading === false).length >
+          0 ? (
+            downloads
+              .filter(
+                (download) =>
+                  download.loading === false &&
+                  download.errorLayers.length === 0
+              )
+              .map((download) => {
+                return (
+                  <DownloadItem
+                    download={download}
+                    closeAction={() => {
+                      store.dispatch(setDownloadRemove(download.id));
+                    }}
+                    color={theme.colors.secondaryColorGreen}
+                    key={'download-item-ready-for-download-' + download.id}
+                  >
+                    <StyledDownloadButton
+                      onClick={() => window.open(`${download.url}`, `_blank`)}
                     >
-                        <StyledLoaderWrapper>
-                            <SvLoader />
-                        </StyledLoaderWrapper>
-                    </DownloadItem>
-                })
-                    : <StyledDescription>- {strings.downloads.noProcessingDownloads}</StyledDescription>
-            }
-            <StyledSubtitle>{strings.downloads.readyForDownload}:</StyledSubtitle>
-            {
-                downloads.filter(download => download.loading === false).length > 0 ?
-                downloads.filter(download => download.loading === false && download.errorLayers.length === 0).map(download => {
-                    return <DownloadItem
-                        download={download}
-                        closeAction={() => {
-                            store.dispatch(setDownloadRemove(download.id));
-                        }}
-                        color={theme.colors.secondaryColorGreen}
-                        key={'download-item-ready-for-download-' + download.id}
-                    >
-                        <StyledDownloadButton
-                            onClick={() => window.open(`${download.url}`,`_blank`)}
-                        >
-                            <FontAwesomeIcon
-                                icon={faDownload}
-                            />
-                        </StyledDownloadButton>
-                    </DownloadItem>
-                })
-            : <StyledDescription>- {strings.downloads.noDownloads}</StyledDescription>
-            }
-            {
-                downloads.filter(download => download.loading === false && download.errorLayers.length > 0).length > 0 && (
-                    <>
-                        <StyledSubtitle>{strings.downloads.failedDownloads}:</StyledSubtitle>
-                        <StyledDescription>- {strings.downloads.errorOccuredDuringDownloadProcessing}:</StyledDescription>
-                        {
-                            downloads.filter(download => download.loading === false && download.errorLayers.length > 0).map(download => {
-                                return <DownloadItem
-                                    download={download}
-                                    closeAction={() => {
-                                        store.dispatch(setDownloadRemove(download.id));
-                                    }}
-                                    color={theme.colors.secondaryColorDarkOrange}
-                                    key={'download-item-error-' + download.id}
-                                >
-                                        <FontAwesomeIcon
-                                            style={{
-                                                color: '#dc3545',
-                                                fontSize: '24px'
-                                            }}
-                                            icon={faExclamationTriangle}
-                                        />
-                                </DownloadItem>
-                            })
-                        }
-                    </>
+                      <FontAwesomeIcon icon={faDownload} />
+                    </StyledDownloadButton>
+                  </DownloadItem>
+                );
+              })
+          ) : (
+            <StyledDescription>
+              - {strings.downloads.noDownloads}
+            </StyledDescription>
+          )}
+          {downloads.filter(
+            (download) =>
+              download.loading === false && download.errorLayers.length > 0
+          ).length > 0 && (
+            <>
+              <StyledSubtitle>
+                {strings.downloads.failedDownloads}:
+              </StyledSubtitle>
+              <StyledDescription>
+                - {strings.downloads.errorOccuredDuringDownloadProcessing}:
+              </StyledDescription>
+              {downloads
+                .filter(
+                  (download) =>
+                    download.loading === false &&
+                    download.errorLayers.length > 0
                 )
-            }
+                .map((download) => {
+                  return (
+                    <DownloadItem
+                      download={download}
+                      closeAction={() => {
+                        store.dispatch(setDownloadRemove(download.id));
+                      }}
+                      color={theme.colors.secondaryColorDarkOrange}
+                      key={'download-item-error-' + download.id}
+                    >
+                      <FontAwesomeIcon
+                        style={{
+                          color: '#dc3545',
+                          fontSize: '24px'
+                        }}
+                        icon={faExclamationTriangle}
+                      />
+                    </DownloadItem>
+                  );
+                })}
+            </>
+          )}
         </StyledDownloadsContainer>
-        </>
+      </>
     );
 };
 

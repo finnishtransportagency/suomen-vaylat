@@ -1,7 +1,7 @@
 import Dialog from '../../dialog/Dialog';
 import { LayerFilterContainer } from '../LayerFilterContainer';
 import strings from '../../../translations';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from "../../../state/hooks";
 
@@ -16,7 +16,7 @@ import {
   setMaximizeFilterDialog
 } from "../../../state/slices/uiSlice";
 
-const LayerFilterDialog = ({ constraintsRef }) => {
+const LayerFilterDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { channel } = useAppSelector((state) => state.rpc);
@@ -24,6 +24,11 @@ const LayerFilterDialog = ({ constraintsRef }) => {
     minimizeFilter,
     maximizeFilter
   } = useAppSelector((state) => state.ui);
+
+  const isFilterDialogOpen = useMemo(
+      () => filteringInfo.some((f) => f.dialogOpen),
+      [filteringInfo]
+    );
 
   const handleCloseFilterDialog = () => {
     // reset map
@@ -46,15 +51,11 @@ const LayerFilterDialog = ({ constraintsRef }) => {
     store.dispatch(setFilteringInfo([]));
   };
 
-  return (
+  return isFilterDialogOpen ? (
     <Dialog
       id="filter_dialog_container"
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
-      resize={true}
-      backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+      resize={false}
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -64,7 +65,6 @@ const LayerFilterDialog = ({ constraintsRef }) => {
       closeAction={
         handleCloseFilterDialog
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={filteringInfo.some((f) => f.dialogOpen)} /* Dialog state */
       minimize={minimizeFilter.minimized}
       maximize={maximizeFilter}
       minimizable={true}
@@ -77,13 +77,15 @@ const LayerFilterDialog = ({ constraintsRef }) => {
       maximizeAction={() =>
         store.dispatch(setMaximizeFilterDialog(!maximizeFilter))
       }
-      maxWidth={maximizeFilter ? null : '40em'}
+      maxWidth={maximizeFilter ? null : '90vw'}
+      maxHeight={maximizeFilter ? null : '90vh'}
       minWidth={'25em'}
-      minHeight={'30em'}
+      minHeight={'23em'}
     >
-      <LayerFilterContainer />
+      <LayerFilterContainer handleCloseFilterDialog={handleCloseFilterDialog} />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default LayerFilterDialog;

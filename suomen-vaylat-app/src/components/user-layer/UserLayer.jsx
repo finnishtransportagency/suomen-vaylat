@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 import { theme } from '../../theme/theme';
@@ -80,11 +80,6 @@ export const UserLayer = ({ layer }) => {
     store.dispatch(setMapLayerVisibility(layer));
     updateLayers(store, channel);
   };
-
-  useEffect(() => {
-    // Clear the timeout when the component unmounts
-    return () => clearTimeout(window.legendUpdateTimer);
-  }, []);
 
   const handleEditClick = (ev) => {
     ev && ev.stopPropagation();

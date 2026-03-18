@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Slide, toast } from 'react-toastify';
 
 import { CircularProgress } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
@@ -14,13 +13,16 @@ import StyleEditor from './style-editor/StyleEditor';
 import GeneralInformation from './general-information/GeneralInformation';
 import { setEditingUserlayer } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
   border-radius: 16px;
   position: relative;
   background-color: white;
+  max-width: ;
 `;
+
 const OverlaySpinner = styled.div`
   position: absolute;
   top: 0;
@@ -34,6 +36,7 @@ const OverlaySpinner = styled.div`
   justify-content: center;
   border-radius: 16px;
 `;
+
 const StyledTabs = styled.div`
   position: relative;
   display: flex;
@@ -41,6 +44,7 @@ const StyledTabs = styled.div`
   max-height: 100px;
   background-color: #f2f2f2;
 `;
+
 const StyledTab = styled.div`
   z-index: 2;
   padding: 8px;
@@ -65,6 +69,7 @@ const StyledTab = styled.div`
     padding: 10px;
   }
 `;
+
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: #fff;
@@ -73,54 +78,14 @@ const StyledSwiper = styled(Swiper)`
   }
   transition: box-shadow 0.3s ease-out;
 `;
+
 const StyledSubmitButtonGroup = styled.div`
   display: flex;
-  justify-content: flex-start;
-  margin-top: 24px;
-  margin-bottom: 8px;
   gap: 18px;
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
   }
-  margin: 0px 32px 24px 32px;
-`;
-const StyledPrimaryButton = styled.button`
-  min-width: 180px;
-  height: 40px;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.button};
-  color: ${({ theme }) => theme.colors.mainWhite};
-  border-radius: 20px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: background 0.2s;
-  border: none;
-  &:hover:enabled {
-    background-color: ${({ theme }) => theme.colors.buttonActive};
-  }
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  svg {
-    margin-right: 7px;
-    font-size: 18px;
-  }
-`;
-const StyledSecondaryButton = styled(StyledPrimaryButton)`
-  background-color: ${({ theme }) => theme.colors.mainWhite};
-  color: ${({ theme }) => theme.colors.mainColor1};
-  border: 2px solid ${({ theme }) => theme.colors.mainColor1};
-  font-weight: 600;
-  &:hover:enabled {
-    background-color: ${({ theme }) => theme.colors.hover};
-    color: ${({ theme }) => theme.colors.buttonActive};
-  }
-  svg {
-    color: ${({ theme }) => theme.colors.mainColor1};
-  }
+  margin: 8px 32px 24px 32px;
 `;
 
 const allowedCharsExp = /^[A-Za-z0-9_\- ()äöåÄÖÅ]*$/;
@@ -435,44 +400,39 @@ const DatasetImport = () => {
         id="import-dataset-submit-button-group-bottom"
         aria-label="Import dataset actions"
       >
-        <StyledSecondaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-cancel-button-bottom"
+        <PillButton
+          id={'import-dataset-cancel-button-bottom'}
+          variant="inverse"
           disabled={isSubmitting}
           aria-disabled={isSubmitting}
+          text={strings.datasetImport.cancel}
           onClick={() => {
             // close import dialog and reset form
             store.dispatch(setIsDatasetImportOpen(false));
             resetForm();
           }}
-        >
-          {strings.datasetImport.cancel}
-        </StyledSecondaryButton>
+          aria-label={strings.datasetImport.cancel}
+        />
 
         {editingUserlayer ? (
-          <StyledPrimaryButton
-            type="button"
-            tabIndex={0}
-            id="import-dataset-savebutton-bottom"
+          <PillButton
+            id={'import-dataset-savebutton-bottom'}
             disabled={disableUpdate || isSubmitting}
-            aria-disabled={disableUpdate || isSubmitting}
+            text={strings.general.save}
             onClick={handleSaveDataset}
-          >
-            {strings.general.save}
-          </StyledPrimaryButton>
+            aria-label={strings.general.save}
+            aria-disabled={disableUpdate || isSubmitting}
+          />
         ) : (
-          <StyledPrimaryButton
-            type="button"
-            tabIndex={0}
-            id="import-dataset-import-button-bottom"
+          <PillButton
+            id={'import-dataset-import-button-bottom'}
+            icon={faUpload}
             disabled={disableImport || isSubmitting}
-            aria-disabled={disableImport || isSubmitting}
+            text={strings.datasetImport.import}
             onClick={handleSubmitDataset}
-          >
-            <FontAwesomeIcon icon={faUpload} />
-            {strings.datasetImport.import}
-          </StyledPrimaryButton>
+            aria-label={strings.datasetImport.import}
+            aria-disabled={disableUpdate || isSubmitting}
+          />
         )}
       </StyledSubmitButtonGroup>
     </StyledMainContainer>

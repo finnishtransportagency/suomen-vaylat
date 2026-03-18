@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
@@ -9,14 +8,13 @@ import FeatureDataDialog from '../feature-data-window/dialog/FeatureDataDialog';
 import FeatureDataDownloadDialog from '../feature-data-window/dialog/FeatureDataDownloadDialog';
 import UserGuideDialog from '../user-guide/dialog/UserGuideDialog';
 import AppInfoDialog from '../app-info/dialog/AppInfoDialog';
-import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomLayerDialog';
+import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomFilterDialog';
 import DatasetImportDialog from '../dataset-import/dialog/DatasetImportDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
 import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
-import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
 import CoordinateToolDialog from '../coordinate-tool/dialog/CoordinateToolDialog';
 import CoordinateToolMobile from '../coordinate-tool/CoordinateToolMobile';
 import Crosshair from '../crosshair/Crosshair';
@@ -33,7 +31,6 @@ import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
 import BaseLayerSelectorDialog from '../base-layers-selector/dialog/BaseLayersSelectorDialog';
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
-import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
 import ProfileInfoDialog from '../profile-info/dialog/ProfileInfoDialog';
@@ -123,59 +120,56 @@ const StyledRightSection = styled.div`
 const StyledToastContainer = styled(ToastContainer)``;
 
 const Content = () => {
-  const constraintsRef = useRef(null);
   const { isCoordinateToolOpen } = useAppSelector((state) => state.ui);
 
   return (
     <>
-      <StyledContent ref={constraintsRef}>
+      <StyledContent>
         <PublishedMap />
 
-        <AnnouncementsDialog constraintsRef={constraintsRef} />
+        <AnnouncementsDialog/>
 
-        <FeatureDataDialog constraintsRef={constraintsRef} />
+        <FeatureDataDialog/>
 
-        <FeatureDataDownloadDialog constraintsRef={constraintsRef} />
+        <FeatureDataDownloadDialog/>
 
-        <UserGuideDialog constraintsRef={constraintsRef} />
+        <UserGuideDialog/>
 
-        <AppInfoDialog constraintsRef={constraintsRef} />
+        <AppInfoDialog/>
 
-        <CustomLayerDialog constraintsRef={constraintsRef} />
+        <CustomLayerDialog/>
 
         {IS_EXTRANET && 
           <>
-            <DatasetImportDialog constraintsRef={constraintsRef} />
-            <ProfileInfoDialog constraintsRef={constraintsRef} />
+            <DatasetImportDialog/>
+            <ProfileInfoDialog/>
           </>
         }
 
-        <MetadataDialog constraintsRef={constraintsRef} />
+        <MetadataDialog/>
 
-        <ShareWebsiteDialog constraintsRef={constraintsRef} />
+        <ShareWebsiteDialog/>
 
-        <SaveGeometriesDialog constraintsRef={constraintsRef} />
+        <SaveGeometriesDialog/>
 
-        <SaveViewDialog constraintsRef={constraintsRef} />
+        <SaveViewDialog/>
 
-        <LayerDownloadButtonLinkDialog constraintsRef={constraintsRef} />
+        <LayerDownloadButtonLinkDialog/>
 
-        <WarningDialog constraintsRef={constraintsRef} />
+        <WarningDialog/>
 
-        <FeatureDataToolsDialog constraintsRef={constraintsRef} />
+        <FeatureDataToolsDialog/>
 
-        <FeatureDataDownloadToolsDialog constraintsRef={constraintsRef} />
-
-        <LayerFilterDialog constraintsRef={constraintsRef} />
+        <LayerFilterDialog/>
 
         <ScaleBar />
         {!isMobile && (
-          <BaseLayerSelectorDialog constraintsRef={constraintsRef} />
+          <BaseLayerSelectorDialog/>
         )}
         {!isMobile && (
           <>
             <BaseLayerSelector />
-            <CoordinateToolDialog constraintsRef={constraintsRef} />
+            <CoordinateToolDialog/>
           </>
         )}
 
@@ -183,7 +177,6 @@ const Content = () => {
 
         {isCoordinateToolOpen && <Crosshair />}
 
-        <DrawtoolMarkersDialog />
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}

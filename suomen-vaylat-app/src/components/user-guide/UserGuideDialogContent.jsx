@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { Accordion } from 'react-bootstrap';
-import UserGuideTabs from './UserGuideTabs';
 import {
   faExpand,
   faLayerGroup,
@@ -16,7 +15,8 @@ import {
   faFilter,
   faRulerHorizontal,
   faShareAlt,
-  faUpload
+  faUpload,
+  faObjectGroup
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,10 +38,6 @@ const StyledXYIcon = styled.img`
 `;
 
 const StyledContent = styled.div`
-  min-width: 600px;
-  max-width: 600px;
-  width: 100%;
-  height: 100%;
   padding: 16px;
   overflow: auto;
   @media ${(props) => props.theme.device.mobileL} {
@@ -182,7 +178,13 @@ export const UserGuideDialogContent = () => {
             <p>{strings.appGuide.dialogContent.mapLayerMenu.title}</p>
           </StyledTitleWrapper>
         ),
-        content: <UserGuideTabs />,
+        content:  (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.mapLayerMenu.content.general}</p>
+            <p>{strings.appGuide.dialogContent.mapLayerMenu.content.selectedLayers}</p>
+            <p>{IS_EXTRANET ? strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasets : strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasetsExtranet}</p>
+          </StyledGuideContent>
+        ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
       },
       {
@@ -349,6 +351,22 @@ export const UserGuideDialogContent = () => {
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.downloads).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faObjectGroup} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.featureSelection.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.featureSelection.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.featureSelection).toLowerCase()
       },
       {
         title: (

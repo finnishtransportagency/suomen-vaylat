@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   setIsInfoOpen,
   setIsProfileOpen,
@@ -136,7 +136,9 @@ const StyledMobileNavContainer = styled(motion.nav)`
     IS_EXTRANET
       ? props.theme.colors.extranetHeaderColor
       : props.theme.colors.mainColor1};
-  z-index: 1001;
+  
+  isolation: isolate;
+  z-index: 11;
 
   display: flex;
   flex-direction: column;

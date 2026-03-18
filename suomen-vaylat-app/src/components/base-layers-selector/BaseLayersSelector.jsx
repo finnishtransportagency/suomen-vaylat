@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ReactReduxContext, useSelector } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
 import { useContext } from 'react';
@@ -42,12 +42,6 @@ const StyledButton = styled(Button)`
     &:focus {
         outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
-    @media ${props => props.theme.device.laptop} {
-        max-width: 120px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        max-width: 100px;
-    };
 `;
 
 const StyledMenuButton = styled(Button)`
@@ -67,12 +61,6 @@ const StyledMenuButton = styled(Button)`
     &:focus {
         outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
-    @media ${props => props.theme.device.laptop} {
-        max-width: 120px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        max-width: 100px;
-    };
 `;
 
 const StyledButtonText = styled.div`
@@ -85,7 +73,7 @@ const StyledButtonText = styled.div`
 `;
 
 const BaseLayerSelector = () => {
-    const { allLayers, selectedLayersByType } = useAppSelector((state) => state.rpc);
+    const { allLayers, allGroups } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
@@ -120,7 +108,7 @@ const BaseLayerSelector = () => {
                 aria-label={strings.baseLayerSelector.labels.editBaseLayers}
                 tabIndex={0}
                 role="button"
-                disabled={selectedLayersByType.backgroundMaps?.length === 0}
+                disabled={allGroups.length === 0}
             >
                 <ModeEditOutlineTwoToneIcon />
             </StyledMenuButton>
@@ -131,7 +119,7 @@ const BaseLayerSelector = () => {
         <StyledBaselayerButtonContainer id="baselayer-selector-base-layer-container">
             {allLayers.length > 0 && selectedBaseLayers.map((layerID) => {
                 const layer = allLayers.find(layer => layer.id === layerID) || null;
-                if (layer === null) return;
+                if (layer === null) return null;
                 return(
                     <BaseLayerButton
                         key={layer?.id}

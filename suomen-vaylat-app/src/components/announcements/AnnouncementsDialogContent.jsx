@@ -8,8 +8,7 @@ const StyledCheckbox = styled.input`
 `;
 
 const StyledContent = styled.div`
-    padding: 32px;
-    max-width: 600px;
+    padding: 1em;
 `;
 
 const StyledFooter = styled.div`

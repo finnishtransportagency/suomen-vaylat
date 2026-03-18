@@ -270,7 +270,7 @@ const DrawingTools = ({
         disabled={geoJsonArray.length === 0 && drawToolMarkers.length <= 0}
         onClick={eraseDrawing}
         icon={faEraser}
-        color={theme.colors.secondaryColorDarkOrange}
+        color={theme.colors.secondaryColorOrange}
         hoverColor={theme.colors.secondaryColorDarkOrange}
         text={strings.tooltips.drawingTools.erase}
         aria-label={strings.tooltips.drawingTools.erase}
@@ -282,6 +282,7 @@ const DrawingTools = ({
         disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
         icon={faCloudUploadAlt}
         color={theme.colors.secondaryColorGreen}
+        hoverColor={theme.colors.secondaryColorGreenSelected}
         text={strings.general.save}
         aria-label={strings.general.save}
       />

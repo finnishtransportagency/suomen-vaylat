@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import { useAppSelector } from '../../state/hooks';
 import FeatureDataBadge from '../feature-data-window/badge/FeatureDataBadge';
 import ThemeBadge from '../layerlists/theme-layerlist/badge/ThemeBadge';
 import LayerFilterBadge from '../layer-filter/badge/LayerFilterBadge';
 import { useState, useEffect } from 'react';
+import FeatureSelectionBadge from '../feature-data-window/badge/FeatureSelectionBadge';
 
 const StyledContent = styled.div`
   position: absolute;
@@ -35,12 +36,13 @@ const StyledContent = styled.div`
 const badgeMap = {
   gfi: <FeatureDataBadge key="gfi" />,
   theme: <ThemeBadge key="theme" />,
-  filter: <LayerFilterBadge key="filter" />
+  filter: <LayerFilterBadge key="filter" />,
+  featureSelection: <FeatureSelectionBadge key="featureSelection" />
 };
 
 const Badges = () => {
   const { selectedTheme } = useAppSelector((state) => state.rpc);
-  const { minimizeGfi, minimizeFilter } = useAppSelector((state) => state.ui);
+  const { minimizeGfi, minimizeFilter, minimizeFeatureSelection } = useAppSelector((state) => state.ui);
 
   const [activeBadges, setActiveBadges] = useState([]);
 
@@ -49,6 +51,7 @@ const Badges = () => {
   if (minimizeGfi) actuallyActive.push('gfi');
   if (selectedTheme && selectedTheme !== '') actuallyActive.push('theme');
   if (minimizeFilter.minimized) actuallyActive.push('filter');
+  if (minimizeFeatureSelection) actuallyActive.push('featureSelection');
 
   useEffect(() => {
     setActiveBadges((prev) => {

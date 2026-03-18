@@ -166,14 +166,6 @@ const StyledCancel = styled.button`
   }
 `;
 
-const StyledSubtitle = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.mainColor1};
-  margin-top: 1em;
-  margin-bottom: 1em;
-`;
-
 const ViewForm = ({ initialData = {}, onSave, onCancel }) => {
   const [viewName, setViewName] = useState(initialData?.name || '');
   const [viewDescription, setViewDescription] = useState(
