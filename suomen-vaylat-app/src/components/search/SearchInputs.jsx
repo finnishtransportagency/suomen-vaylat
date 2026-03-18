@@ -16,9 +16,10 @@ import {
   setSearchValue
 } from '../../state/slices/rpcSlice';
 import {
-  setGeoJsonArray,
+  removeFromGeoJsonArray,
   setIsMoreSearchOpen
 } from '../../state/slices/uiSlice';
+import { SEARCH_GEOJSON_ARRAY_ID } from '../../utils/constants';
 
 
 const SearchInputs = ({ setDropdownOpen }) => {
@@ -55,7 +56,8 @@ const SearchInputs = ({ setDropdownOpen }) => {
     }
 
     searchValueCopy = searchValueCopy.trim();
-    store.dispatch(setGeoJsonArray([]));
+    // filter out search geojsons
+    store.dispatch(removeFromGeoJsonArray(SEARCH_GEOJSON_ARRAY_ID));
     store.dispatch(setFirstSearchResultShown(false));
     removeMarkersAndFeatures(channel);
     store.dispatch(setIsSearchingActive(true));

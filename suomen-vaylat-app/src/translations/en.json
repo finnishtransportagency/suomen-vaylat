@@ -25,7 +25,7 @@
     "searchButton": "Address search",
     "layerlistButton": "Layerlist",
     "fullscreenButton": "Full screen",
-    "closeDrawingTools": "Close drawing tools",
+    "closeTools": "Close drawing tools",
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",

@@ -13,7 +13,7 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
-  setIsDrawingToolsOpen,
+  setIsToolsOpen,
   setIsSideMenuOpen,
   setActiveTool,
   setGeoJsonArray,
@@ -29,6 +29,7 @@ import CircleButton from '../../../utils/components/CircleButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';
+import { FEATURE_SELECTION_DRAWING_TOOL, SEARCH_GEOJSON_ARRAY_ID } from '../../../utils/constants';
 
 const StyledMenuBar = styled.div`
   z-index: 11;
@@ -171,20 +172,23 @@ const MenuBar = () => {
   const {
     isSideMenuOpen,
     isThemeMenuOpen,
-    isDrawingToolsOpen,
+    isToolsOpen,
     isSearchOpen,
-    drawToolMarkers
+    drawToolMarkers,
+    geoJsonArray
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const closeDrawingTools = (open) => {
+  const closeTools = (open) => {
     channel && channel.postRequest('DrawTools.StopDrawingRequest');
-    store.dispatch(setGeoJsonArray([]));
+    // filter out drawtools jsons
+    const filteredGeojsons = geoJsonArray.filter(geojson => geojson.id === SEARCH_GEOJSON_ARRAY_ID || geojson.id === FEATURE_SELECTION_DRAWING_TOOL)
+    store.dispatch(setGeoJsonArray(filteredGeojsons));
     store.dispatch(setActiveTool(null));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker }));
     });
-    store.dispatch(setIsDrawingToolsOpen(open));
+    store.dispatch(setIsToolsOpen(open));
     store.dispatch(setSelectedMarker(2));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
@@ -194,7 +198,7 @@ const MenuBar = () => {
 
   const handleCloseMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    closeDrawingTools();
+    closeTools();
   };
 
   const MENU_ANIMATION = {
@@ -279,7 +283,7 @@ const MenuBar = () => {
 
                 <WebSiteShareButton/>
 
-                {isDrawingToolsOpen ? (
+                {isToolsOpen ? (
                   <StyledDrawingToolsWrapper id="menubar-drawingtools-wrapper">
                     <StyledCornerCloseButton
                       id="menubar-drawingtools-close-btn"
@@ -287,11 +291,11 @@ const MenuBar = () => {
                       text=""
                       toggleState={true}
                       tooltipDirection={'right'}
-                      clickAction={closeDrawingTools}
-                      aria-label={strings.tooltips?.closeDrawingTools}
-                      title={strings.tooltips?.closeDrawingTools}
+                      clickAction={closeTools}
+                      aria-label={strings.tooltips?.closeTools}
+                      title={strings.tooltips?.closeTools}
                     />
-                    <ToolsPanel isOpen={isDrawingToolsOpen} />
+                    <ToolsPanel isOpen={isToolsOpen} />
                   </StyledDrawingToolsWrapper>
                 ) : (
                   <CircleButton
@@ -301,7 +305,7 @@ const MenuBar = () => {
                     toggleState={false}
                     tooltipDirection="right"
                     clickAction={() =>
-                      store.dispatch(setIsDrawingToolsOpen(true))
+                      store.dispatch(setIsToolsOpen(true))
                     }
                     aria-label={strings.tooltips?.toolsButton}
                   />

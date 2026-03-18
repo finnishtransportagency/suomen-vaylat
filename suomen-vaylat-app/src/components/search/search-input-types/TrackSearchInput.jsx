@@ -333,7 +333,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
           key={'track-search-inputs-clear-results-btn'}
           variant='inverse'
           text={strings.search?.clearResults}
-          onClick={emptySearchResults}
+          onClick={() => emptySearchResults(store)}
           aria-label={strings.search?.clearResults}
           style={{ width: '100%', justifyContent: 'center' }}
           disabled={
