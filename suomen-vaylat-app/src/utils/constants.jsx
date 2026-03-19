@@ -11,3 +11,6 @@ export const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
 export const GENERAL_FAIL = "GENERAL_FAIL";
 export const VECTOR_LAYER_ID = 'SEARCH_VECTORLAYER';
 export const MAX_RECONNECTIONS_FEATURE_DATA_DOWNLOAD = 20;
+
+// Geojson ids
+export const SEARCH_GEOJSON_ARRAY_ID = "search-geojson-array"

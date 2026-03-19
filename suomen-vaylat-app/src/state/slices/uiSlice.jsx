@@ -28,7 +28,7 @@ const initialState = {
   isSavedLayer: false,
   shareUrl: null,
   isThemeMenuOpen: false,
-  isDrawingToolsOpen: false,
+  isToolsOpen: false,
   isLegendOpen: false,
   isSaveViewOpen: false,
   isSaveGeometriesOpen: false,
@@ -85,7 +85,7 @@ export const uiSlice = createSlice({
       state.isSavedOpen = false;
 
       state.isUserGuideOpen = false;
-      state.isDrawingToolsOpen = false;
+      state.isToolsOpen = false;
       state.isLegendOpen = false;
       state.isSaveViewOpen = false;
       state.isSaveGeometriesOpen = false;
@@ -124,6 +124,13 @@ export const uiSlice = createSlice({
     },
     setGeoJsonArray: (state, action) => {
       state.geoJsonArray = action.payload;
+    },
+    // remove by id
+    removeFromGeoJsonArray: (state, action) => {
+      let filteredArray = state.geoJsonArray.filter(
+        (geoj) => geoj.id !== action.payload
+      );
+      state.geoJsonArray = filteredArray;
     },
     addToGeoJsonArray: (state, action) => {
       let duplicateIndex = state.geoJsonArray.findIndex(
@@ -177,8 +184,8 @@ export const uiSlice = createSlice({
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
-    setIsDrawingToolsOpen: (state, action) => {
-      state.isDrawingToolsOpen = action.payload;
+    setIsToolsOpen: (state, action) => {
+      state.isToolsOpen = action.payload;
     },
     setActiveTool: (state, action) => {
       state.activeTool = action.payload;
@@ -334,7 +341,7 @@ export const {
   setIsGfiDownloadOpen,
   setSelectedDrawingTool,
   setShareUrl,
-  setIsDrawingToolsOpen,
+  setIsToolsOpen,
   setActiveTool,
   setActiveSelectionTool,
   setIsDownloadLinkDialogOpen,
@@ -348,6 +355,7 @@ export const {
   setWarning,
   setGeoJsonArray,
   addToGeoJsonArray,
+  removeFromGeoJsonArray,
   setIsSavedOpen,
   setHasToastBeenShown,
   setSelectedMarker,

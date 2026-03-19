@@ -16,7 +16,8 @@ import {
   setIsGfiOpen,
   setMinimizeGfi,
   setMaximizeGfi,
-  setActiveSelectionTool
+  setActiveSelectionTool,
+  removeFromGeoJsonArray
 } from '../../../state/slices/uiSlice';
 
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
@@ -42,6 +43,8 @@ const FeatureDataDialog = () => {
     store.dispatch(setVKMData(null));
     store.dispatch(setMinimizeGfi(false));
     store.dispatch(setMaximizeGfi(false));
+    // Filter out feature data geojsons
+    store.dispatch(removeFromGeoJsonArray(FEATURE_SELECTION_DRAWING_TOOL));
     setTimeout(() => {
       store.dispatch(setVKMData(null));
     }, 500); // VKM info does not disappear during dialog close animation.

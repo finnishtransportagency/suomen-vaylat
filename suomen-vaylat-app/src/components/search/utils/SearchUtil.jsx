@@ -6,9 +6,9 @@ import {
   setSearchValue,
   setTrackErrors
 } from '../../../state/slices/rpcSlice';
-import { setGeoJsonArray } from '../../../state/slices/uiSlice';
-import store from '../../../state/store';
+import { removeFromGeoJsonArray } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
+import { SEARCH_GEOJSON_ARRAY_ID } from '../../../utils/constants';
 
 export const vectorLayerId = 'SEARCH_VECTORLAYER';
 export const markerId = 'SEARCH_MARKER';
@@ -258,8 +258,9 @@ export const mergeMatchedKeys = (oldMatchedKeys, newMatchedKeys) => {
   return mergedMatchedKeys;
 };
 
-export const emptySearchResults = () => {
-  store.dispatch(setGeoJsonArray([]));
+export const emptySearchResults = (store) => {
+  // filter out search geojsons
+  store.dispatch(removeFromGeoJsonArray(SEARCH_GEOJSON_ARRAY_ID));
   store.dispatch(setFeatureSearchResults([]));
   store.dispatch(setSearchResults(null));
   store.dispatch(setSearchValue(''));

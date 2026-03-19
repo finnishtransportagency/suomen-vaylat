@@ -35,14 +35,14 @@ import {
 import {
   setMinimizeGfi,
   setSelectedDrawingTool,
-  setGeoJsonArray,
   setHasToastBeenShown,
   setWarning,
   setActiveSelectionTool,
   setActiveTool,
   setMinimizeFeatureSelection,
   setIsGfiToolsOpen,
-  setIsGfiOpen
+  setIsGfiOpen,
+  addToGeoJsonArray
 } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
@@ -912,7 +912,7 @@ const FeatureDataSelectionToolsMenu = () => {
               ]);
             store.dispatch(setActiveTool(null));
             isGfiOpen && store.dispatch(setMinimizeGfi(false));
-            store.dispatch(setGeoJsonArray([data]));
+            store.dispatch(addToGeoJsonArray(data));
             store.dispatch(setSelectedDrawingTool(null));
             toast.dismiss('measurementToast');
             store.dispatch(resetGFILocations([]));

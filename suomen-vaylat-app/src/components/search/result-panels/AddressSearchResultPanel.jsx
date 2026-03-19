@@ -18,7 +18,7 @@ import { theme } from '../../../theme/theme';
 import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import { setGeoJsonArray } from '../../../state/slices/uiSlice';
+import { addToGeoJsonArray } from '../../../state/slices/uiSlice';
 import {
   VKMGeoJsonHoverStyles,
   VKMGeoJsonStyles
@@ -28,6 +28,7 @@ import {
   mapMoveRequest,
   setFirstSearchResultShown
 } from '../../../state/slices/rpcSlice';
+import { SEARCH_GEOJSON_ARRAY_ID } from '../../../utils/constants';
 
 const AddressSearchResultPanel = () => {
   const [searchClickedRow, setSearchClickedRow] = useState(null);
@@ -146,8 +147,9 @@ const AddressSearchResultPanel = () => {
       ]);
 
       store.dispatch(
-        setGeoJsonArray([
+        addToGeoJsonArray(
           {
+            id: SEARCH_GEOJSON_ARRAY_ID,
             data: {
               geom: geom
             },
@@ -155,7 +157,7 @@ const AddressSearchResultPanel = () => {
             hover: hover,
             featureStyle: featureStyle
           }
-        ])
+        )
       );
     } else if (type === 'track') {
       let featureStyle = VKMGeoJsonStyles['track'];
@@ -172,8 +174,9 @@ const AddressSearchResultPanel = () => {
         }
       ]);
       store.dispatch(
-        setGeoJsonArray([
+        addToGeoJsonArray(
           {
+            id: SEARCH_GEOJSON_ARRAY_ID,
             data: {
               geom: geom
             },
@@ -181,7 +184,7 @@ const AddressSearchResultPanel = () => {
             hover: hover,
             featureStyle: featureStyle
           }
-        ])
+        )
       );
     }
   };

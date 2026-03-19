@@ -25,7 +25,7 @@
     "searchButton": "Adressökning",
     "layerlistButton": "Nivåmeny",
     "fullscreenButton": "Helskärm",
-    "closeDrawingTools": "Stäng ritverktyg",
+    "closeTools": "Stäng ritverktyg",
     "legendHeader": "Data som visas på denna zoomnivå och deras förklaringar",
     "legendButton": "Förklaringar",
     "myLocButton": "Egen position",

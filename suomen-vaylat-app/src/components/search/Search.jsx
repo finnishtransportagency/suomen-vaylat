@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
-import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
+import { SEARCH_GEOJSON_ARRAY_ID, SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { theme } from '../../theme/theme';
 
@@ -26,10 +26,10 @@ import {
 
 import {
   setIsSearchOpen,
-  setGeoJsonArray,
   setHasToastBeenShown,
   setActiveSwitch,
-  setIsMoreSearchOpen
+  setIsMoreSearchOpen,
+  removeFromGeoJsonArray
 } from '../../state/slices/uiSlice';
 
 import CircleButton from '../../utils/components/CircleButton';
@@ -286,14 +286,13 @@ const Search = () => {
   const handleSearchButton = () => {
     if (searchResults || featureSearchResults.length > 0) {
       store.dispatch(setIsSearchOpen(!isSearchOpen));
-    } else {
-      if (isSearchOpen) {
-        store.dispatch(setIsMoreSearchOpen(false));
-        store.dispatch(setActiveSwitch('default'));
-      }
-      store.dispatch(setIsSearchOpen(!isSearchOpen));
+    } else if (isSearchOpen) {
+      store.dispatch(setIsMoreSearchOpen(false));
+      store.dispatch(setActiveSwitch('default'));
+      store.dispatch(setIsSearchOpen(false));
       store.dispatch(resetFeatureSearchResults());
-      isSearchOpen && store.dispatch(setGeoJsonArray([]));
+      // filter out search geojsons
+      isSearchOpen && store.dispatch(removeFromGeoJsonArray(SEARCH_GEOJSON_ARRAY_ID));
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(null));
       isSearchOpen && removeMarkersAndFeatures(channel);
@@ -301,6 +300,8 @@ const Search = () => {
       isSearchOpen && store.dispatch(setSearchValue(''));
       isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
       store.dispatch(setSearchType('address'));
+    } else {
+      store.dispatch(setIsSearchOpen(true));
     }
   };
 

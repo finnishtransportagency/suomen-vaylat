@@ -1,4 +1,4 @@
-import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
 import searchReducer from './slices/searchSlice';

@@ -8,7 +8,8 @@ import {
   setIsGfiToolsOpen,
   setActiveSelectionTool,
   setMinimizeFeatureSelection,
-  setSelectedDrawingTool
+  setSelectedDrawingTool,
+  setActiveTool
 } from '../../../state/slices/uiSlice';
 import { faObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -44,6 +45,7 @@ const FeatureDataToolsDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(setSelectedDrawingTool(null));
     store.dispatch(setIsGfiToolsOpen(false));
+    store.dispatch(setActiveTool(null));
     // dismiss measurement toast as drawing is not active anymore
     toast.dismiss('measurementToast');
   };
