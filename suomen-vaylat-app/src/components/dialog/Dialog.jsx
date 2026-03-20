@@ -753,17 +753,11 @@ const Dialog = ({
         cancel=".dialog-no-drag"
         onDragStart={(e) => {
           if (hidden) return;
-          handleBringToFront(e);
           setHasUserMoved(true);
         }}
         onResizeStart={(e) => {
           if (hidden) return;
-          handleBringToFront(e);
           setUserResized(true);
-        }}
-        onMouseDown={(e) => {
-          if (hidden) return;
-          handleBringToFront(e);
         }}
         onPointerDown={(e) => {
           if (hidden) return;
