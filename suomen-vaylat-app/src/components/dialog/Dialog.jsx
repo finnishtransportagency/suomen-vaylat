@@ -82,12 +82,6 @@ const Header = styled.div`
     color: ${(p) => p.theme.colors.mainWhite};
   }
 
-  @media ${(p) => p.theme.device.mobileL} {
-    pointer-events: none;
-    svg {
-      pointer-events: auto;
-    }
-  }
 `;
 
 const Title = styled.div`
@@ -756,6 +750,7 @@ const Dialog = ({
         resizeHandleComponent={{
           bottomRight: <StyledResizeHandle />
         }}
+        cancel=".dialog-no-drag"
         onDragStart={(e) => {
           if (hidden) return;
           handleBringToFront(e);
@@ -823,13 +818,14 @@ const Dialog = ({
 
             <Right>
               {minimizable && (
-                <HeaderBtn onClick={() => minimizeAction?.()}>
+                <HeaderBtn className='dialog-no-drag' onClick={() => minimizeAction?.()}>
                   <FontAwesomeIcon icon={faWindowMinimize} />
                 </HeaderBtn>
               )}
 
               {maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
                 <HeaderBtn
+                  className='dialog-no-drag'
                   onClick={(e) => {
                     e.preventDefault();
                     maximizeAction?.();
@@ -842,12 +838,13 @@ const Dialog = ({
               )}
 
               {hasHelp && (
-                <HeaderBtn id={helpId}>
+                <HeaderBtn className='dialog-no-drag' id={helpId}>
                   <FontAwesomeIcon icon={faQuestion} />
                 </HeaderBtn>
               )}
 
               <CloseBtn
+                className='dialog-no-drag'
                 onClick={() => {
                   closeAction();
                 }}
