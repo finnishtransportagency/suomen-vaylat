@@ -49,7 +49,7 @@ const AnnouncementsDialog = () => {
           drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={
-            true
+            false
           } /* Scale dialog full width / height when using mobile device */
           titleIcon={faBullhorn} /* Use icon on title or null */
           title={
@@ -59,8 +59,10 @@ const AnnouncementsDialog = () => {
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
           id={announcements[currentAnnouncement].id}
-          minWidth="30rem"
-          minHeight="18rem"
+          width="30rem"
+          height="18rem"
+          maxWidth='90vw'
+          maxHeight='90vh'
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}

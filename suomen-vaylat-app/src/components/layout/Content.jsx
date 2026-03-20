@@ -35,6 +35,7 @@ import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
 import ProfileInfoDialog from '../profile-info/dialog/ProfileInfoDialog';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
+import LegendsDialog from '../legend/dialog/LegendsDialog';
 
 const StyledContent = styled.div`
   position: absolute;
@@ -126,6 +127,8 @@ const Content = () => {
     <>
       <StyledContent>
         <PublishedMap />
+
+        <LegendsDialog />
 
         <AnnouncementsDialog/>
 
