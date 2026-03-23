@@ -15,7 +15,6 @@ const LegendsDialog = () => {
   const {
     isLegendOpen
   } = useAppSelector((state) => state.ui);
-  console.log(isLegendOpen)
 
   return isLegendOpen ? (
     <Dialog
