@@ -42,7 +42,7 @@ const StyledHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 12;
+  z-index: 9999;
 `;
 
 const HeaderLeft = styled.div`
