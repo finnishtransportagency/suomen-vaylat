@@ -81,7 +81,6 @@ const Header = styled.div`
   svg {
     color: ${(p) => p.theme.colors.mainWhite};
   }
-
 `;
 
 const Title = styled.div`
@@ -247,7 +246,7 @@ const Dialog = ({
   const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
 
   useEffect(() => {
-    const id = idRef.current
+    const id = idRef.current;
     if (!register) return;
     register(id);
 
@@ -791,7 +790,6 @@ const Dialog = ({
             className="dialog-header"
             type={type}
           >
-            
             {hasHelp && helpId && (
               <Tooltip
                 anchorSelect={`#${helpId}`}
@@ -805,21 +803,26 @@ const Dialog = ({
               </Tooltip>
             )}
 
-            <Title>
+            <Title id={'dialog_title_' + title}>
               {renderDialogIcon(titleIcon)}
               <p>{title}</p>
             </Title>
 
             <Right>
               {minimizable && (
-                <HeaderBtn className='dialog-no-drag' onClick={() => minimizeAction?.()}>
+                <HeaderBtn
+                  id={'dialog_header_minimize_' + title}
+                  className="dialog-no-drag"
+                  onClick={() => minimizeAction?.()}
+                >
                   <FontAwesomeIcon icon={faWindowMinimize} />
                 </HeaderBtn>
               )}
 
               {maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
                 <HeaderBtn
-                  className='dialog-no-drag'
+                  id={'dialog_header_maximize_' + title}
+                  className="dialog-no-drag"
                   onClick={(e) => {
                     e.preventDefault();
                     maximizeAction?.();
@@ -832,13 +835,14 @@ const Dialog = ({
               )}
 
               {hasHelp && (
-                <HeaderBtn className='dialog-no-drag' id={helpId}>
+                <HeaderBtn className="dialog-no-drag" id={helpId}>
                   <FontAwesomeIcon icon={faQuestion} />
                 </HeaderBtn>
               )}
 
               <CloseBtn
-                className='dialog-no-drag'
+                id={'dialog_header_close_' + title}
+                className="dialog-no-drag"
                 onClick={() => {
                   closeAction();
                 }}
@@ -848,7 +852,9 @@ const Dialog = ({
             </Right>
           </Header>
 
-          <Body ref={bodyRef}>{children}</Body>
+          <Body id={'dialog_body_' + title} ref={bodyRef}>
+            {children}
+          </Body>
         </Panel>
       </StyledRnd>
     </>
