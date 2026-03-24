@@ -298,11 +298,11 @@
     "title": "Användarguide",
     "dialogContent": {
       "upperBar": {
-        "title": "Top Bar-funktioner",
+        "title": "Funktioner i översta fältet",
         "content": {
           "0": {
             "title": "Återgå till startvyn",
-            "text": "Startvyn är en fördefinierad vy som visar vattenvägar, järnvägsnätet och vägnätet i hela Finland."
+            "text": "Startvyn är en fördefinierad vy som visar statens farleder, järnvägar och vägar i Finland."
           },
           "1": {
             "title": "Språk",
@@ -355,10 +355,10 @@
       "mapLayerMenu": {
         "title": "Kartnivåmeny",
         "content": {
-          "general": "Du kan söka efter ett kartlager per namn genom att skriva 3 tecken i sökfältet. Listan över dataset kan filtreras efter ämnesområde via menyn 'Filtrera per typ', eller så kan du spara ett 'eget filter' med valda dataset i webbläsarens cache (finns under filteralternativen). Ett eget filter är endast tillgängligt på den enhet och i den webbläsare där det sparats.\nKlicka på informationsikonen bredvid ett lagernamn för att öppna datasetets metadata. Om en nedladdningsknapp visas vid lagret är datasettet nedladdningsbart för hela Finland. Om nedladdningsknappen saknas kräver nedladdning att objekt väljs på kartan.\nVissa dataset går att filtrera baserat på deras attributdata. Om ett dataset kan filtreras visas en filterikon vid lagret.",
+          "general": "Du kan söka efter ett kartlager per namn genom att skriva 3 tecken i sökfältet. Listan över dataslagen kan filtreras efter ämnesområde via menyn 'Filtrera per typ', eller så kan du spara ett 'eget filter' med valda dataset i webbläsarens cache (finns under filteralternativen). Ett eget filter är endast tillgängligt på den enhet och i den webbläsare där det sparats.\nKlicka på informationsikonen bredvid ett dataslag för att öppna dessmetadata. Om en nedladdningsknapp visas vid dataslaget är detnedladdningsbart för hela Finland. Om nedladdningsknappen saknas kräver nedladdning att objekt väljs på kartan.\nVissa dataset går att filtrera baserat på deras egenskapsdata. Om ett dataslag kan filtreras visas en filterikon vid lagret.",
           "ownDatasets": "'Mina dataset' innehåller vyer och geometrier som användaren sparat och som kan visas, redigeras och tas bort.\nSparade vyer och geometrier lagras för närvarande endast i webbläsarens cache, så de är endast tillgängliga på den enhet och i den webbläsare där de sparats.\nMetadata för personliga geometrier och vyer kan visas via informationsknappen. En stjärna visas bredvid namnet på en vy som är inställd som standard. Standardvyer aktiveras automatiskt när sidan öppnas.",
-          "ownDatasetsExtranet": "'Mina dataset' innehåller vyer, geometrier och personliga kartlager som användaren sparat och som kan redigeras och tas bort.\nSparade vyer och geometrier lagras för närvarande endast i webbläsarens cache, så de är endast tillgängliga på den enhet och i den webbläsare där de sparats. Egen kartlager lagras i databasen och hämtas per användare. För närvarande går det inte att dela egen kartlager.\nMetadata för personliga geometrier och vyer kan visas via informationsknappen. En stjärna visas bredvid namnet på en vy som är inställd som standard. Standardvyer aktiveras automatiskt när sidan öppnas.",
-          "selectedLayers": "'Valda lagert' innehåller en lista över de kartlager som valts för visning. Du kan ändra lagrens ordning genom att dra dem med handtaget till vänster. Opacitet kan justeras med reglaget och ett lager kan aktiveras eller avaktiveras med kryssrutan. Filterknappen öppnar filtreringsalternativ där de synliga kartuppgifterna kan filtreras baserat på attributvärden."
+          "ownDatasetsExtranet": "'Mina dataset' innehåller vyer, geometrier och personliga dataslag som användaren sparat och som kan redigeras och tas bort.\nSparade vyer och geometrier lagras för närvarande endast i webbläsarens cache, så de är endast tillgängliga på den enhet och i den webbläsare där de sparats. Egna dataslag lagras i databasen och hämtas per användare. För närvarande går det inte att dela egna dataslag.\nMetadata för personliga geometrier och vyer kan visas via informationsknappen. En stjärna visas bredvid namnet på en vy som är inställd som standard. Standardvyer aktiveras automatiskt när sidan öppnas.",
+          "selectedLayers": "'Valda dataslag' innehåller en lista över de dataslag som valts för visning. Du kan ändra dataslagens ordning genom att dra dem med handtaget till vänster. Genomskinligheten kan justeras med reglaget och ett dataslag kan aktiveras eller avaktiveras med kryssrutan. Filterknappen öppnar filtreringsalternativ där de synliga kartuppgifterna kan filtreras baserat på egenskapen."
         }
       },
       "search": {
@@ -441,15 +441,15 @@
       },
       "views": {
         "title": "Spara vy",
-      "content": "'Spara vy' finns i fönstret som öppnas från verktygsikonen till vänster. Att spara en vy lagrar kartvyn i webbläsarens cache. Den sparade vyn innehåller kartans centrum, zoomnivå och kartlager. Du anger ett namn för vyn och kan lägga till en beskrivning. En vy kan också ställas in som standardvy så att den aktiveras automatiskt vid uppstart av applikationen. Sparade vyer är tillgängliga på enheten och i den webbläsare där de sparades. Sparade vyer listas under 'Mina dataset' i lager-menyn."
+      "content": "'Spara vy' finns i fönstret som öppnas från verktygsikonen till vänster. Att spara en vy lagrar kartvyn i webbläsarens cache. Den sparade vyn innehåller kartans centrum, zoomnivå och kartlager. Du anger ett namn för vyn och kan lägga till en beskrivning. En vy kan också ställas in som standardvy så att den aktiveras automatiskt vid uppstart av applikationen. Sparade vyer är tillgängliga på enheten och i den webbläsare där de sparades. Sparade vyer listas under 'Mina dataset' i menyn."
       },
       "datasetImport": {
         "title": "Importera dataset",
         "content": "'Importera dataset' finns i fönstret som öppnas från verktygsikonen till vänster. Med detta verktyg kan du importera egna dataset till tjänsten och ange namn, beskrivning, datakälla och stilar. Mer detaljerade instruktioner finns i popup-fönstret som öppnas."
       },
       "setFullScreen": {
-        "title": "Bygga ut",
-        "content": "Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen, och den finns i verktygsmenyn."
+        "title": "Expandera vy",
+        "content": "Expandera-knappen i verktygsmenyn kan användas för att expandera karttjänsten så att den fyller hela skärmen."
       },
       "zoomBar": {
         "title": "Bildtexter / zoomfält",
@@ -459,14 +459,14 @@
   },
   "appInfo": {
     "title": "Uppgifter om applikationen",
-    "headingText": "Finlands Trafikleder är en karttjänst som tillhandahålls av Trafikledsverket och som bygger på öppna data. Tjänsten publicerades 2022 och omfattar för tillfället mer än 270 dataslag med tillhörande egenskapsuppgifter. Tjänsten och dess innehåll utvecklas fortfarande.",
-    "mainText": "Via karttjänsten Finlands Trafikleder kan man se vägnätsuppgifter om det statliga vägnätet samt uppgifter om järnvägar och farleder. Det har dessutom skapats egna helheter för Trafikledsverkets infrastrukturprojekt och dataslag för det nationella datasystemet för väg- och gatunätet, Digiroad. Flera temakartor finns redan inbyggda i tjänsten, till exempel Projektkartan och Beskrivning av Finlands bannät. I tjänsten Finlands Trafikleder kan man söka på namn eller ämnesområde och filtrera materialet enligt olika teman. Karttjänsten omfattar dessutom separata sökningar av adresser, vägar och metadata. Finlands Trafikleder kan användas både som desktop- och mobilversion. Tjänsten produceras på finska, svenska och engelska.  Anvisningar om tjänsten hittar man genom att klicka på ? (länk). För tillfället ansvarar Sitowise Oy för driften och underhållet av Finlands Trafikleder.",
+    "headingText": "Trafikledsverket i Finland publicerar öppna platsdata via Suomen väylät -karttjänsten.Tjänsten publicerades 2022 och omfattar för tillfället mer än 270 dataslag med tillhörande egenskapsuppgifter. Tjänsten och dess innehåll utvecklas fortfarande.",
+    "mainText": "Via karttjänsten kan man visa data gällande statens vägar, järnvägar och farleder. Flera temakartor finns redan inbyggda i tjänsten, till exempel Projektkartan (Hankekartta) och Beskrivningen av Finlands bannät (Verkkoselostus). Tjänsten innehåller mångsidiga sökmöjligheter som till exempel platsnamn, väg- och bannätsadresser, metadata, ämnesområdn samt filtrering av egenskapsdata. Tjänsten kan användas både som desktop- och mobilversion. Tjänsten produceras på finska, svenska och engelska.. För tillfället ansvarar Sitowise Oy för utvecklingen och underhållet av tjänsten.",
     "tabs": {
-      "versionInfoTitle": "Versions information",
+      "versionInfoTitle": "Versioner",
       "appVersion": "Applikationsversion: ",
       "appLastUpdate": "Applikationen uppdaterades senast: ",
       "appInfoTitle": "Information om tjänsten",
-      "announcementsTitle": "Aviseringar",
+      "announcementsTitle": "Meddelanden",
       "appInfoLinksTitle": "Länkar",
       "appContactAndFeedback": "Kontaktuppgifter och respons",
       "oskari": "Oskari.org -version: "
@@ -476,11 +476,11 @@
       "noAnnouncements": "Inga aktiva aviseringar"
     },
     "contactInfoFeedback": {
-      "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
+      "0": "Trafikledsverket ansvarar för tjänsten som levereras av Sitowise Oy.",
       "1": "Respons om Suomen väylät -karttjänsten kan skickas till adressen",
       "2": "paikkatieto@vayla.fi",
       "3": "Respons gällande landsvägar, järnvägar och farleder kan ges via",
-      "4": "https://liikenne.palautevayla.fi/feedback",
+      "4": "https://www.palautevayla.fi/aspa/sv",
       "emailSubject": "Respons om Finlands Trafikleder"
     },
     "appInfoLinks": {
@@ -498,7 +498,7 @@
       },
       "3": {
         "text": "Förmedlingsplattform för material där man kan ladda ned filer med öppet material.",
-        "link": "https://ava.vaylapilvi.fi"
+        "link": "https://aineistot.vayla.fi/"
       }
     },
     "dataSourcesAndTermsOfUse": {

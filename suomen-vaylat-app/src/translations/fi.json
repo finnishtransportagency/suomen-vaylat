@@ -479,7 +479,7 @@
       "1": "Palautetta Suomen väylät -palvelusta toivotaan lähetettävän osoitteeseen",
       "2": "paikkatieto@vayla.fi",
       "3": "Palautetta maanteihin, rataverkkoon ja vesiväyliin liittyen voit antaa osoitteessa",
-      "4": "https://liikenne.palautevayla.fi/feedback",
+      "4": "https://www.palautevayla.fi/aspa/fi",
       "emailSubject": "Suomen väylät palaute"
     },
     "appInfoLinks": {
@@ -497,7 +497,7 @@
       },
       "3": {
         "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
-        "link": "https://ava.vaylapilvi.fi"
+        "link": "https://aineistot.vayla.fi/"
       }
     },
     "dataSourcesAndTermsOfUse": {
