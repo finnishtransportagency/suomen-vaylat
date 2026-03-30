@@ -466,7 +466,7 @@
       "appVersion": "Application version: ",
       "appLastUpdate": "Application last updated: ",
       "appInfoTitle": "Information on the service",
-      "announcementsTitle": "Ilmoitukset",
+      "announcementsTitle": "Announcements",
       "appInfoLinksTitle": "Links",
       "appContactAndFeedback": "Contact information and feedback",
       "oskari": "Oskari.org version: "
@@ -480,7 +480,7 @@
       "1": "Send your feedback on the Suomen väylät map service to",
       "2": "paikkatieto@vayla.fi",
       "3": "Feedback regarding roads, railways and waterways can be given at",
-      "4": "https://liikenne.palautevayla.fi/feedback",
+      "4": "https://www.palautevayla.fi/aspa/en",
       "emailSubject": "Feedback on Suomen väylät"
     },
     "appInfoLinks": {
@@ -498,7 +498,7 @@
       },
       "3": {
         "text": "A forwarding service for open data from which you can download open data files.",
-        "link": "https://ava.vaylapilvi.fi"
+        "link": "https://aineistot.vayla.fi/"
       }
     },
     "dataSourcesAndTermsOfUse": {

@@ -182,7 +182,7 @@ export const UserGuideDialogContent = () => {
           <StyledGuideContent>
             <p>{strings.appGuide.dialogContent.mapLayerMenu.content.general}</p>
             <p>{strings.appGuide.dialogContent.mapLayerMenu.content.selectedLayers}</p>
-            <p>{IS_EXTRANET ? strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasets : strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasetsExtranet}</p>
+            <p>{IS_EXTRANET ? strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasetsExtranet : strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasets}</p>
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
