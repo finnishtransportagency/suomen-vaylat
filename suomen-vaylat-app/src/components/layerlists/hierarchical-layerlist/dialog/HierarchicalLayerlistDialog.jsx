@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../state/hooks';
 import { setIsSideMenuOpen } from '../../../../state/slices/uiSlice';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import store from '../../../../state/store';
 
 import DialogHeader from '../../../../utils/components/DialogHeader';
@@ -15,18 +15,16 @@ const StyledMapLayersDialog = styled(motion.div)`
   position: absolute;
   left: 5em;
   top: 80px;
-  width: 350px;
-  height: calc(100% - 96px);
+  width: min-content;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
   background-color: ${(props) => props.theme.colors.mainWhite};
   border-radius: 4px;
-  overflow: hidden;
-  overflow-y: auto;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  z-index: 900;
+  z-index: 10;
 
   &::-webkit-scrollbar {
     display: none;
@@ -44,7 +42,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const HierarchicalLayerlistDialog = () => {
-  const { isSideMenuOpen, isThemeMenuOpen } = useAppSelector(
+  const { isSideMenuOpen } = useAppSelector(
     (state) => state.ui
   );
   const { allGroups, allLayers, allTags } = useAppSelector(

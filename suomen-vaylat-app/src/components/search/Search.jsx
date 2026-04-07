@@ -1,8 +1,8 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   faSearch,
   faTimes,
@@ -11,7 +11,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
-import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
+import {
+  SEARCH_GEOJSON_ARRAY_ID,
+  SEARCH_TIP_LOCALSTORAGE
+} from '../../utils/constants';
 
 import { theme } from '../../theme/theme';
 
@@ -21,15 +24,15 @@ import {
   setSearchResults,
   setSearchValue,
   setSearchType,
-  setIsSearchingActive,
+  setIsSearchingActive
 } from '../../state/slices/rpcSlice';
 
 import {
   setIsSearchOpen,
-  setGeoJsonArray,
   setHasToastBeenShown,
   setActiveSwitch,
-  setIsMoreSearchOpen
+  setIsMoreSearchOpen,
+  removeFromGeoJsonArray
 } from '../../state/slices/uiSlice';
 
 import CircleButton from '../../utils/components/CircleButton';
@@ -42,6 +45,7 @@ import {
   searchDownloadTips,
   variants
 } from './utils/SearchUtil';
+import { useDialogStack } from '../../state/DialogStackContext';
 
 export const StyledSearchIcon = styled.div`
   min-width: 48px;
@@ -169,11 +173,9 @@ const Search = () => {
     activeSwitch,
     isMoreSearchOpen
   } = useAppSelector((state) => state.ui);
-  const {
-    channel,
-    featureSearchResults,
-    searchResults,
-  } = useAppSelector((state) => state.rpc);
+  const { channel, featureSearchResults, searchResults } = useAppSelector(
+    (state) => state.rpc
+  );
 
   const { store } = useContext(ReactReduxContext);
 
@@ -286,14 +288,14 @@ const Search = () => {
   const handleSearchButton = () => {
     if (searchResults || featureSearchResults.length > 0) {
       store.dispatch(setIsSearchOpen(!isSearchOpen));
-    } else {
-      if (isSearchOpen) {
-        store.dispatch(setIsMoreSearchOpen(false));
-        store.dispatch(setActiveSwitch('default'));
-      }
-      store.dispatch(setIsSearchOpen(!isSearchOpen));
+    } else if (isSearchOpen) {
+      store.dispatch(setIsMoreSearchOpen(false));
+      store.dispatch(setActiveSwitch('default'));
+      store.dispatch(setIsSearchOpen(false));
       store.dispatch(resetFeatureSearchResults());
-      isSearchOpen && store.dispatch(setGeoJsonArray([]));
+      // filter out search geojsons
+      isSearchOpen &&
+        store.dispatch(removeFromGeoJsonArray(SEARCH_GEOJSON_ARRAY_ID));
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(null));
       isSearchOpen && removeMarkersAndFeatures(channel);
@@ -301,6 +303,8 @@ const Search = () => {
       isSearchOpen && store.dispatch(setSearchValue(''));
       isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
       store.dispatch(setSearchType('address'));
+    } else {
+      store.dispatch(setIsSearchOpen(true));
     }
   };
 
@@ -331,8 +335,42 @@ const Search = () => {
     }
   }
 
+  // handle z-index with dialogs
+  const { register, unregister, bringToFront, getZIndex, topId } =
+    useDialogStack();
+
+  const idRef = useRef('search-container');
+
+  useEffect(() => {
+    const id = idRef.current;
+    if (!register) return;
+    register(id);
+
+    return () => {
+      unregister && unregister(id);
+    };
+  }, [register, unregister]);
+
+  const handleBringToFront = (e) => {
+    e.stopPropagation();
+    if (!bringToFront) return;
+    if (topId === idRef.current) return;
+    bringToFront(idRef.current);
+  };
+
+  const zIndex = getZIndex ? getZIndex(idRef.current) : 12;
+
   return (
-    <StyledSearchContainer id={"search-container"} isSearchOpen={isSearchOpen}>
+    <StyledSearchContainer
+      id={'search-container'}
+      isSearchOpen={isSearchOpen}
+      style={{
+        zIndex
+      }}
+      onPointerDown={(e) => {
+        handleBringToFront(e);
+      }}
+    >
       <CircleButton
         icon={iconToShow}
         text={circleButtonText}
@@ -353,7 +391,7 @@ const Search = () => {
             exit={'exit'}
             transition={'transition'}
           >
-            <SearchDialog/>
+            <SearchDialog />
           </StyledSearchWrapper>
         )}
       </AnimatePresence>

@@ -240,7 +240,7 @@ const RoadSearchInput = ({
   } = useAppSelector((state) => state.rpc);
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
-
+  
   const onClickSearchRoad = () => {
     handleGeneralSearch(searchValue);
   };
@@ -625,8 +625,9 @@ const RoadSearchInput = ({
         <PillButton
           id={'road-search-inputs-clear-results-btn'}
           key={'road-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
-          onClick={emptySearchResults}
+          onClick={() => emptySearchResults(store)}
           aria-label={strings.search?.clearResults}
           style={{ width: '100%', justifyContent: 'center' }}
           disabled={

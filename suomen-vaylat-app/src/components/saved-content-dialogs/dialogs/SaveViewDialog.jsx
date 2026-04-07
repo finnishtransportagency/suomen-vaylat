@@ -5,13 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import Dialog from '../../dialog/Dialog';
 import ViewForm from '../Views/ViewForm';
 import strings from '../../../translations';
-import { theme } from '../../../theme/theme';
 import { setIsSaveViewOpen } from '../../../state/slices/uiSlice';
 import { setEditingView, setViews } from '../../../state/slices/rpcSlice';
 import { faCamera } from '@fortawesome/free-regular-svg-icons';
 import { Slide, toast } from 'react-toastify';
 
-const SaveViewsDialog = ({ constraintsRef }) => {
+const SaveViewsDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const isSaveViewOpen = useSelector((s) => s.ui.isSaveViewOpen);
   const channel = useSelector((s) => s.rpc.channel);
@@ -20,8 +19,6 @@ const SaveViewsDialog = ({ constraintsRef }) => {
   const views = useSelector((s) => s.rpc.views) || [];
   const geoJsonArray = useSelector((s) => s.ui.geoJsonArray) || [];
   const drawToolMarkers = useSelector((s) => s.ui.drawToolMarkers) || [];
-
-  const isLowResScreen = window.matchMedia(theme.device.lowResDesktop).matches;
 
   // Load any persisted views into local state if needed (we use store + localStorage)
   useEffect(() => {
@@ -70,7 +67,7 @@ const SaveViewsDialog = ({ constraintsRef }) => {
             data: editingView.data
           };
         } else {
-          // create a full new view 
+          // create a full new view
           newView = {
             id: thisId,
             name: formData.name,
@@ -190,23 +187,19 @@ const SaveViewsDialog = ({ constraintsRef }) => {
     </ul>
   );
 
-  return (
+  return isSaveViewOpen ? (
     <Dialog
-      constraintsRef={constraintsRef}
-      drag={true}
-      resize={false}
-      backdrop={false}
-      fullScreenOnMobile={true}
-      titleIcon={faCamera}
+      drag
+      resize
+      fullScreenOnMobile
       title={strings.savedContent?.saveView?.saveView}
-      type={'normal'}
+      titleIcon={faCamera}
       closeAction={handleCloseSaveViewDialog}
-      isOpen={isSaveViewOpen}
-      id="save_view_dialog"
-      minWidth={'600px'}
-      minHeight={isLowResScreen ? '300px' : '400px'}
-      hasHelp={true}
-      helpId={'show_view_help'}
+      type="normal"
+      minWidth={'32rem'}
+      minHeight={'28rem'}
+      hasHelp
+      helpId='show_view_help'
       helpContent={helpContent}
     >
       <ViewForm
@@ -218,7 +211,7 @@ const SaveViewsDialog = ({ constraintsRef }) => {
         }}
       />
     </Dialog>
-  );
+  ) : null;
 };
 
 export default SaveViewsDialog;

@@ -7,7 +7,7 @@ import React, {
   useRef
 } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDown,
@@ -17,7 +17,7 @@ import {
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch, ReactReduxContext } from 'react-redux';
-import Moment from 'react-moment';
+import moment from 'moment';
 import strings from '../../../../../translations';
 import {
   addMarkerRequest,
@@ -266,6 +266,10 @@ const StyledMetaRow = styled.div`
   & > span {
     word-break: break-word;
   }
+`;
+
+const StyledNoGeometriesText = styled.div`
+  font-size: 14px;
 `;
 
 const GeometriesGroup = () => {
@@ -521,7 +525,6 @@ const GeometriesGroup = () => {
 
       <StyledGroup
         id={listId}
-        parentId={-1}
         role="list"
         aria-labelledby={headerId}
         initial="hidden"
@@ -655,10 +658,10 @@ const GeometriesGroup = () => {
               );
             })
         ) : (
-          <div role="status" aria-live="polite">
+          <StyledNoGeometriesText role="status" aria-live="polite">
             {strings.savedContent?.saveGeometry?.noSavedGeometries ||
               'No saved geometries'}
-          </div>
+          </StyledNoGeometriesText>
         )}
       </StyledGroup>
 
@@ -712,9 +715,9 @@ const GeometriesGroup = () => {
               <StyledMetaRow id={`${prefix}info-modal-saved`}>
                 <b>{strings.savedContent?.saveGeometry?.savedAt || 'Saved'}:</b>
                 <span>
-                  <Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">
-                    {infoGeometry.saveDate}
-                  </Moment>
+                  <div>
+                    {moment(infoGeometry.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
+                  </div>
                 </span>
               </StyledMetaRow>
 

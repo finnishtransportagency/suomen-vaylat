@@ -13,6 +13,7 @@ const StyledHeaderContent = styled.div`
     background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1Selected};
     padding: 16px;
     box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    border-radius: 4px 4px 0 0;
     p {
         margin: 0px;
         font-size: 20px;

@@ -1,29 +1,36 @@
-import { SRLWrapper } from 'simple-react-lightbox';
-import { StyledA, StyledImage } from './Common';
+import { useState } from 'react';
+import { StyledImage } from './Common';
+
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
 
 export const MetadataGraphic = ({ identification }) => {
-    const options = {
-        buttons: {
-            showAutoplayButton: true,
-            showCloseButton: true,
-            showDownloadButton: false,
-            showFullscreenButton: false,
-            showNextButton: true,
-            showPrevButton: true,
-            showThumbnailsButton: false
-        }
-    };
-    return (
-        <SRLWrapper options={options}>
-            {identification && identification.browseGraphics && identification.browseGraphics.map((graphic, index) => {
-                return (
-                    <StyledA key={'metadata-image-a-' + graphic.fileName + index} href={graphic.fileName}>
-                        <StyledImage key={'metadata-image-' + graphic.fileName + index} src={graphic.fileName} />
-                    </StyledA>
-                )
-            })}
-        </SRLWrapper>
-    );
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      {identification &&
+        identification.browseGraphics &&
+        identification.browseGraphics.map((graphic, index) => {
+          return (
+            <>
+                <StyledImage
+                  key={'metadata-image-' + graphic.fileName + index}
+                  src={graphic.fileName}
+                  onClick={() => setOpen(true)}
+                  style={{cursor: 'pointer'}}
+                />
+
+                <Lightbox
+                  open={open}
+                  close={() => setOpen(false)}
+                  slides={[{ src: graphic.fileName }]}
+                />
+            </>
+          );
+        })}
+    </>
+  );
 };
 
 export default MetadataGraphic;

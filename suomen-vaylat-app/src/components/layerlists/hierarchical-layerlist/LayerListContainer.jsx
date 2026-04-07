@@ -4,13 +4,13 @@ import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import strings from '../../../translations';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Tag from './Tag';
 import LayerList, { TagLayerList } from './LayerList';
 import LayerSearch from './LayerSearch';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
 import {
   setIsCustomFilterOpen,
@@ -131,6 +131,7 @@ const StyledLayerList = styled.div``;
 const StyledLayerListContainer = styled.div`
   padding: 0.5em;
   background-color: ${(props) => props.theme.colors.mainWhite};
+  overflow: auto;
 `;
 
 const FilterLayerList = ({ layers, groups }) => {
@@ -157,12 +158,12 @@ const FilterLayerList = ({ layers, groups }) => {
             })}
             {layerArray.length > 0 && (
               <TagLayerList
-                tag={strings.layerlist.customLayerInfo.customFilter}
+                tag={strings.layerlist.customFilterInfo.customFilter}
                 layers={layers}
                 groups={groups}
                 key={
                   'taglayerlist-' +
-                  strings.layerlist.customLayerInfo.customFilter
+                  strings.layerlist.customFilterInfo.customFilter
                 }
                 customTag={layerArray}
               />
@@ -200,23 +201,22 @@ const LayerListContainer = ({ groups, layers, tags }) => {
   };
 
   return (
-    <StyledLayerListContainer>
-      <ReactTooltip
-        backgroundColor={theme.colors.mainColor1}
+    <StyledLayerListContainer id='layerlist-container'>
+      <Tooltip
+        style={{backgroundColor: theme.colors.mainColor1}}
         disable={isMobile}
-        id="layerlist-filter"
-        place="right"
-        type="dark"
+        anchorSelect={'#layerlist_filter'}
+        id='layerlist_filter_tooltip'
+        place="bottom"
         effect="float"
       >
         <span>{strings.tooltips.layerlist.filter}</span>
-      </ReactTooltip>
+      </Tooltip>
 
       <StyledSearchAndFilter>
         <LayerSearch layers={layers} groups={groups} />
         <StyledFilterButton
-          data-tip
-          data-for="layerlist-filter"
+          id="layerlist-filter"
           onClick={() => {
             setIsOpen(!isOpen);
           }}

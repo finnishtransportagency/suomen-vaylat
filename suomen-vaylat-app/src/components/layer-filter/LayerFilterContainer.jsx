@@ -9,7 +9,7 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Controller } from 'swiper';
+import { Controller, FreeMode } from 'swiper/modules';
 import { isMobile } from '../../theme/theme';
 import { LayerFilter } from './LayerFilter';
 import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';
@@ -116,7 +116,7 @@ const StyledTabContent = styled.div`
   height: 100%;
 `;
 
-export const LayerFilterContainer = () => {
+export const LayerFilterContainer = ({ handleCloseFilterDialog }) => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterDialog
   const [selectedTab, setSelectedTab] = useState(0);
   const { filteringInfo, allLayers, filters, channel } = useAppSelector(
@@ -156,8 +156,11 @@ export const LayerFilterContainer = () => {
     // delete filter by layer
     const filterInfo = filteringInfo.filter((f) => f.layer.id === id)[0];
     let updatedFilters = filters.filter((f) => f.layer !== id);
-    let filtersString = '';
+    
+    // no more filters so we close the dialog
+    if (updatedFilters.length === 0) handleCloseFilterDialog();
 
+    let filtersString = '';
     updatedFilters && !updatedFilters.codeValue &&
         updatedFilters
           .filter((f) => f.layer === filterInfo?.layer?.id)

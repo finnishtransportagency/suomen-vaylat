@@ -9,23 +9,19 @@ import { clearLayerMetadata } from '../../../state/slices/rpcSlice';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const MetadataDialog = ({ constraintsRef }) => {
+const MetadataDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { layerMetadata } = useAppSelector((state) => state.rpc);
-
+  
   const handleCloseMetadataDialog = () => {
       store.dispatch(clearLayerMetadata());
     };
 
-  return (
+  return layerMetadata.data !== null ? (
     <Dialog
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
+          drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
           fullScreenOnMobile={
             true
           } /* Scale dialog full width / height when using mobile device */
@@ -38,13 +34,14 @@ const MetadataDialog = ({ constraintsRef }) => {
           closeAction={
             handleCloseMetadataDialog
           } /* Action when pressing dialog close button or backdrop */
-          isOpen={layerMetadata.data !== null} /* Dialog state */
           id="metadata_dialog"
-          maxWidth={"800px"}
+          minWidth={'40rem'}
+          minHeight={'40rem'}
         >
           <MetadataDialogContent metadata={layerMetadata} />
         </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default MetadataDialog;

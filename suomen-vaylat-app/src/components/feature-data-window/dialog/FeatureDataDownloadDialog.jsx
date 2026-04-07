@@ -10,7 +10,7 @@ import { setIsGfiDownloadOpen } from '../../../state/slices/uiSlice';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
-const FeatureDataDownloadDialog = ({ constraintsRef }) => {
+const FeatureDataDownloadDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useAppSelector((state) => state.rpc);
 
@@ -19,6 +19,7 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
   const handleCloseGfiDownloadDialog = () => {
     store.dispatch(setIsGfiDownloadOpen(false));
 
+    // If gfi window is closed, remove features, otherwise there's no way to erase them afterwards
     !isGfiOpen &&
       channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
@@ -28,14 +29,10 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
       ]);
   };
 
-  return (
+  return isGfiDownloadOpen ? (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
-      drag={false} /* Enable (true) or disable (false) drag */
+      drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
-      backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -45,13 +42,11 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
       closeAction={
         handleCloseGfiDownloadDialog
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isGfiDownloadOpen} /* Dialog state */
       id="gfi_download_dialog"
-      minWidth={'600px'}
     >
       <FeatureDataDownload />
     </Dialog>
-  );
+  ) : null;
 };
 
 export default FeatureDataDownloadDialog;

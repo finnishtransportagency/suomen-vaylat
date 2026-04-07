@@ -26,15 +26,15 @@ const initialState = {
   isCustomFilterOpen: false,
   isFilterDialogOpen: false,
   isSavedLayer: false,
-  shareUrl: '',
+  shareUrl: null,
   isThemeMenuOpen: false,
-  isDrawingToolsOpen: false,
+  isToolsOpen: false,
   isLegendOpen: false,
   isSaveViewOpen: false,
   isSaveGeometriesOpen: false,
   isGfiOpen: false,
   isGfiDownloadOpen: false,
-  selectedGfiTool: null,
+  selectedDrawingTool: null,
   activeTool: null,
   activeSelectionTool: null,
   gfiLocations: null,
@@ -43,6 +43,7 @@ const initialState = {
   selectedMapLayersMenuThemeIndex: null,
   minimizeGfi: false,
   maximizeGfi: false,
+  minimizeFeatureSelection: false,
   minimizeFilter: { minimized: false },
   maximizeFilter: false,
   gfiCroppingTypes: [],
@@ -84,7 +85,7 @@ export const uiSlice = createSlice({
       state.isSavedOpen = false;
 
       state.isUserGuideOpen = false;
-      state.isDrawingToolsOpen = false;
+      state.isToolsOpen = false;
       state.isLegendOpen = false;
       state.isSaveViewOpen = false;
       state.isSaveGeometriesOpen = false;
@@ -123,6 +124,13 @@ export const uiSlice = createSlice({
     },
     setGeoJsonArray: (state, action) => {
       state.geoJsonArray = action.payload;
+    },
+    // remove by id
+    removeFromGeoJsonArray: (state, action) => {
+      let filteredArray = state.geoJsonArray.filter(
+        (geoj) => geoj.id !== action.payload
+      );
+      state.geoJsonArray = filteredArray;
     },
     addToGeoJsonArray: (state, action) => {
       let duplicateIndex = state.geoJsonArray.findIndex(
@@ -170,14 +178,14 @@ export const uiSlice = createSlice({
     setIsGfiDownloadOpen: (state, action) => {
       state.isGfiDownloadOpen = action.payload;
     },
-    setSelectedGfiTool: (state, action) => {
-      state.selectedGfiTool = action.payload;
+    setSelectedDrawingTool: (state, action) => {
+      state.selectedDrawingTool = action.payload;
     },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
-    setIsDrawingToolsOpen: (state, action) => {
-      state.isDrawingToolsOpen = action.payload;
+    setIsToolsOpen: (state, action) => {
+      state.isToolsOpen = action.payload;
     },
     setActiveTool: (state, action) => {
       state.activeTool = action.payload;
@@ -196,6 +204,9 @@ export const uiSlice = createSlice({
     },
     setMinimizeGfi: (state, action) => {
       state.minimizeGfi = action.payload;
+    },
+    setMinimizeFeatureSelection: (state, action) => {
+      state.minimizeFeatureSelection = action.payload;
     },
     setMaximizeGfi: (state, action) => {
       state.maximizeGfi = action.payload;
@@ -270,9 +281,6 @@ export const uiSlice = createSlice({
     setShowSavedLayers: (state, action) => {
       state.showSavedLayers = action.payload;
     },
-    setUpdateCustomLayers: (state, action) => {
-      state.updateCustomLayer = action.payload;
-    },
     setCheckedLayer: (state, action) => {
       state.checkedLayer = action.payload;
     },
@@ -331,9 +339,9 @@ export const {
   setIsGfiOpen,
   setIsGfiDownloadToolsOpen,
   setIsGfiDownloadOpen,
-  setSelectedGfiTool,
+  setSelectedDrawingTool,
   setShareUrl,
-  setIsDrawingToolsOpen,
+  setIsToolsOpen,
   setActiveTool,
   setActiveSelectionTool,
   setIsDownloadLinkDialogOpen,
@@ -342,10 +350,12 @@ export const {
   setSelectedMapLayersMenuThemeIndex,
   setMinimizeGfi,
   setMaximizeGfi,
+  setMinimizeFeatureSelection,
   setGfiCroppingTypes,
   setWarning,
   setGeoJsonArray,
   addToGeoJsonArray,
+  removeFromGeoJsonArray,
   setIsSavedOpen,
   setHasToastBeenShown,
   setSelectedMarker,
@@ -358,7 +368,6 @@ export const {
   incrementTriggerUpdate,
   setShowCustomLayerList,
   setShowSavedLayers,
-  setUpdateCustomLayers,
   setCheckedLayer,
   setIsCheckmark,
   setSelectedCustomFilterLayers,

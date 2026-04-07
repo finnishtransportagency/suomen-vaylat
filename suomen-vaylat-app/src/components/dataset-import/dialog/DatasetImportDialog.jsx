@@ -3,28 +3,23 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import DatasetImport from '../DatasetImport'
+import DatasetImport from '../DatasetImport';
 
 import { setIsDatasetImportOpen } from '../../../state/slices/uiSlice';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
-const DatasetImportDialog = ({ constraintsRef }) => {
+const DatasetImportDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isDatasetImportOpen } = useAppSelector((state) => state.ui);
-
   const handleCloseDatasetImport = () => {
     store.dispatch(setIsDatasetImportOpen(false));
   };
 
-  return (
+  return isDatasetImportOpen ? (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
-      backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -34,13 +29,14 @@ const DatasetImportDialog = ({ constraintsRef }) => {
       closeAction={
         handleCloseDatasetImport
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isDatasetImportOpen} /* Dialog state */
-      id='dataset-import-dialog'
-      maxWidth={'800px'}
+      id="dataset-import-dialog"
+      minWidth={'35rem'}
+      maxWidth={'35rem'}
+      maxHeight={'90vh'}
     >
-      <DatasetImport/>
+      <DatasetImport />
     </Dialog>
-  );
+  ) : null;
 };
 
 export default DatasetImportDialog;

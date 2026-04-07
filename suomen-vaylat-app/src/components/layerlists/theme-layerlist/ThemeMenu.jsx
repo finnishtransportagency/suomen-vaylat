@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import { useAppSelector } from '../../../state/hooks';
@@ -13,8 +13,8 @@ const StyledThemeMenuContainer = styled(motion.div)`
   position: absolute; /* was static / in-flow */
   left: 5em;
   top: 80px;
-  width: 350px;
-  height: calc(100% - 96px);
+  width: min-content;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -24,7 +24,7 @@ const StyledThemeMenuContainer = styled(motion.div)`
   overflow-y: auto;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  z-index: 1000;
+  z-index: 10;
 
   &::-webkit-scrollbar {
     display: none;
@@ -42,7 +42,7 @@ const StyledThemeMenuContainer = styled(motion.div)`
 `;
 
 const ThemeMenu = () => {
-  const { isThemeMenuOpen, isSideMenuOpen } = useAppSelector(
+  const { isThemeMenuOpen } = useAppSelector(
     (state) => state.ui
   );
   const { allLayers, allThemesWithLayers } = useAppSelector(

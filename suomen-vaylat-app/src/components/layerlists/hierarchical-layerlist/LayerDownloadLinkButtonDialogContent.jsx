@@ -33,8 +33,6 @@ const StyledInfoTextContainer = styled.ul`
 
 const StyledContainer = styled.div`
     padding: 24px;
-    max-height: 500px;
-    min-width: 300px;
     overflow: auto;
 `;
 

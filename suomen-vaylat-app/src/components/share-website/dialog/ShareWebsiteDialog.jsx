@@ -7,33 +7,32 @@ import { ShareWebsiteContent }  from '../ShareWebsiteContent';
 import { setShareUrl } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
-const ShareWebsiteDialog = ({ constraintsRef }) => {
+const ShareWebsiteDialog = () => {
   const { shareUrl } = useAppSelector((state) => state.ui);
   const isShareOpen = shareUrl && shareUrl.length > 0;
 
   const { store } = useContext(ReactReduxContext);
 
   const handleCloseShareWebSite = () => {
-    store.dispatch(setShareUrl(''));
+    store.dispatch(setShareUrl(null));
   };
 
-  return (
+  return isShareOpen ? (
     <Dialog
-      constraintsRef={constraintsRef}
-      drag={false}
+      drag={true}
       resize={false}
-      backdrop={true}
       fullScreenOnMobile={true}
       titleIcon={faShareAlt}
       title={strings.share.title}
       type={'normal'}
       closeAction={handleCloseShareWebSite}
-      isOpen={isShareOpen}
       id="share_website_popup"
+      minWidth='30rem'
     >
       <ShareWebsiteContent />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default ShareWebsiteDialog;

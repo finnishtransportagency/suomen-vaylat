@@ -1,6 +1,4 @@
-import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
-import { createBrowserHistory } from 'history';
-import thunkMiddleware from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
 import searchReducer from './slices/searchSlice';
@@ -10,7 +8,6 @@ import uiReducer from './slices/uiSlice';
 //import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
 //import { throttle } from 'lodash';
 
-const middlewareEnhancer = applyMiddleware(thunkMiddleware);
 
 export const store = configureStore ({
   reducer: {
@@ -19,7 +16,6 @@ export const store = configureStore ({
     ui: uiReducer,
     search: searchReducer
   },
-  enhancers: [middlewareEnhancer],
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware({serializableCheck: false}),
   // TODO check at if something still need to get localStorage
@@ -31,8 +27,6 @@ export const store = configureStore ({
 // store.subscribe(throttle(() => saveToLocalStorage({language: store.getState().language}), 1000));
 
 export default store;
-
-export const history = createBrowserHistory();
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

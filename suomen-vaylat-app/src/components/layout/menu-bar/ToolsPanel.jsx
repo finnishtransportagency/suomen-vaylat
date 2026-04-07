@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import {
   faEraser,
@@ -11,7 +11,8 @@ import {
   faExpand,
   faRulerHorizontal,
   faArrowLeft,
-  faUpload
+  faUpload,
+  faObjectGroup
 } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../../translations';
@@ -22,7 +23,8 @@ import {
   setIsGfiDownloadOpen,
   removeFromDrawToolMarkers,
   setIsSaveGeometriesOpen,
-  setIsDatasetImportOpen
+  setIsDatasetImportOpen,
+  setIsGfiToolsOpen
 } from '../../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
 import DrawtoolMarkers from '../../measurement-tools/DrawtoolMarkers';
@@ -47,7 +49,7 @@ const StyledTools = styled(motion.div)`
   width: 14rem;
   box-sizing: border-box;
   overflow: scroll;
-  padding: 0 8px 8px 8px;
+  padding: 0 6px 6px;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
@@ -73,6 +75,7 @@ const PanelContainer = styled.div`
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
+  padding: 2px;
 `;
 
 const variants = {
@@ -103,7 +106,10 @@ export const ToolsPanel = ({ isOpen }) => {
     drawToolMarkers,
     isGfiDownloadOpen,
     isFullScreen,
-    isDatasetImportOpen
+    isDatasetImportOpen,
+    isSaveGeometriesOpen,
+    isSaveViewOpen,
+    isGfiToolsOpen
   } = useSelector((state) => state.ui);
 
   const [noDownloadableLayers, setNoDownloadableLayers] = useState(false);
@@ -137,7 +143,7 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleAddGeometry = () => {
-    store.dispatch(setIsSaveGeometriesOpen(true));
+    store.dispatch(setIsSaveGeometriesOpen(!isSaveGeometriesOpen));
   };
 
   // Swiper sync: synchronize state with slide index
@@ -146,7 +152,11 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleSaveView = () => {
-    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setIsSaveViewOpen(!isSaveViewOpen));
+  };
+
+  const handleFeatureSelection = () => {
+    store.dispatch(setIsGfiToolsOpen(!isGfiToolsOpen));
   };
 
   // When panelIndex changes through controls, update Swiper
@@ -194,11 +204,21 @@ export const ToolsPanel = ({ isOpen }) => {
               aria-label={strings.tooltips.drawingTools.drawingToolsButton}
             />
             <PillButton
-              id={'menubar-tools-save-btn'}
+              id={'menubar-tools-feature-selection-btn'}
+              key={'feature-selection-btn'}
+              icon={faObjectGroup}
+              text={strings.gfi.featureSelection.title}
+              onClick={handleFeatureSelection}
+              aria-label={strings.gfi.featureSelection.title}
+              enabled={isGfiToolsOpen}
+            />
+            <PillButton
+              id={'menubar-tools-save-view-btn'}
               icon={faCamera}
               text={strings.savedContent.saveView.saveView}
               onClick={handleSaveView}
               aria-label={strings.savedContent?.saveView?.saveView}
+              enabled={isSaveViewOpen}
             />
             <PillButton
               id={'menubar-tools-download-btn'}
@@ -209,6 +229,7 @@ export const ToolsPanel = ({ isOpen }) => {
                 store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
               }
               aria-label={strings.downloads?.downloads}
+              enabled={isGfiDownloadOpen}
             />
             {IS_EXTRANET && (
               <PillButton
@@ -219,6 +240,7 @@ export const ToolsPanel = ({ isOpen }) => {
                   store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
                 }
                 aria-label={strings.datasetImport?.menuButtonTitle}
+                enabled={isDatasetImportOpen}
               />
             )}
             {!isMobile && (
@@ -233,6 +255,7 @@ export const ToolsPanel = ({ isOpen }) => {
                     : elem.requestFullscreen?.();
                 }}
                 aria-label={strings.tooltips?.fullscreenButton}
+                enabled={isFullScreen}
               />
             )}
           </PanelContainer>
@@ -271,7 +294,7 @@ export const ToolsPanel = ({ isOpen }) => {
               }
               onClick={eraseDrawing}
               icon={faEraser}
-              color={theme.colors.secondaryColorDarkOrange}
+              color={theme.colors.secondaryColorOrange}
               hoverColor={theme.colors.secondaryColorDarkOrange}
               text={strings.tooltips.drawingTools.erase}
               aria-label={strings.tooltips.drawingTools.erase}
@@ -283,6 +306,7 @@ export const ToolsPanel = ({ isOpen }) => {
               disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
               icon={faCloudUploadAlt}
               color={theme.colors.secondaryColorGreen}
+              hoverColor={theme.colors.secondaryColorGreenSelected}
               text={strings.general.save}
               aria-label={strings.general.save}
             />

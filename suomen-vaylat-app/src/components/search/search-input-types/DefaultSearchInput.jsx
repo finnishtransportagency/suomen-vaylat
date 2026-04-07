@@ -213,11 +213,11 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
 
       <StyledSearchButtons>
         <PillButton
-          id={'default-search-submit-button"'}
-          key={'default-search-submit-button"'}
+          id={'default-search-submit-button'}
+          key={'default-search-submit-button'}
           text={strings.search?.search}
           onClick={submitSearch}
-          aria-label={strings.search?.clearResults}
+          aria-label={strings.search?.search}
           style={{ width: '100%', justifyContent: 'center' }}
           icon={faMagnifyingGlass}
         />
@@ -225,8 +225,9 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
         <PillButton
           id={'default-search-inputs-clear-results-btn'}
           key={'default-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
-          onClick={emptySearchResults}
+          onClick={() => emptySearchResults(store)}
           aria-label={strings.search?.clearResults}
           style={{ width: '100%', justifyContent: 'center' }}
           disabled={

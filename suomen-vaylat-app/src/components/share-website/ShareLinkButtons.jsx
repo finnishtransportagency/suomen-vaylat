@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import CircleButton from '../../utils/components/CircleButton';
 import strings from '../../translations';
+import { useAppSelector } from '../../state/hooks';
 
 const StyledShareButton = styled.button`
   height: 100%;
@@ -18,8 +19,7 @@ const StyledShareButton = styled.button`
   border: none;
   svg {
     font-size: 18px;
-    color: ${(props) =>
-      props.color ? props.color : props.theme.colors.mainWhite};
+    color: ${(props) => props.theme.colors.mainWhite};
     transition: all 0.5s ease-out;
   }
   @media ${(props) => props.theme.device.mobileL} {
@@ -32,7 +32,7 @@ const StyledShareButton = styled.button`
  * @param {String} theme theme name
  * @returns theme share button component
  */
-export const ThemeGroupShareButton = ({ themeId, color }) => {
+export const ThemeGroupShareButton = ({ themeId }) => {
   const { store } = useContext(ReactReduxContext);
   const url =
     process.env.REACT_APP_SITE_URL +
@@ -42,13 +42,10 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
 
   return (
     <StyledShareButton
-      data-tip
-      data-for={'share_' + themeId}
       onClick={(e) => {
         e && e.stopPropagation();
         store.dispatch(setShareUrl(url));
       }}
-      color={color}
       aria-label={strings.tooltips.shareTheme}
     >
       <FontAwesomeIcon icon={faShareAlt} />
@@ -60,22 +57,26 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
  * Website share button
  * @returns  website share button component
  */
-export const WebSiteShareButton = ({ setSubNavOpen }) => {
+export const WebSiteShareButton = () => {
   const { store } = useContext(ReactReduxContext);
+  const { shareUrl } = useAppSelector((state) => state.ui);
   const url =
     process.env.REACT_APP_SITE_URL +
     '/link/{zoom}/{x}/{y}/{maplayers}/?lang={lang}';
   return (
     <>
       <CircleButton
+        id="menubar-share-btn"
+        aria-label={strings.accessibility?.shareWebsite ?? 'Share website'}
         icon={faShareAlt}
         text={strings.tooltips.share}
-        toggleState={false}
+        toggleState={shareUrl}
         tooltipDirection="right"
         clickAction={(e) => {
           e?.stopPropagation();
-          setSubNavOpen?.(false);
-          store.dispatch(setShareUrl(url));
+          shareUrl
+            ? store.dispatch(setShareUrl(null))
+            : store.dispatch(setShareUrl(url));
         }}
       />
     </>

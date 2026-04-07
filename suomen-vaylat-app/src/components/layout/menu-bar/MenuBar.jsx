@@ -2,11 +2,10 @@ import { useState, useContext } from 'react';
 import strings from '../../../translations';
 import {
   faLayerGroup,
-  faMapMarkedAlt,
   faMap,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 
 import BuildIcon from '@mui/icons-material/Build';
 import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
@@ -14,11 +13,9 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
-  setIsDrawingToolsOpen,
+  setIsToolsOpen,
   setIsSideMenuOpen,
-  setIsGfiOpen,
   setActiveTool,
-  setMinimizeGfi,
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
@@ -26,16 +23,16 @@ import {
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
-  setVKMData
 } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../../utils/components/CircleButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';
+import { FEATURE_SELECTION_DRAWING_TOOL, SEARCH_GEOJSON_ARRAY_ID } from '../../../utils/constants';
 
 const StyledMenuBar = styled.div`
-  z-index: 1;
+  z-index: 11;
   pointer-events: none;
   height: 100%;
   display: flex;
@@ -74,18 +71,6 @@ const StyledDrawingToolsWrapper = styled.div`
 
 const StyledCornerCloseButton = styled(CircleButton)`
   z-index: 10;
-`;
-
-const StyledToolButtons = styled.div`
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px 8px 8px;
-  pointer-events: auto;
-
-  @media ${(props) => props.theme.device.mobileL} {
-    gap: 6px;
-  }
 `;
 
 const StyledLayerCount = styled.div`
@@ -182,26 +167,28 @@ const StyledArrowDropDownCircleIconWrapper = styled(motion.div)`
 
 const MenuBar = () => {
   const { store } = useContext(ReactReduxContext);
-  const { selectedLayers, channel, filters } =
+  const { selectedLayers, channel } =
     useAppSelector((state) => state.rpc);
   const {
     isSideMenuOpen,
     isThemeMenuOpen,
-    isDrawingToolsOpen,
+    isToolsOpen,
     isSearchOpen,
-    isGfiOpen,
-    drawToolMarkers
+    drawToolMarkers,
+    geoJsonArray
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const closeDrawingTools = (open) => {
+  const closeTools = (open) => {
     channel && channel.postRequest('DrawTools.StopDrawingRequest');
-    store.dispatch(setGeoJsonArray([]));
+    // filter out drawtools jsons
+    const filteredGeojsons = geoJsonArray.filter(geojson => geojson.id === SEARCH_GEOJSON_ARRAY_ID || geojson.id === FEATURE_SELECTION_DRAWING_TOOL)
+    store.dispatch(setGeoJsonArray(filteredGeojsons));
     store.dispatch(setActiveTool(null));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker }));
     });
-    store.dispatch(setIsDrawingToolsOpen(open));
+    store.dispatch(setIsToolsOpen(open));
     store.dispatch(setSelectedMarker(2));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
@@ -211,7 +198,7 @@ const MenuBar = () => {
 
   const handleCloseMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    closeDrawingTools();
+    closeTools();
   };
 
   const MENU_ANIMATION = {
@@ -293,35 +280,10 @@ const MenuBar = () => {
                     {selectedLayers.length}
                   </StyledLayerCount>
                 </CircleButton>
-                <CircleButton
-                  id="menubar-gfi-btn"
-                  icon={faMapMarkedAlt}
-                  text={strings.gfi.title}
-                  toggleState={isGfiOpen}
-                  tooltipDirection={'right'}
-                  clickAction={() => {
-                    if (isGfiOpen) {
-                      store.dispatch(setVKMData(null));
-                      store.dispatch(setMinimizeGfi(false));
-                    }
-                    store.dispatch(setIsGfiOpen(!isGfiOpen));
-                  }}
-                  aria-label={strings.gfi?.title}
-                >
-                  {filters?.filters?.length > 0 && (
-                    <StyledLayerCount id="menubar-filter-layer-count">
-                      {filters.filters.length}
-                    </StyledLayerCount>
-                  )}
-                </CircleButton>
-                <WebSiteShareButton
-                  id="menubar-share-btn"
-                  aria-label={
-                    strings.accessibility?.shareWebsite ?? 'Share website'
-                  }
-                />
 
-                {isDrawingToolsOpen ? (
+                <WebSiteShareButton/>
+
+                {isToolsOpen ? (
                   <StyledDrawingToolsWrapper id="menubar-drawingtools-wrapper">
                     <StyledCornerCloseButton
                       id="menubar-drawingtools-close-btn"
@@ -329,11 +291,11 @@ const MenuBar = () => {
                       text=""
                       toggleState={true}
                       tooltipDirection={'right'}
-                      clickAction={closeDrawingTools}
-                      aria-label={strings.tooltips?.closeDrawingTools}
-                      title={strings.tooltips?.closeDrawingTools}
+                      clickAction={closeTools}
+                      aria-label={strings.tooltips?.closeTools}
+                      title={strings.tooltips?.closeTools}
                     />
-                    <ToolsPanel isOpen={isDrawingToolsOpen} />
+                    <ToolsPanel isOpen={isToolsOpen} />
                   </StyledDrawingToolsWrapper>
                 ) : (
                   <CircleButton
@@ -343,7 +305,7 @@ const MenuBar = () => {
                     toggleState={false}
                     tooltipDirection="right"
                     clickAction={() =>
-                      store.dispatch(setIsDrawingToolsOpen(true))
+                      store.dispatch(setIsToolsOpen(true))
                     }
                     aria-label={strings.tooltips?.toolsButton}
                   />

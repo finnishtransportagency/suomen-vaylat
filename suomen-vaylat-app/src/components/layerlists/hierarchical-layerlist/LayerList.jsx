@@ -9,8 +9,9 @@ import store from '../../../state/store';
 import LayerGroup from './LayerGroup';
 import Layers from '../../layer/Layers';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import strings from '../../../translations';
+import PillButton from '../../../utils/components/PillButton';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -169,20 +170,6 @@ const StyledButtonContainer = styled.div`
   gap: 30px;
 `;
 
-const StyledSaveButton = styled.div`
-  width: 78px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  background-color: ${(props) =>
-    props.isOpen ? '#004477' : props.theme.colors.mainColor1};
-  cursor: pointer;
-  font-size: 13px;
-  color: #fff;
-`;
-
 const LayerList = ({ groups, layers, recurse = false }) => {
   const { tagLayers, tags } = useSelector((state) => state.rpc);
 
@@ -263,18 +250,16 @@ const LayerList = ({ groups, layers, recurse = false }) => {
             let isVisible =
               (group.layers && group.layers.length > 0) || hasChildren;
             return (
-              group.id !== 826 && (
-                <StyledLayerGroupWrapper key={'group-sl-' + group.id}>
-                  {isVisible ? (
-                    <LayerGroup
-                      key={'layer-group-' + group.id}
-                      group={group}
-                      layers={layers}
-                      hasChildren={hasChildren}
-                    />
-                  ) : null}
-                </StyledLayerGroupWrapper>
-              )
+              <StyledLayerGroupWrapper key={'group-sl-' + group.id}>
+                {isVisible ? (
+                  <LayerGroup
+                    key={'layer-group-' + group.id}
+                    group={group}
+                    layers={layers}
+                    hasChildren={hasChildren}
+                  />
+                ) : null}
+              </StyledLayerGroupWrapper>
             );
           })}
         </StyledLayerList>
@@ -377,13 +362,13 @@ export const TagLayerList = ({
 
         { customTag.length > 0 &&
             <StyledButtonContainer id={'taglayerlist-' + tag + 'button-container'}>
-                <StyledSaveButton
-                    onClick={() => {
+                <PillButton
+                  onClick={() => {
                     store.dispatch(setIsCustomFilterOpen(true));
-                    }}
+                  }}
                 >
-                    {strings.layerlist.customLayerInfo.editLayers}
-                </StyledSaveButton>
+                    {strings.layerlist.customFilterInfo.editLayers}
+                </PillButton>
             </StyledButtonContainer>
         }
       </StyledLayerGroup>

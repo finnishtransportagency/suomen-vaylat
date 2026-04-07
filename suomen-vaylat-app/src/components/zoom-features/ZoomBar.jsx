@@ -23,7 +23,6 @@ import {
 } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CircleButton from '../../utils/components/CircleButton';
-import { Legend } from '../legend/Legend';
 import { theme } from '../../theme/theme';
 
 import XYicon from '../coordinate-tool/resources/images/xy_icon.svg';
@@ -423,8 +422,6 @@ const ZoomBar = () => {
   return (
     <StyledContainer id="zoom-menu-container">
       <StyledDock id={containerId}>
-        <Legend />
-
         <StyledZoomBarContainer
           $shifted={isSearchResultPanelVisible}
           aria-hidden={false}

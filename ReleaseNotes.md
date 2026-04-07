@@ -1,5 +1,16 @@
 # Release Notes
 
+## 4.0.0
+* Updated to React 19
+* Updated all required dependencies and removed and added some libraries as needed
+* Handle links better in feature data and in metadata
+* Separate feature selection from feature data popup into tools
+* Updated feature data popup UI
+* New Dialog component built with react-rnd
+* Unified dialogs across the app
+* Added dialog stacking mechanism for better usability
+* Fixed z-index related bugs
+
 ## 3.1.1
 * More precise attribute option for feature search
 * Fix bug with date type layer filter not allowing to add filters
