@@ -42,7 +42,7 @@ const StyledHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 9999;
+  z-index: 13;
 `;
 
 const HeaderLeft = styled.div`
@@ -247,11 +247,7 @@ export const Header = () => {
     store.dispatch(resetGFILocations([]));
     navigate(routerPrefix);
     // TODO: Which of these are actually necessary, are we doing extra work?
-    resetThemeGroupsForMainScreen(
-      store,
-      channel,
-      selectedTheme
-    );
+    resetThemeGroupsForMainScreen(store, channel, selectedTheme);
 
     // add start layers back (do it after than select group)
     startState.selectedLayers.forEach((layer) => {
@@ -369,9 +365,7 @@ export const Header = () => {
               id="header-desktop-buttons"
               aria-label={strings.accessibility.desktopButtons}
             >
-              { !IS_EXTRANET &&
-                <LanguageSelector />
-              }
+              {!IS_EXTRANET && <LanguageSelector />}
               <DesktopNav
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
@@ -394,13 +388,13 @@ export const Header = () => {
             />
           </StyledHeaderButton>
         </HeaderRight>
-
-        {isMobile && (
-          <AnimatePresence>
-            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
-          </AnimatePresence>
-        )}
       </StyledHeaderContainer>
+
+      {isMobile && (
+        <AnimatePresence>
+          {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
+        </AnimatePresence>
+      )}
     </>
   );
 };
