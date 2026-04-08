@@ -138,7 +138,7 @@ const StyledMobileNavContainer = styled(motion.nav)`
       : props.theme.colors.mainColor1};
   
   isolation: isolate;
-  z-index: 11;
+  z-index: 14;
 
   display: flex;
   flex-direction: column;
