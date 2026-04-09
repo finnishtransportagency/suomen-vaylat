@@ -27,7 +27,7 @@ import {
   resetGFILocations,
   addFeaturesToGFILocations,
   setFilters,
-  removeMarkerRequest,
+  removeMarkerRequest
 } from '../../state/slices/rpcSlice';
 import FeatureDataTabContent from './tabs/FeatureDataTabContent';
 import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
@@ -473,51 +473,65 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const gfiInputEl = useRef(null);
 
+  // AI-GENERATED | 365 Copilot (GPT-5) | Tarkistanut Oskari Rintamäki | 2026-04-09
+  // Combined effect for gfiLocations + selectedTab to avoid race conditions
+  // and ensure consistent derived state.
   useEffect(() => {
-    if (gfiLocations.length === 0) {
+    // ---------- 1. Guard & normalize ----------
+    if (!Array.isArray(gfiLocations) || gfiLocations.length === 0) {
       setSelectedTab(0);
       setDisableDownload(true);
       setTabsIds([]);
-    } else {
-      const onlyUserLayers = gfiLocations.every(
-        (l) =>
-          typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
-      );
-      setDisableDownload(onlyUserLayers);
 
-      let layerIds = [];
-      gfiLocations.forEach((location) => {
-        layerIds.push(location.layerId);
-      });
-
-      setTabsIds(layerIds);
+      setSelectedLocation(null);
+      setTotalfeaturesCount(0);
+      setFeaturesCount(0);
+      setMoreFeatures(false);
+      return;
     }
-  }, [gfiLocations]);
 
-  useEffect(() => {
-    if (gfiLocations === null || gfiLocations.length === 0) return;
-    const location = gfiLocations[selectedTab];
+    // ---------- 2. Derived data from gfiLocations ----------
+    const onlyUserLayers = gfiLocations.every(
+      (l) => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
+    );
+    setDisableDownload(onlyUserLayers);
+
+    const layerIds = gfiLocations.map((l) => l.layerId);
+    setTabsIds(layerIds);
+
+    // ---------- 3. Clamp selectedTab ----------
+    const safeSelectedTab =
+      selectedTab >= 0 && selectedTab < gfiLocations.length ? selectedTab : 0;
+
+    if (safeSelectedTab !== selectedTab) {
+      setSelectedTab(safeSelectedTab);
+    }
+
+    const location = gfiLocations[safeSelectedTab];
     setSelectedLocation(location);
 
+    // ---------- 4. Feature counting ----------
     let totalFeaturesCount = 0;
-    location?.content?.forEach((cont) => {
-      totalFeaturesCount += cont.geojson.totalFeatures;
-    });
+    let filteredFeaturesCount = 0;
 
-    let featuresCount = 0;
-
-    // count the amount of results when filtered
     location?.content?.forEach((cont) => {
-      cont.geojson?.features?.forEach((feature) => {
+      const geojson = cont.geojson;
+
+      if (!geojson) return;
+
+      totalFeaturesCount += geojson.totalFeatures ?? 0;
+
+      geojson.features?.forEach((feature) => {
         if (filterFeature(feature, location, filters, channel)) {
-          featuresCount += 1;
+          filteredFeaturesCount += 1;
         }
       });
     });
+
     setTotalfeaturesCount(totalFeaturesCount);
-    setFeaturesCount(featuresCount);
-    setMoreFeatures(location.moreFeatures);
-  }, [selectedTab, channel, filters, gfiLocations]);
+    setFeaturesCount(filteredFeaturesCount);
+    setMoreFeatures(Boolean(location?.moreFeatures));
+  }, [gfiLocations, selectedTab, filters, channel]);
 
   const handleLinkClick = (event) => {
     event.preventDefault();
@@ -871,7 +885,7 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
 
   const closeTab = (index, id) => {
     var filteredLocations = gfiLocations.filter((gfi) => gfi.layerId !== id);
-    
+
     if (filteredLocations.length === 0) {
       handleCloseGFIDialog();
     }
@@ -1300,12 +1314,11 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
         </StyledDownloadAndLocationButtonsWrapper>
       </StyledButtonsContainer>
 
-        {isGfiDownloadToolsOpen && (
-          <StyledGfiToolsContainer
-          >
-            <FeatureDataDownloadTools />
-          </StyledGfiToolsContainer>
-        )}
+      {isGfiDownloadToolsOpen && (
+        <StyledGfiToolsContainer>
+          <FeatureDataDownloadTools />
+        </StyledGfiToolsContainer>
+      )}
       <AnimatePresence>
         {isGfiDownloadToolsOpen && (
           <StyledGfiBackdrop
