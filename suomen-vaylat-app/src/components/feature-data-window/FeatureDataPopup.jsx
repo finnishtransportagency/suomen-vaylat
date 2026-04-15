@@ -458,7 +458,7 @@ export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsIds, setTabsIds] = useState([]);
 
-  const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(false);
+  const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(true);
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
