@@ -30,7 +30,7 @@
     "lodash.throttle": "^4.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^8.0.0",
     "oskari-rpc": "^2.1.0",
     "preval.macro": "^5.0.0",
     "process": "^0.11.10",
