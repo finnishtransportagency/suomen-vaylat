@@ -1,5 +1,5 @@
 import React from 'react';
-import Moment from 'react-moment';
+import moment from 'moment';
 import strings from '../../../translations';
 import { StyledTitle, StyledTitleLittle } from './Common';
 import ConformanceResultList from './ConformanceResultList';
@@ -51,7 +51,7 @@ export const QualityTabDataQualities = ({ dataQualities }) => {
                                                 <React.Fragment key={'quality-tab-data-qualities-data-quality-datetime-' + index}>
                                                     {dateTime &&
                                                         <React.Fragment key={'quality-tab-data-qualities-data-quality-datetime-content-' + index}>
-                                                            {strings.metadata.qualityContent.dateTime}: <Moment format={'DD.MM.YYYY hh:mm:ss'} tz="Europe/Helsinki">{dateTime}</Moment><br />
+                                                            {strings.metadata.qualityContent.dateTime}: <div>{moment(dateTime).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}</div><br />
                                                         </React.Fragment>
                                                     }
                                                 </React.Fragment>

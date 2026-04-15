@@ -1,9 +1,8 @@
 import { useContext, useState, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { theme, isMobile } from '../../theme/theme';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
@@ -13,7 +12,6 @@ import VaylaLogoExtranet from './images/vayla_alla_fi_sv_rgb.png';
 import { ReactComponent as VaylaLogoSV } from './images/vayla_alla_fi_sv_white.svg';
 import { ReactComponent as VaylaLogoSVMobile } from './images/vayla_v_white.svg';
 import DesktopNav from './navigation/DesktopNav';
-import { createBrowserHistory } from 'history';
 import MobileNav from './navigation/MobileNav';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Badges from '../badges/Badges';
@@ -34,8 +32,8 @@ import {
   updateLayers
 } from '../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
-
-const history = createBrowserHistory();
+import { useNavigate } from 'react-router-dom';
+import { FEATURE_SELECTION_DRAWING_TOOL } from '../../utils/constants';
 
 const StyledHeaderContainer = styled.div`
   position: relative;
@@ -44,7 +42,7 @@ const StyledHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
+  z-index: 13;
 `;
 
 const HeaderLeft = styled.div`
@@ -211,6 +209,7 @@ export const Header = () => {
   const lang = useAppSelector((state) => state.language);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
+  const navigate = useNavigate();
 
   // This function now only accesses latest redux state when called
   const setToMainScreen = useCallback(() => {
@@ -246,13 +245,9 @@ export const Header = () => {
 
     store.dispatch(setIsMainScreen());
     store.dispatch(resetGFILocations([]));
-    history.push(routerPrefix);
+    navigate(routerPrefix);
     // TODO: Which of these are actually necessary, are we doing extra work?
-    resetThemeGroupsForMainScreen(
-      store,
-      channel,
-      selectedTheme
-    );
+    resetThemeGroupsForMainScreen(store, channel, selectedTheme);
 
     // add start layers back (do it after than select group)
     startState.selectedLayers.forEach((layer) => {
@@ -269,9 +264,9 @@ export const Header = () => {
     });
 
     channel &&
-      activeTool === 'gfi-selection-tool' &&
+      activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
+        FEATURE_SELECTION_DRAWING_TOOL,
         true
       ]);
 
@@ -302,26 +297,6 @@ export const Header = () => {
   return (
     <>
       <StyledHeaderContainer id="header-container" role="banner">
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="header-show-info-tooltip"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.tooltips.showPageInfo}</span>
-        </ReactTooltip>
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="header-show-user-guide-tooltip"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.tooltips.showUserGuide}</span>
-        </ReactTooltip>
         <HeaderLeft id="header-left">
           <StyledHeaderLogoContainer id="header-logo-container">
             <a
@@ -390,9 +365,7 @@ export const Header = () => {
               id="header-desktop-buttons"
               aria-label={strings.accessibility.desktopButtons}
             >
-              { !IS_EXTRANET &&
-                <LanguageSelector />
-              }
+              {!IS_EXTRANET && <LanguageSelector />}
               <DesktopNav
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
@@ -415,13 +388,13 @@ export const Header = () => {
             />
           </StyledHeaderButton>
         </HeaderRight>
-
-        {isMobile && (
-          <AnimatePresence>
-            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
-          </AnimatePresence>
-        )}
       </StyledHeaderContainer>
+
+      {isMobile && (
+        <AnimatePresence>
+          {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
+        </AnimatePresence>
+      )}
     </>
   );
 };

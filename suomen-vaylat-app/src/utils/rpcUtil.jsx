@@ -267,17 +267,13 @@ export const showNonThemeLayers = (store, channel) => {
 };
 
 export const updateLayerLegends = (store) => {
-  // need use global window variable to limit legend updates
-  clearTimeout(window.legendUpdateTimer);
-  window.legendUpdateTimer = setTimeout(function () {
-    store.dispatch(
-      getLegends({
-        handler: (data) => {
-          store.dispatch(setLegends(data));
-        }
-      })
-    );
-  }, 1000);
+  store.dispatch(
+    getLegends({
+      handler: (data) => {
+        store.dispatch(setLegends(data));
+      }
+    })
+  );
 };
 
 const closeThemeLayers = (channel, store, theme, onComplete) => {
@@ -608,25 +604,23 @@ export const removeDuplicates = (originalArray, prop) => {
 /**
  * Gets active announcements
  * @param {Array} annoucements announcements
- * @returns {Array} active annoucements
+ * @returns {Array | null} active annoucements or null
  */
 export const getActiveAnnouncements = (annoucements) => {
   let activeAnnoucements = [];
   if (annoucements && annoucements.length > 0) {
     const localStorageAnnouncements = localStorage.getItem(
       ANNOUNCEMENTS_LOCALSTORAGE
-    )
-      ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
-      : [];
-    const activeAnnouncements = annoucements.filter((announcement) => {
-      const currDate = new Date();
-      const annDate = new Date(announcement.endDate);
-      return (
-        localStorageAnnouncements &&
-        !localStorageAnnouncements.includes(announcement.id) &&
-        currDate < annDate
-      );
-    });
+    );
+
+    let activeAnnouncements;
+    if (localStorageAnnouncements) {
+      activeAnnouncements = annoucements.filter((announcement) => !localStorageAnnouncements.includes(announcement.id));
+    } else {
+      activeAnnouncements = annoucements;
+    }
+
+    if (activeAnnouncements.length === 0) return null;
 
     const currentLang = strings.getLanguage();
     const defaultLang = strings.getAvailableLanguages()[0];
@@ -644,5 +638,6 @@ export const getActiveAnnouncements = (annoucements) => {
       });
     });
   }
+
   return activeAnnoucements;
 };

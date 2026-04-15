@@ -1,8 +1,6 @@
 # Suomen väylät
 
-You can test this app at the following url: https://paikkatietotest.testivaylapilvi.fi/suomen-vaylat/
-
-![Screenshot](screenshot.gif)
+You can find this app at the following url: https://suomenvaylat.vayla.fi/
 
 The Suomen väylät map service brings together the Finnish Transport Infrastructure Agency open materials related to different fairway formats. Through the service, we want to describe information as smoothly, visibly, up-to-date and in a variety of ways as possible for different user groups and needs.
 
@@ -14,7 +12,7 @@ You can read the release notes from another [ReleaseNotes.md](ReleaseNotes.md) f
 
 ### Preparations
 - [ ] Install Node.js
-- [ ] Create Oskari.org published map (this published map need contains also new created RPC functions)
+- [ ] Create Oskari.org published map (this published map need contains also new created RPC functions). Current Oskari version requires minimum Java 17.
 - [ ] Create Environment variable files under suomen-vaylat-app folder and copy following into it (change `<PUBLISHED_OSKARI_MAP_DOMAIN>` and `<PROXY_DOMAIN>` to correct ones):
     ```
     REACT_APP_PUBLISHED_MAP_URL=https://<PUBLISHED_OSKARI_MAP_DOMAIN>?uuid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
@@ -85,9 +83,13 @@ If you want you can copy all translations to same one excel now, do following:
 
 ## Reporting issues
 
-Issues should be reported here: https://github.com/finnishtransportagency/suomen-vaylat/issues
+Issues should be reported here: paikkatieto@vayla.fi
 
 ## License
 
 This work is lisenced under [EUPL v1.1](https://joinup.ec.europa.eu/software/page/eupl/licence-eupl)
 (any language version applies, English version is included in https://github.com/finnishtransportagency/suomen-vaylat/blob/master/LICENSE.EUPL-11.pdf).
+
+## AI use
+
+This project takes advantage of regenerative AI as part of development. Any AI produced content has been reviewed by a human.

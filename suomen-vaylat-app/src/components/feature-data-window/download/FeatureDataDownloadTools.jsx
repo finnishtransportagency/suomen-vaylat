@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 
@@ -17,10 +17,8 @@ import SVLoader from '../../../utils/components/SvLoader';
 import strings from '../../../translations';
 
 import {
-  resetGFILocations,
   setDownloadActive,
   setDownloadFinished,
-  removeMarkerRequest
 } from '../../../state/slices/rpcSlice';
 
 import {
@@ -140,7 +138,7 @@ const StyledLayerNamesList = styled.ul`
 
 const StyledLayerNamesListItem = styled.li``;
 
-const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu}) => {
+const FeatureDataDownloadTools = () => {
   const [loading] = useState(false);
 
   let {
@@ -151,7 +149,7 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
     selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
-  const { isGfiDownloadToolsOpen, isGfiOpen, activeTool } =
+  const { isGfiDownloadToolsOpen, isGfiOpen } =
     useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   const [downloadUuids, setDownloadUuids] = useState([]);
@@ -236,8 +234,6 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
       ]);
   };
 
-
-  // TODO: move to utils if this is used more than once
   const connectWebsocket = (count) => {
     setWebsocketFirstTimeTryConnecting(true);
 
@@ -407,29 +403,14 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
         }
       );
 
-    if (!isGfiOpen) {
-      store.dispatch(resetGFILocations([]));
-      store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
-      channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-        null,
-        null,
-        'download-tool-layer'
-      ]);
-      activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
-        true
-      ]);
-    }
     isGfiDownloadToolsOpen && store.dispatch(setIsGfiDownloadToolsOpen(false));
   };
 
   return (
     <StyledGfiDownloadsContainer>
-      {closeButton && (
-        <StyledCloseButton onClick={() => handleGfiDownloadsMenu()}>
-          <FontAwesomeIcon icon={faTimes} />
-        </StyledCloseButton>
-      )}
+      <StyledCloseButton onClick={() => store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))}>
+        <FontAwesomeIcon icon={faTimes} />
+      </StyledCloseButton>
       <AnimatePresence>
         {loading && (
           <StyledLoadingOverlay

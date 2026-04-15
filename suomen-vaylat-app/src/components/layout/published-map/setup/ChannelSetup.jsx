@@ -36,8 +36,17 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
     setTimeout(() => {
       if (data.getSelectedAnnouncements) {
         channel.getSelectedAnnouncements(function (responseData) {
-          store.dispatch(setAnnouncements(responseData));
-          activeAnnouncements = getActiveAnnouncements(responseData);
+          let announcements = [];
+
+          // check that the announcement is not expired
+          responseData.forEach((announcement) => {
+            const currDate = new Date();
+            const annDate = new Date(announcement.endDate);
+            currDate < annDate && announcements.push(announcement);
+          });
+
+          announcements.length > 0 && store.dispatch(setAnnouncements(responseData));
+          activeAnnouncements = getActiveAnnouncements(announcements);
 
           if (activeAnnouncements && activeAnnouncements.length > 0) {
             store.dispatch(setActiveAnnouncements(activeAnnouncements));

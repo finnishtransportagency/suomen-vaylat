@@ -1,30 +1,27 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   faTimes,
   faSearchLocation,
-  faMapMarkedAlt,
-  faFileDownload,
+  faDownload,
   faAngleLeft,
   faAngleRight,
-  faLayerGroup,
-  faMapMarkerAlt,
   faStreetView
 } from '@fortawesome/free-solid-svg-icons';
 import proj4 from 'proj4';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Controller } from 'swiper';
+import { Controller, FreeMode } from 'swiper/modules';
 import {
+  setIsGfiDownloadToolsOpen,
   setMinimizeGfi,
-  setWarning,
-  setActiveSelectionTool
+  setWarning
 } from '../../state/slices/uiSlice';
 import {
   resetGFILocations,
@@ -33,21 +30,53 @@ import {
   removeMarkerRequest
 } from '../../state/slices/rpcSlice';
 import FeatureDataTabContent from './tabs/FeatureDataTabContent';
-import FeatureDataToolsMenu from './tools/FeatureDataToolsMenu';
 import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
-import CircleButton from '../../utils/components/CircleButton';
 import SVLoader from '../../utils/components/SvLoader';
-import { isValidUrl } from '../../utils/validUrlUtil';
 import { theme, isMobile } from '../../theme/theme';
 import { filterFeature } from '../../utils/gfiUtil';
+import { renderLinksInText } from '../../utils/commonUtil';
 import { SortingMode, PagingPosition } from 'ka-table/enums';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
+} from '@mui/material';
+import PillButton from '../../utils/components/PillButton';
 
 // Max amount of features that wont trigger react-data-table-component
 const KUNTA_IMAGE_URL =
   'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
 
+const StyledAccordion = styled(Accordion)`
+  margin: 0px !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid ${(props) => props.theme.colors.lightGrey};
+`;
+
+const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+  svg {
+    font-size: 34px !important;
+  }
+  color: ${(props) => props.theme.colors.mainColor1};
+`;
+
+const StyledAccordionSummary = styled(AccordionSummary)`
+  padding: 0 12px !important;
+  min-height: 0px !important;
+  .Mui-expanded {
+    margin: 12px 0 !important;
+  }
+`;
+
+const AccordionSummaryLabel = styled(Typography)`
+  color: ${(props) => props.theme.colors.mainColor1};
+  font-weight: 600 !important;
+`;
+
 const StyledGfiContainer = styled.div`
-  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -164,14 +193,10 @@ const StyledTabName = styled.p`
 `;
 
 const StyledNoGfisContainer = styled.div`
-  position: absolute;
-  width: 100%;
   max-width: 520px;
-  height: 100%;
+  height: max-content;
   display: flex;
   padding: 24px;
-  left: 50%;
-  transform: translateX(-50%);
   flex-direction: column;
   font-size: 18px;
   color: ${(props) => props.theme.colors.mainColor1};
@@ -259,9 +284,13 @@ const StyledTabCloseButton = styled.div`
 
 const StyledTabContent = styled.div`
   user-select: text;
-  overflow: hidden;
   display: flex;
-  height: 100%;
+  flex-direction: column;
+  flex: 1 1 auto; /* grow/shrink and take remaining space */
+  min-height: 0; /* critical: allow child to scroll */
+  overflow-y: auto; /* scroll when content overflows */
+
+  /* rest of your styles preserved... */
   div.contentWrapper-infobox {
     @media ${(props) => props.theme.device.mobileL} {
       font-size: 14px;
@@ -326,6 +355,8 @@ const StyledTabContent = styled.div`
 `;
 
 const StyledFeaturesInfo = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
 `;
 
@@ -333,32 +364,32 @@ const StyledFeatureAmount = styled.p`
   text-align: center;
   color: ${(props) => props.theme.colors.mainColor1};
   margin: 5px 0px 10px 0px;
+  font-weight: 500;
 `;
 
 const StyledShowMoreButtonWrapper = styled.div`
-  text-align: center;
+  display: flex;
+  justify-content: center;
 `;
 
-const StyledShowMoreButton = styled.button`
-  width: 250px;
-  height: 35px;
-  color: ${(props) => props.theme.colors.mainWhite};
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
+const StyledDownloadAndLocationButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;
 
 const StyledButtonsContainer = styled.div`
+  border-top: 1px solid #cdcdcd;
   margin-top: auto;
-  padding: 16px;
+  padding: 12px;
   z-index: 1;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 8px;
-  pointer-events: none;
+  pointer-events: auto; /* allow clicks */
+  background: transparent;
 `;
 
 const StyledGfiToolsContainer = styled(motion.div)`
@@ -404,7 +435,7 @@ const StyledLoaderWrapper = styled.div`
   }
 `;
 
-export const FeatureDataPopup = () => {
+export const FeatureDataPopup = ({ handleCloseGFIDialog }) => {
   const LAYER_ID = 'gfi-result-layer';
 
   const { store } = useContext(ReactReduxContext);
@@ -416,47 +447,91 @@ export const FeatureDataPopup = () => {
     pointInfoImageError,
     setPointInfoImageError,
     gfiCroppingArea,
-    selectedLayers,
     pointInfo,
-    filters,
-    selectedLayersByType
+    filters
   } = useAppSelector((state) => state.rpc);
 
-  const { activeTool } = useAppSelector((state) => state.ui);
+  const { isGfiDownloadToolsOpen } = useAppSelector((state) => state.ui);
 
   const [point, setPoint] = useState(null);
-  const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsIds, setTabsIds] = useState([]);
-  const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
 
-  const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData ? true : false);
+  const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(true);
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [disableDownload, setDisableDownload] = useState(false);
+
+  // Number of total features of current tab
+  const [totalfeaturesCount, setTotalfeaturesCount] = useState(0);
+  // Number of features present (like with filter on) on tab
+  const [featuresCount, setFeaturesCount] = useState(0);
+  // Are there more features for this tab
+  const [moreFeatures, setMoreFeatures] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const gfiInputEl = useRef(null);
 
+  // AI-GENERATED | 365 Copilot (GPT-5) | Tarkistanut Oskari Rintamäki | 2026-04-09
+  // Combined effect for gfiLocations + selectedTab to avoid race conditions
+  // and ensure consistent derived state.
   useEffect(() => {
-    if (gfiLocations.length === 0) {
+    // ---------- 1. Guard & normalize ----------
+    if (!Array.isArray(gfiLocations) || gfiLocations.length === 0) {
       setSelectedTab(0);
       setDisableDownload(true);
       setTabsIds([]);
-    } else {
-      const onlyUserLayers = gfiLocations.every(
-        l => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
-      );
-      setDisableDownload(onlyUserLayers);
 
-      let layerIds = [];
-      gfiLocations.forEach((location) => {
-        layerIds.push(location.layerId);
-      });
-
-      setTabsIds(layerIds);
+      setSelectedLocation(null);
+      setTotalfeaturesCount(0);
+      setFeaturesCount(0);
+      setMoreFeatures(false);
+      return;
     }
-  }, [gfiLocations]);
+
+    // ---------- 2. Derived data from gfiLocations ----------
+    const onlyUserLayers = gfiLocations.every(
+      (l) => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
+    );
+    setDisableDownload(onlyUserLayers);
+
+    const layerIds = gfiLocations.map((l) => l.layerId);
+    setTabsIds(layerIds);
+
+    // ---------- 3. Clamp selectedTab ----------
+    const safeSelectedTab =
+      selectedTab >= 0 && selectedTab < gfiLocations.length ? selectedTab : 0;
+
+    if (safeSelectedTab !== selectedTab) {
+      setSelectedTab(safeSelectedTab);
+    }
+
+    const location = gfiLocations[safeSelectedTab];
+    setSelectedLocation(location);
+
+    // ---------- 4. Feature counting ----------
+    let totalFeaturesCount = 0;
+    let filteredFeaturesCount = 0;
+
+    location?.content?.forEach((cont) => {
+      const geojson = cont.geojson;
+
+      if (!geojson) return;
+
+      totalFeaturesCount += geojson.totalFeatures ?? 0;
+
+      geojson.features?.forEach((feature) => {
+        if (filterFeature(feature, location, filters, channel)) {
+          filteredFeaturesCount += 1;
+        }
+      });
+    });
+
+    setTotalfeaturesCount(totalFeaturesCount);
+    setFeaturesCount(filteredFeaturesCount);
+    setMoreFeatures(Boolean(location?.moreFeatures));
+  }, [gfiLocations, selectedTab, filters, channel]);
 
   const handleLinkClick = (event) => {
     event.preventDefault();
@@ -495,8 +570,9 @@ export const FeatureDataPopup = () => {
     }
   };
 
+  // If download tools is open when me make a new feature selection, close it
   useEffect(() => {
-    isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
+    isGfiDownloadToolsOpen && store.dispatch(setIsGfiDownloadToolsOpen(false));
   }, [gfiLocations]);
 
   // Zoom to features
@@ -548,10 +624,6 @@ export const FeatureDataPopup = () => {
           }
         ]);
     }
-  };
-
-  const handleVKMInfo = () => {
-    setIsVKMInfoOpen(!isVKMInfoOpen);
   };
 
   const addGFIResultsToMap = (filteredFeatures) => {
@@ -713,21 +785,7 @@ export const FeatureDataPopup = () => {
           position: PagingPosition.Bottom
         },
         format: ({ value }) => {
-          if (isValidUrl(value)) {
-            return (
-              <a target="_blank" rel="noreferrer" href={value}>
-                {value}
-              </a>
-            );
-          } else if (typeof value === 'string') {
-            return (
-              <span>
-                {value.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </span>
-            );
-          }
+          return renderLinksInText(value);
         }
       };
       return tablePropsInit;
@@ -799,22 +857,7 @@ export const FeatureDataPopup = () => {
           position: PagingPosition.Bottom
         },
         format: ({ value }) => {
-          if (isValidUrl && isValidUrl(value)) {
-            return (
-              <a target="_blank" rel="noreferrer" href={value}>
-                {value}
-              </a>
-            );
-          } else if (typeof value === 'string') {
-            return (
-              <span>
-                {value.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </span>
-            );
-          }
-          return value;
+          return renderLinksInText(value);
         }
       };
       return tablePropsInit;
@@ -840,67 +883,18 @@ export const FeatureDataPopup = () => {
     };
   };
 
-  const handleGfiToolsMenuWithConfirmDialog = () => {
-    const fetchableLayers = selectedLayers.filter((layer) =>
-      layer.groups?.every((group) => group !== 1)
-    );
-    if (fetchableLayers.length >= 10) {
-      //delete group 1 taustakartat
-      store.dispatch(
-        setWarning({
-          title: strings.multipleLayersFetchWarning,
-          subtitle: null,
-          cancel: {
-            text: strings.general.cancel,
-            action: () => store.dispatch(setWarning(null))
-          },
-          confirm: {
-            text: strings.general.continue,
-            action: () => {
-              store.dispatch(setWarning(null));
-              handleGfiToolsMenu();
-            }
-          }
-        })
-      );
-    } else {
-      handleGfiToolsMenu();
-    }
-  };
-
-  const handleGfiToolsMenu = () => {
-    setIsGfiDownloadToolsOpen(false);
-    setIsGfiToolsOpen(!isGfiToolsOpen);
-    store.dispatch(setActiveSelectionTool(null));
-
-    channel &&
-      activeTool === 'gfi-selection-tool' &&
-      channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
-        true
-      ]);
-
-    isGfiToolsOpen &&
-      channel &&
-      channel.postRequest('VectorLayerRequest', [
-        {
-          layerId: 'download-tool-layer',
-          remove: true
-        }
-      ]);
-  };
-
-  const handleGfiDownloadsMenu = () => {
-    setIsGfiToolsOpen(false);
-    setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
-  };
-
   const closeTab = (index, id) => {
+    var filteredLocations = gfiLocations.filter((gfi) => gfi.layerId !== id);
+
+    if (filteredLocations.length === 0) {
+      handleCloseGFIDialog();
+    }
+
+    store.dispatch(resetGFILocations(filteredLocations));
+
     const updatedFilters = filters.filter((filter) => filter.layer !== id);
     store.dispatch(setFilters(updatedFilters));
 
-    var filteredLocations = gfiLocations.filter((gfi) => gfi.layerId !== id);
-    store.dispatch(resetGFILocations(filteredLocations));
     channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
         null,
@@ -960,7 +954,6 @@ export const FeatureDataPopup = () => {
   };
 
   useEffect(() => {
-    vkmData ? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     if (pointInfo.lon && pointInfo.lat) {
       // our projection EPSG:3067
       var oskariProjection =
@@ -976,8 +969,56 @@ export const FeatureDataPopup = () => {
     }
   }, [vkmData, pointInfo]);
 
+  const DownloadButton = () => {
+    return (
+      <PillButton
+        id={'baselayer-selector-base-layer-cancel-button'}
+        icon={faDownload}
+        text={strings.gfi.downloadMaterials}
+        disabled={disableDownload}
+        variant="inverse"
+        onClick={() =>
+          store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))
+        }
+        aria-label={
+          gfiLocations.length > 0 && !disableDownload
+            ? strings.gfi.downloadMaterials
+            : strings.gfi.downloadMaterialsDisabled
+        }
+      />
+    );
+  };
+
+  const LocationButton = () => {
+    return (
+      <PillButton
+        id={'feature-data-location-button'}
+        icon={faSearchLocation}
+        text={strings.gfi.focusToLocations}
+        disabled={gfiLocations.length === 0 || disableDownload}
+        variant="inverse"
+        onClick={() => {
+          handleOverlayGeometry(tabsIds[selectedTab]);
+          isMobile && store.dispatch(setMinimizeGfi(true));
+        }}
+        aria-label={strings.gfi.focusToLocations}
+      />
+    );
+  };
+
   return (
     <StyledGfiContainer id="gfi_container">
+      <Tooltip
+        style={{ backgroundColor: theme.colors.mainColor1 }}
+        disable={isMobile}
+        anchorSelect="#streetview_link"
+        id="streetview_tooltip"
+        place="bottom"
+        effect="float"
+      >
+        <span>{strings.gfi.streetView.openGoogleStreetView}</span>
+      </Tooltip>
+
       <AnimatePresence>
         {isLoading && (
           <StyledLoadingOverlay
@@ -1001,129 +1042,126 @@ export const FeatureDataPopup = () => {
           </StyledLoadingOverlay>
         )}
       </AnimatePresence>
-      <StyledVKMDataContainer
-        initial={{
-          height: !isVKMInfoOpen && !vkmData && 0
-        }}
-        animate={{
-          height: isVKMInfoOpen ? 'auto' : 0,
-          opacity: isVKMInfoOpen ? 1 : 0,
-          margin: isVKMInfoOpen ? '16px' : '0px',
-          y: isVKMInfoOpen ? 0 : -100
-        }}
-        transition={{ duration: 0.4 }}
+
+      <StyledAccordion
+        expanded={isVKMInfoOpen}
+        onChange={(_, isExpanded) => setIsVKMInfoOpen(isExpanded)}
+        id="vkm-info-accordion"
       >
-        <StyledVKMDataMunacipalityImageWrapper>
-          {vkmData && vkmData.vkm.kuntakoodi && !pointInfoImageError && (
-            <img
-              src={
-                KUNTA_IMAGE_URL +
-                vkmData.vkm.kuntakoodi.toString().padStart(3, '0') +
-                '.gif'
-              }
-              alt={vkmData.vkm.kuntanimi}
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null; // prevents looping
-                setPointInfoImageError(true);
-              }}
-            />
-          )}
-          {vkmData && vkmData.vkm.kuntanimi && <h5>{vkmData.vkm.kuntanimi}</h5>}
-        </StyledVKMDataMunacipalityImageWrapper>
-        {vkmData && vkmData.coordinates && (
-          <StyledCoordinatesWrapper>
-            <div>
-              <h6>{strings.vkm.locationInfo}</h6>
-              <p style={{ fontWeight: '600' }}>{vkmData.vkm.Katunimi}</p>
-              <p>
-                Lat:{' '}
-                <span style={{ fontWeight: '600' }}>
-                  {vkmData.coordinates.y}
-                </span>
-              </p>
-              <p>
-                Lon:{' '}
-                <span style={{ fontWeight: '600' }}>
-                  {vkmData.coordinates.x}
-                </span>
-              </p>
-              <a
-                data-tip
-                data-for={'streetview'}
-                href={'http://maps.google.com/maps?q=&layer=c&cbll=' + point}
-                rel="noreferrer"
-                target="_blank"
-                onClick={handleLinkClick}
-              >
-                <FontAwesomeIcon icon={faStreetView} />
-                <span style={{ fontSize: '14px', marginLeft: '.5em' }}>
-                  {strings.gfi.streetView.title}
-                </span>
-                <ReactTooltip
-                  backgroundColor={theme.colors.mainColor1}
-                  textColor={theme.colors.mainWhite}
-                  disable={isMobile}
-                  id="streetview"
-                  place="bottom"
-                  type="dark"
-                  effect="float"
-                >
-                  <span>{strings.gfi.streetView.openGoogleStreetView}</span>
-                </ReactTooltip>
-              </a>
-            </div>
-          </StyledCoordinatesWrapper>
-        )}
-        {vkmData &&
-        vkmData.vkm._orderHigh &&
-        vkmData.vkm._orderHigh.filter((value) => value !== 'kuntanimi').length >
-          0 ? (
-          <StyledVKMDataInfoWrapper>
-            <h6>{strings.vkm.roadAddressInfo}</h6>
-            <StyledVkmDataItems>
-              {vkmData.vkm._orderHigh
-                .filter((value) => value !== 'kuntanimi')
-                .map((property) => {
-                  if (property !== 'Katunimi')
-                    return (
-                      <p
-                        key={'vkm-info-box-li' + property}
-                        style={{
-                          color: '#0064af'
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: 'light',
-                            margin: '0'
-                          }}
-                        >
-                          {property + ':'}
-                        </span>
-                        &nbsp;
-                        <span
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: '600',
-                            margin: '0'
-                          }}
-                        >
-                          {vkmData.vkm[property]}
-                        </span>
-                      </p>
-                    );
-                  else return null;
-                })}
-            </StyledVkmDataItems>
-          </StyledVKMDataInfoWrapper>
-        ) : (
-          <StyledVkmInstruction>
-            <h6>{strings.vkm.roadAddressInfo}</h6>
-            <p>{strings.vkm.roadAddressInstructions}</p>
-          </StyledVkmInstruction>
-        )}
-      </StyledVKMDataContainer>
+        <StyledAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
+          <AccordionSummaryLabel>{strings.vkm.title}</AccordionSummaryLabel>
+        </StyledAccordionSummary>
+        <AccordionDetails>
+          <StyledVKMDataContainer>
+            {vkmData && (
+              <StyledVKMDataMunacipalityImageWrapper>
+                {vkmData && vkmData.vkm.kuntakoodi && !pointInfoImageError && (
+                  <img
+                    src={
+                      KUNTA_IMAGE_URL +
+                      vkmData.vkm.kuntakoodi.toString().padStart(3, '0') +
+                      '.gif'
+                    }
+                    alt={vkmData.vkm.kuntanimi}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      setPointInfoImageError(true);
+                    }}
+                  />
+                )}
+                {vkmData && vkmData.vkm.kuntanimi && (
+                  <h5>{vkmData.vkm.kuntanimi}</h5>
+                )}
+              </StyledVKMDataMunacipalityImageWrapper>
+            )}
+            {vkmData && vkmData.coordinates && (
+              <StyledCoordinatesWrapper>
+                <div>
+                  <h6>{strings.vkm.locationInfo}</h6>
+                  <p style={{ fontWeight: '600' }}>{vkmData.vkm.Katunimi}</p>
+                  <p>
+                    Lat:{' '}
+                    <span style={{ fontWeight: '600' }}>
+                      {vkmData.coordinates.y}
+                    </span>
+                  </p>
+                  <p>
+                    Lon:{' '}
+                    <span style={{ fontWeight: '600' }}>
+                      {vkmData.coordinates.x}
+                    </span>
+                  </p>
+                  <a
+                    data-tip
+                    data-for={'streetview'}
+                    href={
+                      'http://maps.google.com/maps?q=&layer=c&cbll=' + point
+                    }
+                    rel="noreferrer"
+                    target="_blank"
+                    onClick={handleLinkClick}
+                  >
+                    <FontAwesomeIcon icon={faStreetView} />
+                    <span style={{ fontSize: '14px', marginLeft: '.5em' }}>
+                      {strings.gfi.streetView.title}
+                    </span>
+                  </a>
+                </div>
+              </StyledCoordinatesWrapper>
+            )}
+            {vkmData &&
+            vkmData.vkm._orderHigh &&
+            vkmData.vkm._orderHigh.filter((value) => value !== 'kuntanimi')
+              .length > 0 ? (
+              <StyledVKMDataInfoWrapper>
+                <h6>{strings.vkm.roadAddressInfo}</h6>
+                <StyledVkmDataItems>
+                  {vkmData.vkm._orderHigh
+                    .filter((value) => value !== 'kuntanimi')
+                    .map((property) => {
+                      if (property !== 'Katunimi')
+                        return (
+                          <p
+                            key={'vkm-info-box-li' + property}
+                            style={{
+                              color: '#0064af'
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: 'light',
+                                margin: '0'
+                              }}
+                            >
+                              {property + ':'}
+                            </span>
+                            &nbsp;
+                            <span
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                margin: '0'
+                              }}
+                            >
+                              {vkmData.vkm[property]}
+                            </span>
+                          </p>
+                        );
+                      else return null;
+                    })}
+                </StyledVkmDataItems>
+              </StyledVKMDataInfoWrapper>
+            ) : (
+              <StyledVkmInstruction>
+                <h6>{strings.vkm.roadAddressInfo}</h6>
+                <p>{strings.vkm.roadAddressInstructions}</p>
+              </StyledVkmInstruction>
+            )}
+          </StyledVKMDataContainer>
+        </AccordionDetails>
+      </StyledAccordion>
+
       {tabsIds.length > 0 && (
         <StyledTabSwiperContainer>
           {!isMobile && gfiTabsSnapGridLength > 1 && (
@@ -1186,134 +1224,57 @@ export const FeatureDataPopup = () => {
           )}
         </StyledTabSwiperContainer>
       )}
-      <StyledTabContent isMobile={isMobile}>
-        {tabsIds[selectedTab] === undefined ? (
-          <StyledNoGfisContainer>
-            <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
-            <StyledInfoTextContainer>
-              <li>
-                {strings.gfi.choosingGfiDescription0}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faLayerGroup}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-              <li>
-                {strings.gfi.choosingGfiDescription1}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faMapMarkedAlt}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-              <li>{strings.gfi.choosingGfiDescription2}.</li>
-            </StyledInfoTextContainer>
-            <StyledSubtitle>
-              {strings.gfi.streetView.googleStreetviewTitle}:
-            </StyledSubtitle>
-            <StyledInfoTextContainer>
-              <li>
-                {strings.gfi.streetView.googleStreetviewContent}.&nbsp;{' '}
-                <FontAwesomeIcon
-                  icon={faStreetView}
-                  style={{ fontSize: '16px' }}
-                />
-              </li>
-            </StyledInfoTextContainer>
-          </StyledNoGfisContainer>
-        ) : (
-          <StyledSwiper
-            ref={gfiInputEl}
-            id={'gfi-swiper'}
-            onSlideChange={(e) => {
-              setSelectedTab(e.activeIndex);
-            }}
-            tabIndex={selectedTab}
-            allowTouchMove={false} // Disable swiping
-            speed={300}
-          >
-            {gfiLocations.map((location, index) => {
-              const layers = allLayers.filter(
-                (layer) => layer.id === location.layerId
+      <StyledTabContent id="feature-data-tab-content" isMobile={isMobile}>
+        <StyledSwiper
+          ref={gfiInputEl}
+          id={'gfi-swiper'}
+          onSlideChange={(e) => {
+            setSelectedTab(e.activeIndex);
+          }}
+          tabIndex={selectedTab}
+          allowTouchMove={false} // Disable swiping
+          speed={300}
+        >
+          {gfiLocations.map((location, index) => {
+            const layers = allLayers.filter(
+              (layer) => layer.id === location.layerId
+            );
+            const title = layers.length > 0 && layers[0].name;
+            const tableProps = tablePropsInit(index, location);
+
+            if (location.type === 'geojson') {
+              return (
+                <SwiperSlide
+                  id={'gfi_tab_content_' + location.layerId}
+                  key={'gfi_tab_content_' + location.layerId}
+                >
+                  <FeatureDataTabContent
+                    layer={layers[0]}
+                    data={location}
+                    title={title}
+                    tablePropsInit={tableProps}
+                    filters={filters}
+                  />
+                </SwiperSlide>
               );
-              const title = layers.length > 0 && layers[0].name;
-              const tableProps = tablePropsInit(index, location);
-              let totalFeatures = 0;
-              location?.content?.forEach((cont) => {
-                totalFeatures += cont.geojson.totalFeatures;
-              });
-
-              let featuresAmount = 0;
-
-              // count the amount of results when filtered
-              location?.content?.forEach((cont) => {
-                cont.geojson?.features?.forEach((feature) => {
-                  if (filterFeature(feature, location, filters, channel)) {
-                    featuresAmount += 1;
-                  }
-                });
-              });
-
-              if (location.type === 'geojson') {
-                return (
-                  <SwiperSlide
-                    id={'gfi_tab_content_' + location.layerId}
-                    key={'gfi_tab_content_' + location.layerId}
-                  >
-                    <FeatureDataTabContent
-                      layer={layers[0]}
-                      data={location}
-                      title={title}
-                      tablePropsInit={tableProps}
-                      filters={filters}
-                    />
-                    {location?.content?.some(
-                      (content) => content.geojson.features
-                    ) && (
-                      <StyledFeaturesInfo>
-                        <StyledFeatureAmount>
-                          {`${strings.gfi.featureAmount} : `}
-                          <span>
-                            {featuresAmount}{' '}
-                            {location.moreFeatures && ` / ${totalFeatures}`}
-                          </span>
-                        </StyledFeatureAmount>
-                        {location.moreFeatures && (
-                          <StyledShowMoreButtonWrapper>
-                            <StyledShowMoreButton
-                              onClick={() =>
-                                getMoreFeatures(
-                                  location.content,
-                                  location.layerId
-                                )
-                              }
-                            >
-                              {strings.gfi.getMoreFeatures}
-                            </StyledShowMoreButton>
-                          </StyledShowMoreButtonWrapper>
-                        )}
-                      </StyledFeaturesInfo>
-                    )}
-                  </SwiperSlide>
-                );
-              } else if (location.type === 'json') {
-                return (
-                  <SwiperSlide
-                    id={'gfi_tab_content_' + location.layerId}
-                    key={'gfi_tab_content_' + location.layerId}
-                  >
-                    <FeatureDataTabContent
-                      layer={layers[0]}
-                      title={title}
-                      tablePropsInit={tableProps}
-                      filters={filters}
-                    />
-                  </SwiperSlide>
-                );
-              }
-              return null;
-            })}
-          </StyledSwiper>
-        )}
+            } else if (location.type === 'json') {
+              return (
+                <SwiperSlide
+                  id={'gfi_tab_content_' + location.layerId}
+                  key={'gfi_tab_content_' + location.layerId}
+                >
+                  <FeatureDataTabContent
+                    layer={layers[0]}
+                    title={title}
+                    tablePropsInit={tableProps}
+                    filters={filters}
+                  />
+                </SwiperSlide>
+              );
+            }
+            return null;
+          })}
+        </StyledSwiper>
         {gfiLocations.content && gfiLocations.content[0].noContent && (
           <StyledNoGfisContainer>
             <StyledSubtitle>{strings.gfi.noResultsTitle}</StyledSubtitle>
@@ -1324,112 +1285,42 @@ export const FeatureDataPopup = () => {
         )}
       </StyledTabContent>
       <StyledButtonsContainer>
-        <CircleButton
-          icon={faMapMarkerAlt}
-          text={strings.vkm.locationInfo}
-          toggleState={isVKMInfoOpen}
-          tooltipDirection={'bottom'}
-          clickAction={handleVKMInfo}
-          disabled={!vkmData}
-        />
-        <CircleButton
-          icon={faMapMarkedAlt}
-          text={strings.gfi.selectLocations}
-          toggleState={isGfiToolsOpen}
-          tooltipDirection={'bottom'}
-          clickAction={handleGfiToolsMenuWithConfirmDialog}
-          disabled={
-            !selectedLayers.some(
-              (layer) =>
-                layer.groups?.every((group) => group !== 1) &&
-                selectedLayersByType.backgroundMaps.filter(
-                  (l) => l.id === layer.id
-                ).length === 0
-            )
-          }
-        />
-        <CircleButton
-          icon={faFileDownload}
-          text={
-            gfiLocations.length > 0 && !disableDownload
-              ? strings.gfi.downloadMaterials
-              : strings.gfi.downloadMaterialsDisabled
-          }
-          toggleState={isGfiDownloadToolsOpen}
-          tooltipDirection={'bottom'}
-          clickAction={handleGfiDownloadsMenu}
-          disabled={disableDownload}
-        />
-        <CircleButton
-          icon={faSearchLocation}
-          text={strings.gfi.focusToLocations}
-          tooltipDirection={'bottom'}
-          clickAction={() => {
-            handleOverlayGeometry(tabsIds[selectedTab]);
-            isMobile && store.dispatch(setMinimizeGfi(true));
-          }}
-          disabled={
-            gfiLocations.length === 0 ||
-            disableDownload
-          }
-        />
+        <StyledFeaturesInfo>
+          <StyledFeatureAmount>
+            {`${strings.gfi.featureAmount} : `}
+            <span>
+              {featuresCount} {moreFeatures && ` / ${totalfeaturesCount}`}
+            </span>
+          </StyledFeatureAmount>
+          {moreFeatures && (
+            <StyledShowMoreButtonWrapper>
+              <PillButton
+                id={'feature-data-show-more-results-button'}
+                text={strings.gfi.getMoreFeatures}
+                onClick={() =>
+                  getMoreFeatures(
+                    selectedLocation.content,
+                    selectedLocation.layerId
+                  )
+                }
+                aria-label={strings.gfi.getMoreFeatures}
+              />
+            </StyledShowMoreButtonWrapper>
+          )}
+        </StyledFeaturesInfo>
+        <StyledDownloadAndLocationButtonsWrapper>
+          <DownloadButton />
+          <LocationButton />
+        </StyledDownloadAndLocationButtonsWrapper>
       </StyledButtonsContainer>
 
-      <AnimatePresence>
-        {isGfiToolsOpen && (
-          <StyledGfiToolsContainer
-            transition={{
-              duration: 0.4,
-              type: 'tween'
-            }}
-            initial={{
-              opacity: 0,
-              x: '-100%'
-            }}
-            animate={{
-              opacity: 1,
-              x: 0
-            }}
-            exit={{
-              opacity: 0,
-              x: '-100%'
-            }}
-          >
-            <FeatureDataToolsMenu
-              handleGfiToolsMenu={handleGfiToolsMenu}
-              filters={filters}
-            />
-          </StyledGfiToolsContainer>
-        )}
-      </AnimatePresence>
+      {isGfiDownloadToolsOpen && (
+        <StyledGfiToolsContainer>
+          <FeatureDataDownloadTools />
+        </StyledGfiToolsContainer>
+      )}
       <AnimatePresence>
         {isGfiDownloadToolsOpen && (
-          <StyledGfiToolsContainer
-            transition={{
-              duration: 0.4,
-              type: 'tween'
-            }}
-            initial={{
-              opacity: 0,
-              x: '-100%'
-            }}
-            animate={{
-              opacity: 1,
-              x: 0
-            }}
-            exit={{
-              opacity: 0,
-              x: '-100%'
-            }}
-          >
-            <FeatureDataDownloadTools
-              handleGfiDownloadsMenu={handleGfiDownloadsMenu}
-            />
-          </StyledGfiToolsContainer>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {(isGfiDownloadToolsOpen || isGfiToolsOpen) && (
           <StyledGfiBackdrop
             transition={{
               duration: 0.4,
@@ -1444,10 +1335,9 @@ export const FeatureDataPopup = () => {
             exit={{
               opacity: 0
             }}
-            onClick={() => {
-              isGfiToolsOpen && handleGfiToolsMenu();
-              isGfiDownloadToolsOpen && handleGfiDownloadsMenu();
-            }}
+            onClick={() =>
+              store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen))
+            }
           />
         )}
       </AnimatePresence>

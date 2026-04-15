@@ -1,40 +1,40 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 import LayersIcon from '@mui/icons-material/Layers';
-import { faCopy, faEnvelope, faLayerGroup, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCopy,
+  faEnvelope,
+  faLayerGroup,
+  faChevronDown
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 import strings from '../../translations';
-
+import PillButton from '../../utils/components/PillButton';
 
 const StyledPopupWrapper = styled.div`
-  max-width: 600px;
-  width: 100%;
   margin: 0 auto;
   padding: 24px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 
-  @media ${props => props.theme.device.mobileL} {
-    position: fixed;
+  @media ${(props) => props.theme.device.mobileL} {
     padding: 22px;
     bottom: 0;
     left: 0;
-    width: 100vw;
     margin: 0;
     z-index: 1;
   }
 
-  @media ${props => props.theme.device.mobileM} {
+  @media ${(props) => props.theme.device.mobileM} {
     padding: 7px;
   }
 
-  @media ${props => props.theme.device.mobileS} {
+  @media ${(props) => props.theme.device.mobileS} {
     padding: 2px;
     font-size: 13px;
   }
@@ -45,7 +45,6 @@ const StyledDescription = styled.p`
   color: #333;
   margin: 0 0 16px;
 `;
-
 
 const StyledCopiedToClipboardText = styled(motion.span)`
   color: ${(props) => props.theme.colors.mainColor1};
@@ -74,16 +73,15 @@ const StyledLayerSummary = styled.div`
   padding: 12px 16px;
   font-weight: 500;
 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  margin-bottom: 16px;  /* always a gap before next element */
+  margin-bottom: 16px; /* always a gap before next element */
 
   @media ${(props) => props.theme.device.mobileL} {
     padding: 12px;
   }
 `;
-
 
 const StyledLayerList = styled.ul`
   list-style: none;
@@ -91,7 +89,7 @@ const StyledLayerList = styled.ul`
   padding: 12px 16px;
 
   background-color: #ffffff;
-  border: 1px solid rgba(0,0,0,0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 12px;
   margin-bottom: 16px;
 
@@ -99,7 +97,7 @@ const StyledLayerList = styled.ul`
   ${StyledLayerSummary} + & {
     border-top: none;
     border-radius: 0 0 12px 12px;
-    margin-top: -16px;   /* overlap to remove the gap */
+    margin-top: -16px; /* overlap to remove the gap */
   }
 
   li {
@@ -114,7 +112,6 @@ const StyledLayerList = styled.ul`
     }
   }
 `;
-
 
 const StyledLayerInfo = styled.div`
   display: flex;
@@ -147,7 +144,7 @@ const StyledButtonColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 180px; 
+  min-width: 180px;
 `;
 
 const StyledRightAction = styled.button`
@@ -171,56 +168,28 @@ const StyledRightAction = styled.button`
   }
 `;
 
-
-
 const StyledActionButtons = styled.div`
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-between
+
   margin-top: 12px;
   flex-wrap: wrap;
 
-  @media ${props => props.theme.device.mobileL} {
+  @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
     gap: 8px;
   }
 
-  @media ${props => props.theme.device.mobileM} {
+  @media ${(props) => props.theme.device.mobileM} {
     flex-direction: column;
     gap: 8px;
   }
 
-  @media ${props => props.theme.device.mobileS} {
+  @media ${(props) => props.theme.device.mobileS} {
     flex-direction: column;
     gap: 8px;
     padding: 8px;
-  }
-`;
-
-
-const StyledCTAButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  color: ${(props) => props.theme.colors.mainWhite};
-
-  border: none;
-  padding: 10px 20px;
-  border-radius: 999px; // makes pill shape
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  svg {
-    color: ${(props) => props.theme.colors.mainWhite};
-    font-size: 16px;
-  }
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.mainColor2}; // hover color if defined
   }
 `;
 
@@ -228,8 +197,9 @@ const StyledCTAButton = styled.button`
  * Shows ShareWebsiteContent if shareUrl is defined in Redux state.
  */
 export const ShareWebsiteContent = () => {
-  const { center, currentZoomLevel, selectedLayers, legends } =
-    useAppSelector((state) => state.rpc);
+  const { center, currentZoomLevel, selectedLayers, legends } = useAppSelector(
+    (state) => state.rpc
+  );
 
   const { shareUrl } = useAppSelector((state) => state.ui);
 
@@ -249,7 +219,7 @@ export const ShareWebsiteContent = () => {
   });
   mapLayers = mapLayers.slice(0, -2); // remove last '++'
 
-  let url = shareUrl
+  let url = shareUrl && shareUrl
     .replace('{zoom}', currentZoomLevel)
     .replace('{x}', parseInt(center.x))
     .replace('{y}', parseInt(center.y))
@@ -271,85 +241,92 @@ export const ShareWebsiteContent = () => {
   };
 
   return (
-      <StyledPopupWrapper>
-        <StyledDescription>
-          {strings.share.shareTexts.shareDescription}
+    <StyledPopupWrapper>
+      <StyledDescription>
+        {strings.share.shareTexts.shareDescription}
       </StyledDescription>
-        {filteredLayers?.length > 0 && (
-  <>
-  <StyledLayerSummary>
-    <StyledLayerInfo>
-      <FontAwesomeIcon icon={faLayerGroup} className="icon" />
-      <div className="texts">
-        <div className="title">
-          {strings.share.shareTexts.showOpenLayersTitle}
-        </div>
-        <div className="sub">
-          {strings.formatString(strings.share.shareTexts.showOpenLayersCount, {
-            count: filteredLayers.length,
-          })}
-        </div>
-      </div>
-    </StyledLayerInfo>
+      {filteredLayers?.length > 0 && (
+        <>
+          <StyledLayerSummary>
+            <StyledLayerInfo>
+              <FontAwesomeIcon icon={faLayerGroup} className="icon" />
+              <div className="texts">
+                <div className="title">
+                  {strings.share.shareTexts.showOpenLayersTitle}
+                </div>
+                <div className="sub">
+                  {strings.formatString(
+                    strings.share.shareTexts.showOpenLayersCount,
+                    {
+                      count: filteredLayers.length
+                    }
+                  )}
+                </div>
+              </div>
+            </StyledLayerInfo>
 
-    <StyledRightAction
-      onClick={() => setShowLayers((prev) => !prev)}
-      $open={showLayers}
-    >
-      {showLayers
-        ? strings.share.shareTexts.hideOpenLayers
-        : strings.share.shareTexts.showOpenLayers}
-      <FontAwesomeIcon icon={faChevronDown} className="caret" />
-    </StyledRightAction>
-  </StyledLayerSummary>
+            <StyledRightAction
+              onClick={() => setShowLayers((prev) => !prev)}
+              $open={showLayers}
+            >
+              {showLayers
+                ? strings.share.shareTexts.hideOpenLayers
+                : strings.share.shareTexts.showOpenLayers}
+              <FontAwesomeIcon icon={faChevronDown} className="caret" />
+            </StyledRightAction>
+          </StyledLayerSummary>
 
+          {showLayers && (
+            <StyledLayerList>
+              {filteredLayers.map((layer) => (
+                <li key={layer.id}>
+                  <LayersIcon className="mui-icon" />
+                  {layer.name}
+                </li>
+              ))}
+            </StyledLayerList>
+          )}
+        </>
+      )}
 
-    {showLayers && (
-  <StyledLayerList>
-    {filteredLayers.map((layer) => (
-      <li key={layer.id}>
-      <LayersIcon className="mui-icon" />
-        {layer.name}
-      </li>
-    ))}
-  </StyledLayerList>
-)}
+      <StyledLinkBox>{url}</StyledLinkBox>
 
-  </>
-)}
+      <StyledActionButtons>
+        <StyledButtonColumn>
+          <PillButton
+            id={'share-website-content-copy-url-button'}
+            text={strings.share.shareTexts.copyToClipboard}
+            onClick={handleCopy}
+            aria-label={strings.share.shareTexts.copyToClipboard}
+            style={{ width: '100%', justifyContent: 'center' }}
+            icon={faCopy}
+          />
 
+          <AnimatePresence>
+            {isCopied && (
+              <StyledCopiedToClipboardText
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, type: 'tween' }}
+              >
+                {strings.share.shareTexts.copiedToClipboard}
+              </StyledCopiedToClipboardText>
+            )}
+          </AnimatePresence>
+        </StyledButtonColumn>
 
-        <StyledLinkBox>{url}</StyledLinkBox>
-
-        <StyledActionButtons>
-          <StyledButtonColumn>
-            <StyledCTAButton onClick={handleCopy}>
-              <FontAwesomeIcon icon={faCopy} />
-              {strings.share.shareTexts.copyToClipboard}
-            </StyledCTAButton>
-
-            <AnimatePresence>
-              {isCopied && (
-                <StyledCopiedToClipboardText
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3, type: 'tween' }}
-                >
-                  {strings.share.shareTexts.copiedToClipboard}
-                </StyledCopiedToClipboardText>
-              )}
-            </AnimatePresence>
-          </StyledButtonColumn>
-            
-          <StyledButtonColumn>
-            <StyledCTAButton onClick={handleEmail}>
-              <FontAwesomeIcon icon={faEnvelope} />
-              {strings.share.shareTexts.sendEmail}
-            </StyledCTAButton>
-          </StyledButtonColumn>
-        </StyledActionButtons>
-
-      </StyledPopupWrapper>
+        <StyledButtonColumn>
+          <PillButton
+            id={'share-website-content-send-email-button'}
+            text={strings.share.shareTexts.sendEmail}
+            onClick={handleEmail}
+            aria-label={strings.share.shareTexts.sendEmail}
+            style={{ width: '100%', justifyContent: 'center' }}
+            icon={faEnvelope}
+          />
+        </StyledButtonColumn>
+      </StyledActionButtons>
+    </StyledPopupWrapper>
   );
 };

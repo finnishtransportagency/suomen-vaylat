@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 import { isMobile, size } from '../../theme/theme';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useSelector } from 'react-redux';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,10 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
-    max-width: 660px;
     flex-direction: column;
     display: flex;
-    height: 100%;
     overflow-y: auto;
 `;
 
@@ -64,10 +62,10 @@ const StyledTabs = styled.div`
 const StyledTab = styled(motion.div)`
   z-index: 2;
   user-select: none;
-  width: ${(props) => 'calc(100% /' + props.tabsCount + ')'};
+  width: ${(props) => 'calc(100% /' + props.$tabsCount + ')'};
   cursor: pointer;
   color: ${(props) =>
-    props.isSelected ? props.theme.colors[props.color] : '#656565'};
+    props.$isSelected ? props.theme.colors[props.color] : '#656565'};
   text-align: center;
   transition: color 0.2s ease-out;
   display: flex;
@@ -120,7 +118,7 @@ const StyledMobileTab = styled.button`
     border: none;
     background: none;
     color: ${(props) => props.theme.colors.mainColor1};
-    text-decoration: ${(props) => props.isSelected && 'underline'};
+    text-decoration: ${(props) => props.$isSelected && 'underline'};
     font-weight: bold;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
     margin: 5px 0px;
@@ -547,7 +545,7 @@ export const AppInfoDialogContent = () => {
                         return (
                           <StyledMobileTab
                             key={'ai_tab_' + tab.title}
-                            isSelected={index === tabIndex}
+                            $isSelected={index === tabIndex}
                             color={tab.titleColor}
                             onClick={() => {
                               setTabIndex(index);
@@ -573,12 +571,12 @@ export const AppInfoDialogContent = () => {
               return (
                 <StyledTab
                   key={'ai_tab_' + tab.title}
-                  isSelected={index === tabIndex}
+                  $isSelected={index === tabIndex}
                   color={tab.titleColor}
                   onClick={() => {
                     setTabIndex(index);
                   }}
-                  tabsCount={tabsContent.length}
+                  $tabsCount={tabsContent.length}
                 >
                   <p>{tab.title}</p>
                 </StyledTab>

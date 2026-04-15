@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/sv';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import {
   getPropertyOperatorCQL,
   updateFiltersOnMap
@@ -633,16 +633,16 @@ export const LayerFilter = ({ filterInfo }) => {
 
   return (
     <StyledDialogContainer>
-      <ReactTooltip
-        backgroundColor={theme.colors.mainColor1}
+      <Tooltip
+        style={{backgroundColor: theme.colors.mainColor1}}
         disable={isMobile}
-        id={'open_info_link'}
-        place="left"
-        type="dark"
+        anchorSelect={'#open_info_link'}
+        id='open_info_link_tooltip'
+        place="bottom"
         effect="float"
       >
         <span>{strings.tooltips.showInfoLink}</span>
-      </ReactTooltip>
+      </Tooltip>
       <StyledDialogSelectionContainer>
         <StyledDialogFloatingChapter>
           <Dropdown
@@ -708,8 +708,7 @@ export const LayerFilter = ({ filterInfo }) => {
               />
               {filterInfo.layer.filterFieldsInfo && (
                 <StyledHeaderButton
-                  data-tip
-                  data-for={'open_info_link'}
+                  id='open_info_link'
                   onClick={handleInfoClick}
                 >
                   <FontAwesomeIcon icon={faInfoCircle} />

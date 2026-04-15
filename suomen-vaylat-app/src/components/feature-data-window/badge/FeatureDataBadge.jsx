@@ -12,15 +12,17 @@ import Badge from '../../badges/Badge';
 import {
   resetGFILocations,
   removeMarkerRequest,
-  setVKMData
+  setVKMData,
+  setFilters
 } from '../../../state/slices/rpcSlice';
 import {
   setIsGfiOpen,
   setMinimizeGfi,
   setMaximizeGfi,
-  setActiveSelectionTool
+  setActiveSelectionTool,
+  removeFromGeoJsonArray
 } from '../../../state/slices/uiSlice';
-import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
+import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER, GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 import { theme } from '../../../theme/theme';
 
 const addFeaturesToMapParams = {
@@ -57,18 +59,21 @@ const FeatureDataBadge = () => {
   const handleCloseGFIDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
+    store.dispatch(setFilters([]));
     store.dispatch(setIsGfiOpen(false));
     store.dispatch(setVKMData(null));
     store.dispatch(setMinimizeGfi(false));
     store.dispatch(setMaximizeGfi(false));
+    // Filter out feature data geojsons
+    store.dispatch(removeFromGeoJsonArray(FEATURE_SELECTION_DRAWING_TOOL));
     setTimeout(() => {
       store.dispatch(setVKMData(null));
-    }, 500);
+    }, 500); // VKM info does not disappear during dialog close animation.
     store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
       null,
-      'download-tool-layer'
+      FEATURE_SELECTION_LAYER
     ]);
     channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
@@ -76,9 +81,11 @@ const FeatureDataBadge = () => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    activeTool === 'gfi-selection-tool' &&
+
+    // clears feature selection drawing
+    activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
+        FEATURE_SELECTION_DRAWING_TOOL,
         true
       ]);
   };

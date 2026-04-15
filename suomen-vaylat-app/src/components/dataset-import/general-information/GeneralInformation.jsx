@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import {
   Typography,
   TextField,
-  Tooltip,
   Accordion,
   AccordionSummary,
   AccordionDetails
@@ -14,6 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../../translations';
 import ZipFileInput from '../ZipFileInput';
+import { isMobile, theme } from '../../../theme/theme';
+import { Tooltip } from 'react-tooltip';
 
 const StyledFlexRow = styled.div`
   display: flex;
@@ -69,6 +70,10 @@ const GeneralInformation = ({
 }) => {
   return (
     <div>
+      <Tooltip anchorSelect={'#dataset_import_lang_info'} style={{backgroundColor: theme.colors.mainColor1}} disable={isMobile} id={'dataset_import_lang_info_tooltip'} place='bottom' effect='float'>
+        {strings.datasetImport.languagesTooltip}
+      </Tooltip>
+
       {!isEditing && (
         <ZipFileInput
           value={uploadedFile}
@@ -163,11 +168,7 @@ const GeneralInformation = ({
         <Typography style={{ marginRight: 8 }}>
           {strings.datasetImport.languages}
         </Typography>
-        <Tooltip title={strings.datasetImport.languagesTooltip}>
-          <span>
-            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#0064af' }} />
-          </span>
-        </Tooltip>
+        <FontAwesomeIcon id='dataset_import_lang_info' icon={faInfoCircle} color={theme.colors.mainColor1} />
       </StyledFlexRow>
 
       {/* Swedish accordion */}

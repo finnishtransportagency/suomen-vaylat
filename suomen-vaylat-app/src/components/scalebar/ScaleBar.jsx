@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useAppSelector } from '../../state/hooks';
 
 const StyledScaleBarContainer = styled(motion.div)`

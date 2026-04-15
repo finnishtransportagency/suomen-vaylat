@@ -8,22 +8,28 @@ import FeatureDataPopup from '../FeatureDataPopup';
 import {
   resetGFILocations,
   removeMarkerRequest,
-  setVKMData
+  setVKMData,
+  setFilters
 } from '../../../state/slices/rpcSlice';
 
 import {
   setIsGfiOpen,
   setMinimizeGfi,
   setMaximizeGfi,
-  setActiveSelectionTool
+  setActiveSelectionTool,
+  removeFromGeoJsonArray
 } from '../../../state/slices/uiSlice';
 
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
-import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
+import {
+  FEATURE_SELECTION_DRAWING_TOOL,
+  FEATURE_SELECTION_LAYER,
+  GFI_GEOMETRY_LAYER_ID
+} from '../../../utils/constants';
 
-const FeatureDataDialog = ({ constraintsRef }) => {
+const FeatureDataDialog = () => {
   const { store } = useContext(ReactReduxContext);
-  const { channel, gfiLocations } = useAppSelector((state) => state.rpc);
+  const { channel } = useAppSelector((state) => state.rpc);
 
   const { isGfiOpen, minimizeGfi, maximizeGfi, activeTool } = useAppSelector(
     (state) => state.ui
@@ -32,10 +38,13 @@ const FeatureDataDialog = ({ constraintsRef }) => {
   const handleCloseGFIDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
+    store.dispatch(setFilters([]));
     store.dispatch(setIsGfiOpen(false));
     store.dispatch(setVKMData(null));
     store.dispatch(setMinimizeGfi(false));
     store.dispatch(setMaximizeGfi(false));
+    // Filter out feature data geojsons
+    store.dispatch(removeFromGeoJsonArray(FEATURE_SELECTION_DRAWING_TOOL));
     setTimeout(() => {
       store.dispatch(setVKMData(null));
     }, 500); // VKM info does not disappear during dialog close animation.
@@ -43,7 +52,7 @@ const FeatureDataDialog = ({ constraintsRef }) => {
     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
       null,
-      'download-tool-layer'
+      FEATURE_SELECTION_LAYER
     ]);
     channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
@@ -51,20 +60,19 @@ const FeatureDataDialog = ({ constraintsRef }) => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
-      'gfi-selection-tool',
-      true
-    ]);
+
+    // clears feature selection drawing
+    activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
+      channel.postRequest('DrawTools.StopDrawingRequest', [
+        FEATURE_SELECTION_DRAWING_TOOL,
+        true
+      ]);
   };
 
-  return (
+  return isGfiOpen ? (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
-      backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -74,22 +82,22 @@ const FeatureDataDialog = ({ constraintsRef }) => {
       closeAction={
         handleCloseGFIDialog
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isGfiOpen} /* Dialog state */
       id="gfi_dialog"
-      minWidth={'600px'}
-      minHeight={'530px'}
-      height={gfiLocations.length > 0 ? "100vw" : "40vw"}
-      width={gfiLocations.length > 0 ? "50vh" : "40vh"}
+      minWidth={'35rem'}
+      minHeight={'40rem'}
+      height={'47rem'}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}
       maximizable={true}
+      maxWidth={maximizeGfi ? null : '90vw'}
+      maxHeight={maximizeGfi ? null : '90vh'}
       minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}
       maximizeAction={() => store.dispatch(setMaximizeGfi(!maximizeGfi))}
     >
-      <FeatureDataPopup />
+      <FeatureDataPopup handleCloseGFIDialog={handleCloseGFIDialog}/>
     </Dialog>
-  );
+  ) : null;
 };
 
 export default FeatureDataDialog;

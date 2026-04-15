@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
@@ -75,20 +75,6 @@ const StyledMasterGroupName = styled.p`
   font-weight: 600;
   transition: all 0.1s ease-in;
   cursor: pointer;
-`;
-
-const StyledLinkName = styled.p`
-  user-select: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-  color: ${(props) => props.theme.colors.mainWhite};
-  margin: 0;
-  padding: 0px;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.1s ease-in;
 `;
 
 const StyledThemeGroup = styled.div`
