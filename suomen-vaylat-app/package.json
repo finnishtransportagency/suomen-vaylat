@@ -9,7 +9,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.1",
-    "@mui/icons-material": "7.3.9",
+    "@mui/icons-material": "7.3.11",
     "@mui/material": "7.3.9",
     "@mui/styles": "^6.5.0",
     "@mui/x-date-pickers": "8.27.2",
